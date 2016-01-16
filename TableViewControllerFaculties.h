@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "TableViewControllerGroup.h"
 
+
+
 @interface TableViewControllerFaculties : UITableViewController
 
 @end

@@ -8,6 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
-@interface TableViewControllerGroup : UITableViewController <UITableViewDataSource>
+
+
+
+@interface TableViewControllerGroup : UITableViewController <UITableViewDataSource , UISearchBarDelegate>
+
+-(void) loadGroup: (NSString*) URLFacul;
+@property NSString *titleName;
 
 @end

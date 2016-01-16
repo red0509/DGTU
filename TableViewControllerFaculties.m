@@ -28,26 +28,39 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    TableViewControllerFaculties *tableViewControllerFaculties = [[TableViewControllerFaculties alloc]init];
+    TableViewControllerGroup *tableViewControllerGroup = nil;
+    
+
     
     if (indexPath.row == 0) {
-//        view = [[TableViewController alloc]init];
-    }
-    else if (indexPath.row == 1){
-//        view = [[WebViewController alloc]init];
-    }
-    else if (indexPath.row == 2){
-//        view = [[ScrollViewController alloc]init];
-    }
-    else if (indexPath.row == 3){
-//        view = [[MapViewController alloc]init];
-    }
-    else if (indexPath.row == 4){
-        //        view = [[MapViewController alloc]init];
+    tableViewControllerGroup = [[TableViewControllerGroup alloc]init];
+    tableViewControllerGroup.titleName = @"ЭФ";
+    [tableViewControllerGroup loadGroup:@"http://stud.sssu.ru/Dek/?mode=group&f=facultet&id=7"];
+        
+    }else if (indexPath.row == 1){
+    tableViewControllerGroup = [[TableViewControllerGroup alloc]init];
+    tableViewControllerGroup.titleName = @"МРТФ";
+    [tableViewControllerGroup loadGroup:@"http://stud.sssu.ru/Dek/?mode=group&f=facultet&id=8"];
+
+    }else if (indexPath.row == 2){
+    tableViewControllerGroup = [[TableViewControllerGroup alloc]init];
+    tableViewControllerGroup.titleName = @"ФСТ";
+    [tableViewControllerGroup loadGroup:@"http://stud.sssu.ru/Dek/?mode=group&f=facultet&id=9"];
+        
+    }else if (indexPath.row == 3){
+    tableViewControllerGroup = [[TableViewControllerGroup alloc]init];
+    tableViewControllerGroup.titleName = @"СГФ";
+    [tableViewControllerGroup loadGroup:@"http://stud.sssu.ru/Dek/?mode=group&f=facultet&id=10"];
+        
+    }else if (indexPath.row == 4){
+    tableViewControllerGroup = [[TableViewControllerGroup alloc]init];
+    tableViewControllerGroup.titleName = @"КЭС";
+    [tableViewControllerGroup loadGroup:@"http://stud.sssu.ru/Dek/?mode=group&f=facultet&id=11"];
     }
     
-    [self.navigationController pushViewController:tableViewControllerFaculties animated:YES];
-}
+    [self.navigationController pushViewController:tableViewControllerGroup animated:YES];
+    
+    }
 
 /*
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {

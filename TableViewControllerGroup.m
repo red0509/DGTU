@@ -14,22 +14,19 @@
 @property (strong,nonatomic) NSMutableArray *EFfacul;
 @property (strong,nonatomic) NSMutableArray *EFfaculReferences;
 
+
 @end
 
 @implementation TableViewControllerGroup
 
 
-- (void)viewWillAppear:(BOOL)animated{
-    [self loadGroup];
-}
-
-
 - (void)viewDidLoad {
     [super viewDidLoad];
-//    NSThread* thread = [[NSThread alloc] initWithTarget:self selector:@selector(loadGroup) object:nil];
-//    thread.name = [NSString stringWithFormat:@"Thread 1"];
+
+    self.title = self.titleName;
     
-  
+    UISearchBar *bar = [[UISearchBar alloc]initWithFrame:CGRectMake(0, 0, 414, 40)];
+    [self.view addSubview:bar];
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
@@ -37,13 +34,14 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
--(void) loadGroup{
+
+-(void) loadGroup: (NSString*) URLFacul{
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
     NSLog(@"%@",[NSThread currentThread].name);
     self.EFfacul= [NSMutableArray array];
     self.EFfaculReferences= [NSMutableArray array];
 
-    NSURL *URL = [NSURL URLWithString:@"http://stud.sssu.ru/Dek/?mode=group&f=facultet&id=7"];
+    NSURL *URL = [NSURL URLWithString:URLFacul];
     NSURLSession *session = [NSURLSession sharedSession];
     [[session dataTaskWithURL:URL completionHandler:
       ^(NSData *data, NSURLResponse *response, NSError *error) {
@@ -56,14 +54,14 @@
                                             contentTypeHeader:contentType];
           NSInteger numFacul = 2;
 
-          HTMLElement *div = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#_ctl0_ContentPage_ucGroups_Grid > tbody > tr:nth-child(%ld) > td:nth-child(1) > a",numFacul]];
+          HTMLElement *div = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#_ctl0_ContentPage_ucGroups_Grid > tbody > tr:nth-child(%ld) > td:nth-child(1) > a",(long)numFacul]];
           double startTime = CACurrentMediaTime();
           
           NSLog(@"%@ started", [[NSThread currentThread] name]);
           
           while (!(div == nil)) {
               
-                div = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#_ctl0_ContentPage_ucGroups_Grid > tbody > tr:nth-child(%ld) > td:nth-child(1) > a",numFacul]];
+                div = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#_ctl0_ContentPage_ucGroups_Grid > tbody > tr:nth-child(%ld) > td:nth-child(1) > a",(long)numFacul]];
               
                   NSLog(@"%@",div.textContent);
           
@@ -74,7 +72,7 @@
                   [self.EFfaculReferences addObject:div.attributes.allValues.lastObject];
                   [self.tableView reloadData];
                       }
-                      });
+                });
           
               numFacul++;
               
@@ -91,8 +89,6 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-    NSLog(@"MEMORY");
 }
 
 #pragma mark - Table view data source
@@ -102,8 +98,8 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-//   return self.countRows;
-    return [self.EFfacul count];
+//    return [self.EFfacul count];
+    return 10;
 }
 
 
@@ -114,9 +110,9 @@
     if (!cell) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:identifier];
     }
-    
-    cell.textLabel.text = [self.EFfacul objectAtIndex:indexPath.row];
-    
+    cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:17];
+//    cell.textLabel.text = [self.EFfacul objectAtIndex:indexPath.row];
+    cell.textLabel.text = @"1";
     return cell;
 }
 
