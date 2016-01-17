@@ -7,13 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TableViewControllerSelection.h"
+#import <HTMLReader.h>
 
 
 
 
-@interface TableViewControllerGroup : UITableViewController <UITableViewDataSource , UISearchBarDelegate>
+@interface TableViewControllerGroup : UITableViewController <UITableViewDataSource , UISearchDisplayDelegate>
 
 -(void) loadGroup: (NSString*) URLFacul;
+
 @property NSString *titleName;
 
+@property (strong, nonatomic) NSMutableArray *searchResult;
 @end

@@ -30,30 +30,28 @@
     
     TableViewControllerGroup *tableViewControllerGroup = nil;
     
-
-    
     if (indexPath.row == 0) {
-    tableViewControllerGroup = [[TableViewControllerGroup alloc]init];
+    tableViewControllerGroup = [self.storyboard instantiateViewControllerWithIdentifier:@"TableViewControllerGroup"];
     tableViewControllerGroup.titleName = @"ЭФ";
     [tableViewControllerGroup loadGroup:@"http://stud.sssu.ru/Dek/?mode=group&f=facultet&id=7"];
         
     }else if (indexPath.row == 1){
-    tableViewControllerGroup = [[TableViewControllerGroup alloc]init];
+    tableViewControllerGroup = [self.storyboard instantiateViewControllerWithIdentifier:@"TableViewControllerGroup"];
     tableViewControllerGroup.titleName = @"МРТФ";
     [tableViewControllerGroup loadGroup:@"http://stud.sssu.ru/Dek/?mode=group&f=facultet&id=8"];
 
     }else if (indexPath.row == 2){
-    tableViewControllerGroup = [[TableViewControllerGroup alloc]init];
+    tableViewControllerGroup = [self.storyboard instantiateViewControllerWithIdentifier:@"TableViewControllerGroup"];
     tableViewControllerGroup.titleName = @"ФСТ";
     [tableViewControllerGroup loadGroup:@"http://stud.sssu.ru/Dek/?mode=group&f=facultet&id=9"];
         
     }else if (indexPath.row == 3){
-    tableViewControllerGroup = [[TableViewControllerGroup alloc]init];
+    tableViewControllerGroup = [self.storyboard instantiateViewControllerWithIdentifier:@"TableViewControllerGroup"];
     tableViewControllerGroup.titleName = @"СГФ";
     [tableViewControllerGroup loadGroup:@"http://stud.sssu.ru/Dek/?mode=group&f=facultet&id=10"];
         
     }else if (indexPath.row == 4){
-    tableViewControllerGroup = [[TableViewControllerGroup alloc]init];
+    tableViewControllerGroup = [self.storyboard instantiateViewControllerWithIdentifier:@"TableViewControllerGroup"];
     tableViewControllerGroup.titleName = @"КЭС";
     [tableViewControllerGroup loadGroup:@"http://stud.sssu.ru/Dek/?mode=group&f=facultet&id=11"];
     }

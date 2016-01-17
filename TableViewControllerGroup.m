@@ -7,7 +7,7 @@
 //
 
 #import "TableViewControllerGroup.h"
-#import <HTMLReader.h>
+
 
 @interface TableViewControllerGroup ()
 
@@ -20,13 +20,15 @@
 @implementation TableViewControllerGroup
 
 
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-
     self.title = self.titleName;
+    self.searchResult = [NSMutableArray arrayWithCapacity:[self.EFfacul count]];
     
-    UISearchBar *bar = [[UISearchBar alloc]initWithFrame:CGRectMake(0, 0, 414, 40)];
-    [self.view addSubview:bar];
+//    
+//    UISearchBar *bar = [[UISearchBar alloc]initWithFrame:CGRectMake(0, 0, 350, 40)];
+//    [self.view addSubview:bar];
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
@@ -37,7 +39,6 @@
 
 -(void) loadGroup: (NSString*) URLFacul{
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-    NSLog(@"%@",[NSThread currentThread].name);
     self.EFfacul= [NSMutableArray array];
     self.EFfaculReferences= [NSMutableArray array];
 
@@ -63,8 +64,8 @@
               
                 div = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#_ctl0_ContentPage_ucGroups_Grid > tbody > tr:nth-child(%ld) > td:nth-child(1) > a",(long)numFacul]];
               
-                  NSLog(@"%@",div.textContent);
-          
+//                  NSLog(@"%@",div.textContent);
+//                  NSLog(@"%@",div.attributes.allValues.lastObject);
                   dispatch_async(dispatch_get_main_queue(), ^{
                       if (div != nil) {
                           
@@ -91,15 +92,22 @@
     [super didReceiveMemoryWarning];
 }
 
-#pragma mark - Table view data source
+#pragma mark - UITableViewDatasource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-//    return [self.EFfacul count];
-    return 10;
+    
+    if (tableView == self.searchDisplayController.searchResultsTableView)
+    {
+        return [self.searchResult count];
+    }
+    else
+    {
+        return [self.EFfacul count];
+    }
 }
 
 
@@ -111,11 +119,78 @@
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:identifier];
     }
     cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:17];
-//    cell.textLabel.text = [self.EFfacul objectAtIndex:indexPath.row];
-    cell.textLabel.text = @"1";
+    
+    
+    if (tableView == self.searchDisplayController.searchResultsTableView)
+    {
+        cell.textLabel.text = [self.searchResult objectAtIndex:indexPath.row];
+    }
+    else
+    {
+        cell.textLabel.text = self.EFfacul[indexPath.row];
+    }
     return cell;
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    TableViewControllerSelection *tableViewControllerSelection = [self.storyboard instantiateViewControllerWithIdentifier:@"TableViewControllerSelection"];
+    
+    if (tableView == self.searchDisplayController.searchResultsTableView)
+    {
+        tableViewControllerSelection.group = self.searchResult[indexPath.row];
+       
+        for (int i = 0; i < [self.EFfacul count]; i++) {
+            if ([self.EFfacul[i] isEqualToString:self.searchResult[indexPath.row]]) {
+                 tableViewControllerSelection.reference = self.EFfaculReferences[i];
+            }
+        }
+    }
+    else
+    {
+        tableViewControllerSelection.group = self.EFfacul[indexPath.row];
+        tableViewControllerSelection.reference = self.EFfaculReferences[indexPath.row];
+
+    }
+    
+    [self.navigationController pushViewController:tableViewControllerSelection animated:YES];
+    
+    
+}
+
+- (NSString*)reference{
+    
+    
+    return @"";
+}
+
+#pragma mark - UISearchBarDelegate
+
+- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar{
+    [searchBar setShowsCancelButton:YES animated:YES];
+}
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar{
+    [searchBar resignFirstResponder];
+    [searchBar setShowsCancelButton:NO animated:YES];
+}
+
+
+
+- (void)filterContentForSearchText:(NSString*)searchText scope:(NSString*)scope{
+    
+    [self.searchResult removeAllObjects];
+    
+    NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"SELF contains[c] %@", searchText];
+    
+    self.searchResult = [NSMutableArray arrayWithArray: [self.EFfacul filteredArrayUsingPredicate:resultPredicate]];
+   
+}
+
+-(BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
+{
+    [self filterContentForSearchText:searchString scope:[[self.searchDisplayController.searchBar scopeButtonTitles] objectAtIndex:[self.searchDisplayController.searchBar selectedScopeButtonIndex]]];
+    
+    return YES;
+}
 
 /*
 // Override to support conditional editing of the table view.
