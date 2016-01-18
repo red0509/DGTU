@@ -64,8 +64,7 @@
               
                 div = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#_ctl0_ContentPage_ucGroups_Grid > tbody > tr:nth-child(%ld) > td:nth-child(1) > a",(long)numFacul]];
               
-//                  NSLog(@"%@",div.textContent);
-//                  NSLog(@"%@",div.attributes.allValues.lastObject);
+
                   dispatch_async(dispatch_get_main_queue(), ^{
                       if (div != nil) {
                           
@@ -119,7 +118,7 @@
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:identifier];
     }
     cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:17];
-    
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     
     if (tableView == self.searchDisplayController.searchResultsTableView)
     {
@@ -157,11 +156,6 @@
     
 }
 
-- (NSString*)reference{
-    
-    
-    return @"";
-}
 
 #pragma mark - UISearchBarDelegate
 

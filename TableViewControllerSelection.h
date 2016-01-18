@@ -8,12 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import <HTMLReader.h>
+#import "ViewControllerPageView.h"
 
 @interface TableViewControllerSelection : UITableViewController
 
-@property NSString *group;
-@property NSString *reference;
+@property (strong,nonatomic) NSString *group;
+@property (strong,nonatomic) NSString *reference;
+@property (strong,nonatomic) NSString *numberGroupString;
 
-@property (strong,nonatomic) NSMutableArray *referenceGroup;
 
 @end

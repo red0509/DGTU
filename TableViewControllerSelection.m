@@ -18,24 +18,18 @@
     [super viewDidLoad];
     
     self.title = self.group;
-    [self loadGroupReference];
+    self.numberGroupString = [self.reference substringFromIndex:self.reference.length-5];
     
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // [NSString stringWithFormat:@"http://stud.sssu.ru/Dek/Default.aspx%@",self.reference]];}
 }
 
 
--(void) loadGroupReference{
+-(void) loadGroupReference:(NSString*) URLGroup{
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"http://stud.sssu.ru/Dek/Default.aspx%@",self.reference]];
+        NSURL *URL = [NSURL URLWithString:URLGroup];
         NSURLSession *session = [NSURLSession sharedSession];
         [[session dataTaskWithURL:URL completionHandler:
           ^(NSData *data, NSURLResponse *response, NSError *error) {
@@ -47,38 +41,38 @@
             HTMLDocument *home = [HTMLDocument documentWithData:data
                                               contentTypeHeader:contentType];
               
-            HTMLElement *refVed = [home firstNodeMatchingSelector:@"#_ctl0_ucLinks_lnkListVed"];
-            HTMLElement *refRasp = [home firstNodeMatchingSelector:@"#_ctl0_ucLinks_lnkRasp"];
-            HTMLElement *refGraph = [home firstNodeMatchingSelector:@"#_ctl0_ucLinks_lnkGraph"];
+                double startTime = CACurrentMediaTime();
               
-              NSLog(@"refVed %@",refVed.attributes.allValues.lastObject);
-              NSLog(@"refRasp %@",refRasp.attributes.allValues.lastObject);
-              NSLog(@"refGraph %@",refGraph.attributes.allValues.lastObject);
-              double startTime = CACurrentMediaTime();
-              
-              NSLog(@"%@ Rstarted", [[NSThread currentThread] name]);
               
 
                   dispatch_async(dispatch_get_main_queue(), ^{
                       
-                      
-                      [self.referenceGroup addObject:refRasp.attributes.allValues.lastObject];
-                      [self.referenceGroup addObject:refVed.attributes.allValues.lastObject];
-                      [self.referenceGroup addObject:refGraph.attributes.allValues.lastObject];
-                      NSLog(@"ref %@",self.referenceGroup);
-
-//                          [self.EFfacul addObject:div.textContent];
-//                          [self.EFfaculReferences addObject:div.attributes.allValues.lastObject];
-//                          [self.tableView reloadData];
-                      
                   });
                   
-              NSLog(@"%@ Rfinished in %f", [[NSThread currentThread] name], CACurrentMediaTime() - startTime);
         }
           ] resume];
     });
 }
 #pragma mark - Table view data source
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    ViewControllerPageView *viewControllerPageView = viewControllerPageView = nil;
+    
+    if(indexPath.row == 0){//Расписание
+        [self loadGroupReference:[NSString stringWithFormat:@"http://stud.sssu.ru/Rasp/Rasp.aspx?group=%@&sem=1",[self numberGroupString]]];
+       viewControllerPageView = [self.storyboard instantiateViewControllerWithIdentifier:@"ViewControllerPageView"];
+        
+    }else if(indexPath.row == 1){//Ведомость
+        [self loadGroupReference:[NSString stringWithFormat:@"http://stud.sssu.ru/Ved/Default.aspx?sem=cur&group=%@",[self numberGroupString]]];
+        viewControllerPageView = [self.storyboard instantiateViewControllerWithIdentifier:@"ViewControllerPageView"];
+        
+    }else if(indexPath.row == 2){//Графики
+        [self loadGroupReference:[NSString stringWithFormat:@"http://stud.sssu.ru/Graph/Graph.aspx?group=%@&sem=1",[self numberGroupString]]];
+        viewControllerPageView = [self.storyboard instantiateViewControllerWithIdentifier:@"ViewControllerPageView"];
+    }
+    
+    [self.navigationController pushViewController:viewControllerPageView animated:YES];
+}
 
 //- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
 //    return 0;
