@@ -13,7 +13,7 @@
 
 
 
-@interface TableViewControllerGroup : UITableViewController <UITableViewDataSource , UISearchDisplayDelegate>
+@interface TableViewControllerGroup : UITableViewController <UITableViewDataSource ,UISearchResultsUpdating>
 
 -(void) loadGroup: (NSString*) URLFacul;
 

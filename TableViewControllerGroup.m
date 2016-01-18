@@ -15,6 +15,8 @@
 @property (strong,nonatomic) NSMutableArray *EFfaculReferences;
 
 
+@property (strong,nonatomic) UISearchController *resultSearchController ;
+
 @end
 
 @implementation TableViewControllerGroup
@@ -25,17 +27,20 @@
     [super viewDidLoad];
     self.title = self.titleName;
     self.searchResult = [NSMutableArray arrayWithCapacity:[self.EFfacul count]];
-    
-//    
-//    UISearchBar *bar = [[UISearchBar alloc]initWithFrame:CGRectMake(0, 0, 350, 40)];
-//    [self.view addSubview:bar];
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-}
+    self.resultSearchController = [[UISearchController alloc]initWithSearchResultsController:nil];
+    self.resultSearchController.searchResultsUpdater = self;
+    self.resultSearchController.dimsBackgroundDuringPresentation = NO;
+    self.resultSearchController.searchBar.placeholder = @"Поиск";
+    self.resultSearchController.searchBar.tintColor = [UIColor whiteColor];
+    [self.resultSearchController.searchBar sizeToFit];
+    self.tableView.tableHeaderView = self.resultSearchController.searchBar;
+    self.definesPresentationContext = YES;
 
+    [self.tableView reloadData];
+
+    
+    
+     }
 
 -(void) loadGroup: (NSString*) URLFacul{
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -93,13 +98,14 @@
 
 #pragma mark - UITableViewDatasource
 
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    if (tableView == self.searchDisplayController.searchResultsTableView)
+    if (self.resultSearchController.active)
     {
         return [self.searchResult count];
     }
@@ -113,14 +119,15 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *identifier = @"cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
-    
     if (!cell) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:identifier];
     }
     cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:17];
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     
-    if (tableView == self.searchDisplayController.searchResultsTableView)
+
+    
+     if (self.resultSearchController.active)
     {
         cell.textLabel.text = [self.searchResult objectAtIndex:indexPath.row];
     }
@@ -134,7 +141,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     TableViewControllerSelection *tableViewControllerSelection = [self.storyboard instantiateViewControllerWithIdentifier:@"TableViewControllerSelection"];
     
-    if (tableView == self.searchDisplayController.searchResultsTableView)
+    if (self.resultSearchController.active)
     {
         tableViewControllerSelection.group = self.searchResult[indexPath.row];
        
@@ -157,34 +164,21 @@
 }
 
 
-#pragma mark - UISearchBarDelegate
-
-- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar{
-    [searchBar setShowsCancelButton:YES animated:YES];
-}
-- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar{
-    [searchBar resignFirstResponder];
-    [searchBar setShowsCancelButton:NO animated:YES];
-}
+#pragma mark - UISearchResultsUpdating
 
 
-
-- (void)filterContentForSearchText:(NSString*)searchText scope:(NSString*)scope{
+- (void)updateSearchResultsForSearchController:(UISearchController *)searchController{
     
     [self.searchResult removeAllObjects];
     
-    NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"SELF contains[c] %@", searchText];
+    NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"SELF contains[c] %@", searchController.searchBar.text];
     
     self.searchResult = [NSMutableArray arrayWithArray: [self.EFfacul filteredArrayUsingPredicate:resultPredicate]];
-   
+    [self.tableView reloadData];
+    
 }
 
--(BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
-{
-    [self filterContentForSearchText:searchString scope:[[self.searchDisplayController.searchBar scopeButtonTitles] objectAtIndex:[self.searchDisplayController.searchBar selectedScopeButtonIndex]]];
-    
-    return YES;
-}
+
 
 /*
 // Override to support conditional editing of the table view.

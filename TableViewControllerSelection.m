@@ -19,7 +19,7 @@
     
     self.title = self.group;
     self.numberGroupString = [self.reference substringFromIndex:self.reference.length-5];
-    
+
 }
 
 - (void)didReceiveMemoryWarning {
@@ -41,10 +41,6 @@
             HTMLDocument *home = [HTMLDocument documentWithData:data
                                               contentTypeHeader:contentType];
               
-                double startTime = CACurrentMediaTime();
-              
-              
-
                   dispatch_async(dispatch_get_main_queue(), ^{
                       
                   });
@@ -64,11 +60,11 @@
         
     }else if(indexPath.row == 1){//Ведомость
         [self loadGroupReference:[NSString stringWithFormat:@"http://stud.sssu.ru/Ved/Default.aspx?sem=cur&group=%@",[self numberGroupString]]];
-        viewControllerPageView = [self.storyboard instantiateViewControllerWithIdentifier:@"ViewControllerPageView"];
+        
         
     }else if(indexPath.row == 2){//Графики
         [self loadGroupReference:[NSString stringWithFormat:@"http://stud.sssu.ru/Graph/Graph.aspx?group=%@&sem=1",[self numberGroupString]]];
-        viewControllerPageView = [self.storyboard instantiateViewControllerWithIdentifier:@"ViewControllerPageView"];
+        
     }
     
     [self.navigationController pushViewController:viewControllerPageView animated:YES];

@@ -56,19 +56,10 @@
     [tableViewControllerGroup loadGroup:@"http://stud.sssu.ru/Dek/?mode=group&f=facultet&id=11"];
     }
     
-    [self.navigationController pushViewController:tableViewControllerGroup animated:YES];
+//    [self.navigationController pushViewController:tableViewControllerGroup animated:YES];
+    [self.navigationController showViewController:tableViewControllerGroup sender:nil];
     
     }
-
-/*
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
-    
-    // Configure the cell...
-    
-    return cell;
-}
-*/
 
 /*
 // Override to support conditional editing of the table view.
