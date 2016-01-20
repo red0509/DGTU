@@ -25,14 +25,15 @@
     
     ViewControllerPageContent *startingViewController = [self viewControllerAtIndex:0];
     NSArray *viewControllers = @[startingViewController];
-    [self.pageViewController setViewControllers:viewControllers direction:UIPageViewControllerNavigationDirectionForward animated:YES completion:nil];
+    [self.pageViewController setViewControllers:viewControllers direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
     
-    // Change the size of page view controller
-    self.pageViewController.view.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 30);
+    self.pageViewController.view.frame = CGRectMake(0, 60, self.view.frame.size.width, self.view.frame.size.height - 30);
     
     [self addChildViewController:self.pageViewController];
     [self.view addSubview:self.pageViewController.view];
     [self.pageViewController didMoveToParentViewController:self];
+    
+     [self loadGroupReference:@"http://stud.sssu.ru/Rasp/Rasp.aspx?group=18856&sem=1"];
     
 }
 
@@ -92,13 +93,38 @@
 
 - (NSInteger)presentationIndexForPageViewController:(UIPageViewController *)pageViewController
 {
-    NSString *calendarId = [[NSLocale currentLocale] objectForKey:NSLocaleCalendar];
-    NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:calendarId];
-    NSUInteger firstDay = [calendar firstWeekday];
-   
-    NSLog(@"%ld",firstDay);
-    return firstDay;
+
+    return 0;
 }
 
-
+-(void) loadGroupReference:(NSString*) URLGroup{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSURL *URL = [NSURL URLWithString:URLGroup];
+        NSURLSession *session = [NSURLSession sharedSession];
+        [[session dataTaskWithURL:URL completionHandler:
+          ^(NSData *data, NSURLResponse *response, NSError *error) {
+              NSString *contentType = nil;
+              if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
+                  NSDictionary *headers = [(NSHTTPURLResponse *)response allHeaderFields];
+                  contentType = headers[@"Content-Type"];
+              }
+              HTMLDocument *home = [HTMLDocument documentWithData:data
+                                                contentTypeHeader:contentType];
+              
+             
+              
+              
+              
+              HTMLElement *div = [home firstNodeMatchingSelector:@"#cmbDayOfWeek"];
+              
+            NSLog(@"div -  %@",div.textContent);
+              NSLog(@"div -  %@",div.attributes.allValues);
+              dispatch_async(dispatch_get_main_queue(), ^{
+                  
+              });
+              
+          }
+          ] resume];
+    });
+}
 @end

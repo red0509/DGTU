@@ -8,11 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewControllerPageContent : UIViewController
-
-
-@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
-
+@interface ViewControllerPageContent : UITableViewController <UITableViewDataSource>
+@property (weak, nonatomic) IBOutlet UILabel *labelTitle;
 
 @property NSUInteger pageIndex;
 @property NSString *titleText;

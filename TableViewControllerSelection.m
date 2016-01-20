@@ -27,43 +27,25 @@
 }
 
 
--(void) loadGroupReference:(NSString*) URLGroup{
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSURL *URL = [NSURL URLWithString:URLGroup];
-        NSURLSession *session = [NSURLSession sharedSession];
-        [[session dataTaskWithURL:URL completionHandler:
-          ^(NSData *data, NSURLResponse *response, NSError *error) {
-              NSString *contentType = nil;
-              if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
-                  NSDictionary *headers = [(NSHTTPURLResponse *)response allHeaderFields];
-                  contentType = headers[@"Content-Type"];
-              }
-            HTMLDocument *home = [HTMLDocument documentWithData:data
-                                              contentTypeHeader:contentType];
-              
-                  dispatch_async(dispatch_get_main_queue(), ^{
-                      
-                  });
-                  
-        }
-          ] resume];
-    });
-}
+
 #pragma mark - Table view data source
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    ViewControllerPageView *viewControllerPageView = viewControllerPageView = nil;
+    ViewControllerPageView *viewControllerPageView = nil;
+    
     
     if(indexPath.row == 0){//Расписание
-        [self loadGroupReference:[NSString stringWithFormat:@"http://stud.sssu.ru/Rasp/Rasp.aspx?group=%@&sem=1",[self numberGroupString]]];
+        viewControllerPageView = [[ViewControllerPageView alloc]init];
+        
+        [viewControllerPageView loadGroupReference:[NSString stringWithFormat:@"http://stud.sssu.ru/Rasp/Rasp.aspx?group=%@&sem=1",[self numberGroupString]]];
        viewControllerPageView = [self.storyboard instantiateViewControllerWithIdentifier:@"ViewControllerPageView"];
         
     }else if(indexPath.row == 1){//Ведомость
-        [self loadGroupReference:[NSString stringWithFormat:@"http://stud.sssu.ru/Ved/Default.aspx?sem=cur&group=%@",[self numberGroupString]]];
+//        [viewControllerPageView loadGroupReference:[NSString stringWithFormat:@"http://stud.sssu.ru/Ved/Default.aspx?sem=cur&group=%@",[self numberGroupString]]];
         
         
     }else if(indexPath.row == 2){//Графики
-        [self loadGroupReference:[NSString stringWithFormat:@"http://stud.sssu.ru/Graph/Graph.aspx?group=%@&sem=1",[self numberGroupString]]];
+//        [viewControllerPageView loadGroupReference:[NSString stringWithFormat:@"http://stud.sssu.ru/Graph/Graph.aspx?group=%@&sem=1",[self numberGroupString]]];
         
     }
     

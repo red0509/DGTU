@@ -56,6 +56,7 @@
               NSDictionary *headers = [(NSHTTPURLResponse *)response allHeaderFields];
               contentType = headers[@"Content-Type"];
           }
+          NSLog(@"%@",error);
           HTMLDocument *home = [HTMLDocument documentWithData:data
                                             contentTypeHeader:contentType];
           NSInteger numFacul = 2;

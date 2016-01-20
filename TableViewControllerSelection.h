@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <HTMLReader.h>
 #import "ViewControllerPageView.h"
+#import "ViewControllerPageContent.h"
+
 
 @interface TableViewControllerSelection : UITableViewController
 
