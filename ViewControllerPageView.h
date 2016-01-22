@@ -10,9 +10,11 @@
 #import <HTMLReader.h>
 #import "ViewControllerPageContent.h"
 
+
+
 @interface ViewControllerPageView : UIViewController <UIPageViewControllerDataSource>
 
--(void) loadGroupReference:(NSString*) URLGroup;
+//-(void) loadGroupReference:(NSString*) URLGroup;
 
 @property (strong, nonatomic) UIPageViewController *pageViewController;
 @property (strong, nonatomic) NSArray *pageTitles;

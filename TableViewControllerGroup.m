@@ -92,7 +92,9 @@
     }
 
 
-
+-(void)dealloc {
+    [self.resultSearchController.view removeFromSuperview];
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }

@@ -7,11 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <HTMLReader.h>
+
 
 @interface ViewControllerPageContent : UITableViewController <UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UILabel *labelTitle;
 
 @property NSUInteger pageIndex;
 @property NSString *titleText;
+@property (strong,nonatomic) HTMLDocument *document;
 
 @end
