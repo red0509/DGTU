@@ -14,10 +14,7 @@
 
 @interface ViewControllerPageView : UIViewController <UIPageViewControllerDataSource>
 
-//-(void) loadGroupReference:(NSString*) URLGroup;
-
 @property (strong, nonatomic) UIPageViewController *pageViewController;
 @property (strong, nonatomic) NSArray *pageTitles;
-
-
+@property (strong,nonatomic) NSString *referencePageView;
 @end

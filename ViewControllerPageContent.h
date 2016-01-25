@@ -16,5 +16,5 @@
 @property NSUInteger pageIndex;
 @property NSString *titleText;
 @property (strong,nonatomic) HTMLDocument *document;
-
+@property NSString *referenceContent;
 @end

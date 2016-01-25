@@ -10,18 +10,18 @@
 
 @interface ViewControllerPageView ()
 
-
+@property(strong,nonatomic) ViewControllerPageContent * content;
 
 @end
 
 @implementation ViewControllerPageView
 
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-   
     self.pageTitles = @[@"Понедельник", @"Вторник", @"Среда", @"Четверг",@"Пятница",@"Суббота"];
-        
+    
     self.pageViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"PageViewController"];
     self.pageViewController.dataSource = self;
     self.title = @"Расписание";
@@ -35,11 +35,8 @@
     [self addChildViewController:self.pageViewController];
     [self.view addSubview:self.pageViewController.view];
     [self.pageViewController didMoveToParentViewController:self];
-    NSLog(@"2");
-    
-    
-    
-}
+   }
+
 
 - (void)didReceiveMemoryWarning
 {
@@ -56,7 +53,7 @@
     ViewControllerPageContent *viewControllerPageContent = [self.storyboard instantiateViewControllerWithIdentifier:@"ViewControllerPageContent"];
     viewControllerPageContent.titleText = self.pageTitles[index];
     viewControllerPageContent.pageIndex = index;
-    
+    viewControllerPageContent.referenceContent = self.referencePageView;
     return viewControllerPageContent;
 }
 

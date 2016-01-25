@@ -8,10 +8,14 @@
 
 #import <UIKit/UIKit.h>
 #import "ViewControllerPageView.h"
+#import <HTMLReader.h>
 #import "ViewControllerPageContent.h"
 
 
-@interface TableViewControllerSelection : UITableViewController
+
+
+@interface TableViewControllerSelection : UITableViewController 
+
 
 @property (strong,nonatomic) NSString *group;
 @property (strong,nonatomic) NSString *reference;

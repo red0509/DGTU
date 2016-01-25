@@ -37,7 +37,8 @@
     self.definesPresentationContext = YES;
 
     [self.tableView reloadData];
-
+    
+    
     
     
      }
@@ -56,7 +57,6 @@
               NSDictionary *headers = [(NSHTTPURLResponse *)response allHeaderFields];
               contentType = headers[@"Content-Type"];
           }
-          NSLog(@"%@",error);
           HTMLDocument *home = [HTMLDocument documentWithData:data
                                             contentTypeHeader:contentType];
           NSInteger numFacul = 2;
@@ -86,8 +86,8 @@
       
           NSLog(@"%@ finished in %f", [[NSThread currentThread] name], CACurrentMediaTime() - startTime);
           
-          }
-      ] resume];
+
+          }] resume];
     });
     }
 
@@ -103,6 +103,7 @@
 
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+   
     return 1;
 }
 
