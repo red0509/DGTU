@@ -7,6 +7,7 @@
 //
 
 #import "TableViewControllerSelection.h"
+#import "TableViewControllerRegister.h"
 
 @interface TableViewControllerSelection () 
 
@@ -35,15 +36,17 @@
 #pragma mark - Table view data source
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    ViewControllerPageView *viewControllerPageView = nil;
     
     if(indexPath.row == 0){//Расписание
-        viewControllerPageView = [self.storyboard instantiateViewControllerWithIdentifier:@"ViewControllerPageView"];
+       ViewControllerPageView *viewControllerPageView = [self.storyboard instantiateViewControllerWithIdentifier:@"ViewControllerPageView"];
         viewControllerPageView.referencePageView = self.numberGroupString;
         [self.navigationController pushViewController:viewControllerPageView animated:YES];
         
     }else if(indexPath.row == 1){//Ведомость
-//        [viewControllerPageView loadGroupReference:[NSString stringWithFormat:@"http://stud.sssu.ru/Ved/Default.aspx?sem=cur&group=%@",[self numberGroupString]]];
+        TableViewControllerRegister *tableViewControllerRegister = [self.storyboard instantiateViewControllerWithIdentifier:@"TableViewControllerRegister"];
+        [tableViewControllerRegister loadRegister:[NSString stringWithFormat:@"http://stud.sssu.ru/Ved/Default.aspx?sem=cur&group=%@",self.numberGroupString]];
+        
+        [self.navigationController pushViewController:tableViewControllerRegister animated:YES];
         
         
     }else if(indexPath.row == 2){//Графики

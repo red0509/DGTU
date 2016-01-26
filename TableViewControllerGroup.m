@@ -7,6 +7,7 @@
 //
 
 #import "TableViewControllerGroup.h"
+#import "ViewController.h"
 
 
 @interface TableViewControllerGroup ()
@@ -47,16 +48,35 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
     self.EFfacul= [NSMutableArray array];
     self.EFfaculReferences= [NSMutableArray array];
-
     NSURL *URL = [NSURL URLWithString:URLFacul];
-    NSURLSession *session = [NSURLSession sharedSession];
+    NSURLSessionConfiguration *sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
+    sessionConfig.timeoutIntervalForResource = 7;
+    sessionConfig.timeoutIntervalForRequest = 7;
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfig];
     [[session dataTaskWithURL:URL completionHandler:
       ^(NSData *data, NSURLResponse *response, NSError *error) {
+          
+          if (error != nil) {
+              dispatch_async(dispatch_get_main_queue(), ^{
+                  UIAlertController *alert= [UIAlertController alertControllerWithTitle:@"Ошибка" message:@"Не удается подключится." preferredStyle:UIAlertControllerStyleAlert];
+                  
+                  UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK"
+                                                                          style:UIAlertActionStyleDefault
+                                                                        handler:^(UIAlertAction * action) {
+                                                                            [self.navigationController popViewControllerAnimated:YES];
+                                                                        }];
+                [alert addAction:defaultAction];
+
+                [self.navigationController presentViewController:alert animated:YES completion:nil];
+              });
+          }else{
+              
           NSString *contentType = nil;
           if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
               NSDictionary *headers = [(NSHTTPURLResponse *)response allHeaderFields];
               contentType = headers[@"Content-Type"];
           }
+          
           HTMLDocument *home = [HTMLDocument documentWithData:data
                                             contentTypeHeader:contentType];
           NSInteger numFacul = 2;
@@ -87,7 +107,8 @@
           NSLog(@"%@ finished in %f", [[NSThread currentThread] name], CACurrentMediaTime() - startTime);
           
 
-          }] resume];
+          }
+      }] resume];
     });
     }
 

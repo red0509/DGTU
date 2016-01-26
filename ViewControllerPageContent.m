@@ -74,9 +74,29 @@
 -(void) loadGroupReference:(NSString*) URLGroup day:(NSString*) weekDay{
     
     NSURL *URL = [NSURL URLWithString:URLGroup];
-    NSURLSession *session = [NSURLSession sharedSession];
+    NSURLSessionConfiguration *sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
+    sessionConfig.timeoutIntervalForResource = 5;
+    sessionConfig.timeoutIntervalForRequest = 5;
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfig];
+
     [[session dataTaskWithURL:URL completionHandler:
       ^(NSData *data, NSURLResponse *response, NSError *error) {
+          
+          if (error != nil) {
+              dispatch_async(dispatch_get_main_queue(), ^{
+                  UIAlertController *alert= [UIAlertController alertControllerWithTitle:@"Ошибка" message:@"Не удается подключится." preferredStyle:UIAlertControllerStyleAlert];
+                  
+                  UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK"
+                                                                          style:UIAlertActionStyleDefault
+                                                                        handler:^(UIAlertAction * action) {
+                                                                            [self.navigationController popViewControllerAnimated:YES];
+                                                                        }];
+                  [alert addAction:defaultAction];
+                  
+                  [self.navigationController presentViewController:alert animated:YES completion:nil];
+              });
+          }else{
+          
           NSString *contentType = nil;
           if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
               NSDictionary *headers = [(NSHTTPURLResponse *)response allHeaderFields];
@@ -88,9 +108,8 @@
           dispatch_async(dispatch_get_main_queue(), ^{
               [self loadTimeTable:home day:weekDay];
           });
-          
-      }
-      ] resume];
+        }
+      }] resume];
 }
 
 
@@ -250,11 +269,21 @@
     
     switch (section) {
         case 0:
-            headerLabel.text = @"Первая неделя";
+            if ([self.timeArray count]==0) {
+                headerLabel.text = @"Первая неделя - выходной";
+            }else{
+                headerLabel.text = @"Первая неделя";
+            }
+            
             return sectionHeaderView;
             break;
         case 1:
-            headerLabel.text = @"Вторая неделя";
+            if ([self.timeArrayWeekTwo count]==0) {
+                headerLabel.text = @"Вторая неделя - выходной";
+            }else{
+                headerLabel.text = @"Вторая неделя";
+            }
+            
             return sectionHeaderView;
             break;
         default:
@@ -264,17 +293,7 @@
     return sectionHeaderView;
 }
 
-- (nullable NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
-   
-    
-    
-    if (section == 0) {
-        return @"Первая неделя1";
-    }else {
-        return @"Первая неделя2";
-    }
-    
-}
+
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     if (section == 0) {
