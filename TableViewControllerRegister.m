@@ -69,10 +69,7 @@
                                                     contentTypeHeader:contentType];
                   NSInteger section = 2;
                   
-//                  #_ctl0_ContentPage_ucListVedBox_Grid > tbody > tr:nth-child(2) > td:nth-child(1) > a
-//                  #_ctl0_ContentPage_ucListVedBox_Grid > tbody > tr:nth-child(2) > td:nth-child(2)
-//                  #_ctl0_ContentPage_ucListVedBox_Grid > tbody > tr:nth-child(2) > td:nth-child(3)
-//                  #_ctl0_ContentPage_ucListVedBox_Grid > tbody > tr:nth-child(3) > td:nth-child(1) > a
+
                 HTMLElement *subject = [home firstNodeMatchingSelector:
                                     [NSString stringWithFormat:@"#_ctl0_ContentPage_ucListVedBox_Grid > tbody > tr:nth-child(%ld) > td:nth-child(1) > a",(long)section]];
                 HTMLElement *type;
@@ -125,7 +122,7 @@
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     cell.textLabel.lineBreakMode = 2;
     cell.textLabel.text = self.subjectArray[indexPath.row];
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"Тип ведомости: %@      Закрыта: %@",self.typeArray[indexPath.row],self.closedArray[indexPath.row]];
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"Тип ведомости: %@    Закрыта: %@",self.typeArray[indexPath.row],self.closedArray[indexPath.row]];
     
     return cell;
 }
@@ -137,7 +134,6 @@
     
     viewRegisterPageView.pageTitles = @[@"Контрольная точка 1", @"Контрольная точка 2",type];
         viewRegisterPageView.referencePageView = self.registerReferences[indexPath.row];
-    
     
     
     [self.navigationController pushViewController:viewRegisterPageView animated:YES];

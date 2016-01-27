@@ -309,7 +309,7 @@
     static NSString *identifier = @"cell";
     TableViewCellContent *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
     if (indexPath.section == 0) {
-        cell.num.text = [NSString stringWithFormat:@"%ld",indexPath.row+1];
+        cell.num.text = [NSString stringWithFormat:@"%d",(int)indexPath.row+1];
         if ([self.timeArray[indexPath.row] isEqualToString:@"8-3010-05"]) {
             cell.time.text = @"8-30 10-05";
         }else{
@@ -320,7 +320,7 @@
         cell.teacher.text = self.teacherArray[indexPath.row];
 
     }else{
-        cell.num.text = [NSString stringWithFormat:@"%ld",indexPath.row+1];
+        cell.num.text = [NSString stringWithFormat:@"%d",(int)indexPath.row+1];
         if ([self.timeArrayWeekTwo[indexPath.row] isEqualToString:@"8-3010-05"]) {
             cell.time.text = @"8-30 10-05";
         }else{
