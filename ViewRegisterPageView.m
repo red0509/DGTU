@@ -21,6 +21,8 @@
         self.pageTitles = @[@"Курсовой проект"];
     }else if([self.pageTitles[2] isEqualToString:@"Курсовая работа" ]){
         self.pageTitles = @[@"Курсовая работа"];
+    }else if([self.pageTitles[2] isEqualToString:@"Практика" ]){
+        self.pageTitles = @[@"Практика"];
     }
     self.referencePageView = [self.referencePageView substringFromIndex:self.referencePageView.length-6];
     
@@ -59,6 +61,8 @@
         tableViewRegisterContent.pageIndex = 4;
     }else if([self.pageTitles[0] isEqualToString:@"Курсовая работа" ]){
         tableViewRegisterContent.pageIndex = 4;
+    }else if([self.pageTitles[0] isEqualToString:@"Практика" ]){
+        tableViewRegisterContent.pageIndex = 3;
     }else{
         tableViewRegisterContent.pageIndex = index;
     }

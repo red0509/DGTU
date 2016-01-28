@@ -11,7 +11,7 @@
 @interface ViewControllerPageView ()
 
 @property(strong,nonatomic) ViewControllerPageContent * content;
-
+@property(assign,nonatomic) NSInteger index;
 @end
 
 @implementation ViewControllerPageView
@@ -26,7 +26,28 @@
     self.pageViewController.dataSource = self;
     self.title = @"Расписание";
     
-    ViewControllerPageContent *startingViewController = [self viewControllerAtIndex:0];
+    NSDate *date = [NSDate date];
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
+    
+    [dateFormatter setDateFormat:@"EEEE"];
+    NSString * strintDate = [dateFormatter stringFromDate:date];
+    if ([strintDate isEqualToString:@"понедельник"]) {
+        self.index=0;
+    }else if([strintDate isEqualToString:@"вторник"]){
+        self.index=1;
+    }else if([strintDate isEqualToString:@"среда"]){
+        self.index=2;
+    }else if([strintDate isEqualToString:@"четверг"]){
+        self.index=3;
+    }else if([strintDate isEqualToString:@"пятница"]){
+        self.index=4;
+    }else if([strintDate isEqualToString:@"суббота"]){
+        self.index=5;
+    }else{
+        self.index=0;
+    }
+    ViewControllerPageContent *startingViewController = [self viewControllerAtIndex:self.index];
     NSArray *viewControllers = @[startingViewController];
     [self.pageViewController setViewControllers:viewControllers direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
     
@@ -35,6 +56,7 @@
     [self addChildViewController:self.pageViewController];
     [self.view addSubview:self.pageViewController.view];
     [self.pageViewController didMoveToParentViewController:self];
+    
    }
 
 
@@ -93,8 +115,9 @@
 
 - (NSInteger)presentationIndexForPageViewController:(UIPageViewController *)pageViewController
 {
-
-    return 0;
+    
+    return self.index;
 }
+
 
 @end

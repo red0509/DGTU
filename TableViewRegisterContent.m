@@ -46,6 +46,9 @@
     }else if (self.pageIndex == 2){
         [self loadReference:
          [NSString stringWithFormat:@"http://stud.sssu.ru/Ved/Ved.aspx?id=%@",self.referenceContent] KT:NO];
+    }else if (self.pageIndex == 3){
+        [self loadReference:
+         [NSString stringWithFormat:@"http://stud.sssu.ru/Ved/Ved.aspx?id=%@",self.referenceContent] KT:NO];
     }else if (self.pageIndex ==  4){
         [self loadReference:
          [NSString stringWithFormat:@"http://stud.sssu.ru/Ved/Ved.aspx?id=%@",self.referenceContent] KT:NO];
@@ -73,6 +76,23 @@
     NSURLSession *session = [NSURLSession sharedSession];
     [[session dataTaskWithURL:URL completionHandler:
       ^(NSData *data, NSURLResponse *response, NSError *error) {
+          
+          if (error != nil) {
+              dispatch_async(dispatch_get_main_queue(), ^{
+                  UIAlertController *alert= [UIAlertController alertControllerWithTitle:@"Ошибка" message:@"Не удается подключится." preferredStyle:UIAlertControllerStyleAlert];
+                  
+                  UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK"
+                                                                          style:UIAlertActionStyleDefault
+                                                                        handler:^(UIAlertAction * action) {
+                                                                            [self.navigationController popViewControllerAnimated:YES];
+                                                                        }];
+                  [alert addAction:defaultAction];
+                  
+                  [self.navigationController presentViewController:alert animated:YES completion:nil];
+              });
+              
+          }else{
+          
           NSString *contentType = nil;
           if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
               NSDictionary *headers = [(NSHTTPURLResponse *)response allHeaderFields];
@@ -104,6 +124,20 @@
               
             HTMLElement *projectName;
               HTMLElement *projectExam;
+              
+             
+              if (self.pageIndex == 3) {
+                  for (NSInteger i = 5; i<nameNum+5; i++) {
+                      
+                      projectName = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(5)",(long)i]];
+                      if (projectName == nil) {
+                          [self.projectExamArray addObject:@" "];
+                      }else{
+                          [self.projectExamArray addObject:projectName.textContent];
+                      }
+                      
+                  }
+              }
               
               if (self.pageIndex == 4) {
                   for (NSInteger i = 5; i<nameNum+5; i++) {
@@ -229,13 +263,12 @@
                   if (exam == nil) {
                       [self.examArray addObject:@" "];
                   }else if (([exam.textContent isEqualToString:@"Н/я"])||([exam.textContent isEqualToString:@"Незачет"])||([exam.textContent isEqualToString:@"Неуд"])){
-                      
                           exam = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(21)",(long)i]];
                       
                       if (exam == nil) {
                           [self.examArray addObject:@" "];
                       }else{
-                          [self.examArray addObject:examNum.textContent];
+                          [self.examArray addObject:exam.textContent];
                       }
 
                       
@@ -249,7 +282,7 @@
               
           });
           
- 
+        }
       }] resume];
     NSLog(@"%@ finished in %f", [[NSThread currentThread] name], CACurrentMediaTime() - startTime);
 }
@@ -262,6 +295,9 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
 
     if (self.pageIndex == 2) {
+        return 0;
+        
+    }else if (self.pageIndex == 3) {
         return 0;
         
     }else if (self.pageIndex == 4) {
@@ -326,7 +362,10 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (self.pageIndex == 4) {
+    if (self.pageIndex == 3) {
+        return 40;
+    }
+    else if(self.pageIndex == 4) {
         return 120;
     }else{
         return 68;
@@ -367,6 +406,12 @@
         cell.nameLabel.text = self.nameArray[indexPath.row];
         cell.examNumLabel.text =  [NSString stringWithFormat:@"Итоговый Рейтинг: %@",self.examNumArray[indexPath.row]];
         cell.examLabel.text =  [NSString stringWithFormat:@"Итог: %@",self.examArray[indexPath.row]];
+    }else if(self.pageIndex == 3){
+        identifier = @"cellPra";
+        cell = [tableView dequeueReusableCellWithIdentifier:identifier];
+        cell.NamePra.text = self.nameArray[indexPath.row];
+        cell.numPra.text =[NSString stringWithFormat:@"Оценка: %@",self.projectExamArray[indexPath.row]];
+        
     }else if(self.pageIndex == 4){
         identifier = @"cellProject";
         cell = [tableView dequeueReusableCellWithIdentifier:identifier];

@@ -16,8 +16,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.button.layer.cornerRadius = 75;
-    self.button.clipsToBounds = YES;
+//    self.button.layer.cornerRadius = 75;
+//    self.button.clipsToBounds = YES;
 //    self.button.layer.shadowRadius = 75;
 //    self.button.layer.shadowOpacity = 1;
 //    self.button.layer.shadowOffset = CGSizeMake(2, 2);

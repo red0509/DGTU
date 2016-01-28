@@ -24,4 +24,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *project;
 
 
+@property (weak, nonatomic) IBOutlet UILabel *NamePra;
+@property (weak, nonatomic) IBOutlet UILabel *numPra;
+
 @end

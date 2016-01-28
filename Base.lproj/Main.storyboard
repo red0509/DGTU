@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--Navigation Controller-->
@@ -40,10 +41,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bK3-Dp-h4p">
-                                <rect key="frame" x="112" y="259" width="150" height="150"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bK3-Dp-h4p">
+                                <rect key="frame" x="67" y="319" width="241" height="30"/>
                                 <animations/>
                                 <color key="backgroundColor" red="0.93130311973958901" green="1" blue="0.066301743039947736" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="241" id="LS1-jw-xnB"/>
+                                    <constraint firstAttribute="height" constant="30" id="UAU-CU-hEp"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="15"/>
                                 <state key="normal" title="Группы">
                                     <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
@@ -56,6 +61,10 @@
                         </subviews>
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="bK3-Dp-h4p" firstAttribute="centerY" secondItem="kWm-i4-J9Y" secondAttribute="centerY" id="FuW-h3-neV"/>
+                            <constraint firstItem="bK3-Dp-h4p" firstAttribute="centerX" secondItem="kWm-i4-J9Y" secondAttribute="centerX" id="PdI-m2-uJH"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Меню" id="Gqx-qt-Chz"/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
@@ -569,22 +578,63 @@
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="119"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="ПИЮ-12-77" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Ma-BK-8o7">
-                                            <rect key="frame" x="8" y="8" width="116" height="21"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ПИЮ-12-77" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Ma-BK-8o7">
+                                            <rect key="frame" x="8" y="8" width="92" height="21"/>
                                             <animations/>
                                             <fontDescription key="fontDescription" type="system" weight="light" pointSize="17"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Оценка" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B75-00-Xzk">
-                                            <rect key="frame" x="140" y="8" width="159" height="21"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Тема: Разработка технологического процесса восстановления работоспособности детали (по вариантам)" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AwE-hY-Xso">
+                                            <rect key="frame" x="8" y="37" width="359" height="72"/>
                                             <animations/>
                                             <fontDescription key="fontDescription" type="system" weight="light" pointSize="17"/>
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Тема: Разработка технологического процесса восстановления работоспособности детали (по вариантам)" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AwE-hY-Xso">
-                                            <rect key="frame" x="8" y="29" width="304" height="88"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Оценка" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B75-00-Xzk">
+                                            <rect key="frame" x="138" y="6" width="208" height="26"/>
+                                            <animations/>
+                                            <fontDescription key="fontDescription" type="system" weight="light" pointSize="17"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <animations/>
+                                    <constraints>
+                                        <constraint firstItem="3Ma-BK-8o7" firstAttribute="top" secondItem="glp-O5-mRm" secondAttribute="topMargin" id="9JC-PJ-8RC"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="AwE-hY-Xso" secondAttribute="trailing" id="NDm-LJ-vc8"/>
+                                        <constraint firstItem="AwE-hY-Xso" firstAttribute="top" secondItem="glp-O5-mRm" secondAttribute="topMargin" constant="29" id="YVg-A0-owZ"/>
+                                        <constraint firstItem="3Ma-BK-8o7" firstAttribute="leading" secondItem="glp-O5-mRm" secondAttribute="leadingMargin" id="aKb-G3-0u0"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="AwE-hY-Xso" secondAttribute="bottom" constant="2" id="gsO-ha-n7p"/>
+                                        <constraint firstAttribute="leadingMargin" secondItem="AwE-hY-Xso" secondAttribute="leading" id="wyV-kR-mqn"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <animations/>
+                                <connections>
+                                    <outlet property="nameExamLabel" destination="3Ma-BK-8o7" id="raA-vS-Gce"/>
+                                    <outlet property="nameLabel" destination="3Ma-BK-8o7" id="DB1-ye-0KO"/>
+                                    <outlet property="project" destination="AwE-hY-Xso" id="LLY-pZ-I6d"/>
+                                    <outlet property="projectNameLabel" destination="3Ma-BK-8o7" id="5MG-G4-m7D"/>
+                                    <outlet property="projectNumLabel" destination="B75-00-Xzk" id="NtV-Nr-y7k"/>
+                                </connections>
+                            </tableViewCell>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cellPra" rowHeight="45" id="VvR-dR-vjM" customClass="TableViewCellRegister">
+                                <rect key="frame" x="0.0" y="327" width="375" height="45"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="VvR-dR-vjM" id="Kzp-mi-S03">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m0E-nh-Ot2">
+                                            <rect key="frame" x="8" y="0.0" width="125" height="28"/>
+                                            <animations/>
+                                            <fontDescription key="fontDescription" type="system" weight="light" pointSize="17"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DVr-JG-Qvw">
+                                            <rect key="frame" x="141" y="0.0" width="196" height="28"/>
                                             <animations/>
                                             <fontDescription key="fontDescription" type="system" weight="light" pointSize="17"/>
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -595,11 +645,8 @@
                                 </tableViewCellContentView>
                                 <animations/>
                                 <connections>
-                                    <outlet property="nameExamLabel" destination="3Ma-BK-8o7" id="raA-vS-Gce"/>
-                                    <outlet property="nameLabel" destination="3Ma-BK-8o7" id="DB1-ye-0KO"/>
-                                    <outlet property="project" destination="AwE-hY-Xso" id="LLY-pZ-I6d"/>
-                                    <outlet property="projectNameLabel" destination="3Ma-BK-8o7" id="5MG-G4-m7D"/>
-                                    <outlet property="projectNumLabel" destination="B75-00-Xzk" id="NtV-Nr-y7k"/>
+                                    <outlet property="NamePra" destination="m0E-nh-Ot2" id="khE-J2-KoG"/>
+                                    <outlet property="numPra" destination="DVr-JG-Qvw" id="Nzl-1w-TSg"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -666,22 +713,8 @@
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="150"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="пр.Теория погрешностей" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Y3-4P-KF7">
-                                            <rect key="frame" x="105" y="8" width="262" height="100"/>
-                                            <animations/>
-                                            <fontDescription key="fontDescription" type="system" weight="light" pointSize="17"/>
-                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Аудитория 1302" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NMG-Ii-84X">
                                             <rect key="frame" x="8" y="98" width="89" height="44"/>
-                                            <animations/>
-                                            <fontDescription key="fontDescription" type="system" weight="light" pointSize="17"/>
-                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="ст. преп.РУБЦОВА С.В." lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sMu-0d-LjC">
-                                            <rect key="frame" x="105" y="100" width="262" height="50"/>
                                             <animations/>
                                             <fontDescription key="fontDescription" type="system" weight="light" pointSize="17"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -700,10 +733,36 @@
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="лаб.Типаж, эксплуатация и основы проектирования технологического оборудования /Технологические процессы" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Y3-4P-KF7">
+                                            <rect key="frame" x="113" y="8" width="254" height="100"/>
+                                            <animations/>
+                                            <fontDescription key="fontDescription" type="system" weight="light" pointSize="17"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ст. преп.РУБЦОВА С.В." lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sMu-0d-LjC">
+                                            <rect key="frame" x="105" y="100" width="262" height="50"/>
+                                            <animations/>
+                                            <fontDescription key="fontDescription" type="system" weight="light" pointSize="17"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                     </subviews>
                                     <animations/>
+                                    <constraints>
+                                        <constraint firstItem="sMu-0d-LjC" firstAttribute="top" secondItem="8Y3-4P-KF7" secondAttribute="bottom" constant="-8" id="C6d-06-xVt"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="8Y3-4P-KF7" secondAttribute="trailing" id="WgI-WO-1py"/>
+                                        <constraint firstItem="8Y3-4P-KF7" firstAttribute="leading" secondItem="9qv-jJ-z0H" secondAttribute="leadingMargin" constant="105" id="n4C-ma-O4P"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="sMu-0d-LjC" secondAttribute="trailing" id="nLm-Sd-RRB"/>
+                                        <constraint firstAttribute="topMargin" secondItem="8Y3-4P-KF7" secondAttribute="top" id="nQe-ZF-0oI"/>
+                                        <constraint firstItem="sMu-0d-LjC" firstAttribute="top" secondItem="9qv-jJ-z0H" secondAttribute="topMargin" constant="92" id="reT-fe-6qX"/>
+                                        <constraint firstItem="sMu-0d-LjC" firstAttribute="leading" secondItem="9qv-jJ-z0H" secondAttribute="leadingMargin" constant="97" id="zAH-4U-kIG"/>
+                                    </constraints>
                                 </tableViewCellContentView>
                                 <animations/>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="sMu-0d-LjC" secondAttribute="bottom" constant="1" id="tZf-Aa-M9L"/>
+                                </constraints>
                                 <connections>
                                     <outlet property="num" destination="A0d-hp-c6T" id="o8I-E5-GUR"/>
                                     <outlet property="room" destination="NMG-Ii-84X" id="HYs-10-9Zz"/>
