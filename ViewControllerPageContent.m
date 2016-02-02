@@ -30,34 +30,50 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.labelTitle.text = self.titleText;
+    
+    NSDate *date = [NSDate date];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
+    
+    [dateFormatter setDateFormat:@"M"];
+    NSString * strintDate = [dateFormatter stringFromDate:date];
+   NSInteger intDate = [strintDate integerValue];
+    NSString *semester;
+    if (intDate > 8 || intDate == 1) {
+        semester =  @"1";
+    }else{
+        semester = @"2";
+    }
+    
+    
+    
     if (self.pageIndex == 0) {
         [self loadGroupReference:
-        [NSString stringWithFormat:@"http://stud.sssu.ru/Rasp/Rasp.aspx?group=%@&sem=1",self.referenceContent]
+        [NSString stringWithFormat:@"http://stud.sssu.ru/Rasp/Rasp.aspx?group=%@&sem=%@",self.referenceContent,semester]
                                 day:@"Понедельник"];
         
     }else if (self.pageIndex == 1){
         [self loadGroupReference:
-        [NSString stringWithFormat:@"http://stud.sssu.ru/Rasp/Rasp.aspx?group=%@&sem=1",self.referenceContent]
+        [NSString stringWithFormat:@"http://stud.sssu.ru/Rasp/Rasp.aspx?group=%@&sem=%@",self.referenceContent,semester]
                                 day:@"Вторник"];
         
     }else if (self.pageIndex == 2){
         [self loadGroupReference:
-        [NSString stringWithFormat:@"http://stud.sssu.ru/Rasp/Rasp.aspx?group=%@&sem=1",self.referenceContent]
+        [NSString stringWithFormat:@"http://stud.sssu.ru/Rasp/Rasp.aspx?group=%@&sem=%@",self.referenceContent,semester]
                                 day:@"Среда"];
         
     }else if (self.pageIndex == 3){
         [self loadGroupReference:
-         [NSString stringWithFormat:@"http://stud.sssu.ru/Rasp/Rasp.aspx?group=%@&sem=1",self.referenceContent]
+         [NSString stringWithFormat:@"http://stud.sssu.ru/Rasp/Rasp.aspx?group=%@&sem=%@",self.referenceContent,semester]
                                 day:@"Четверг"];
         
     }else if (self.pageIndex == 4){
         [self loadGroupReference:
-         [NSString stringWithFormat:@"http://stud.sssu.ru/Rasp/Rasp.aspx?group=%@&sem=1",self.referenceContent]
+         [NSString stringWithFormat:@"http://stud.sssu.ru/Rasp/Rasp.aspx?group=%@&sem=%@",self.referenceContent,semester]
                                 day:@"Пятница"];
         
     }else if (self.pageIndex == 5){
         [self loadGroupReference:
-         [NSString stringWithFormat:@"http://stud.sssu.ru/Rasp/Rasp.aspx?group=%@&sem=1",self.referenceContent]
+         [NSString stringWithFormat:@"http://stud.sssu.ru/Rasp/Rasp.aspx?group=%@&sem=%@",self.referenceContent,semester]
                                 day:@"Суббота"];
     }
     

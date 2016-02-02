@@ -17,7 +17,6 @@
 @interface TableViewControllerSelection : UITableViewController 
 
 
--(void) loadGroupReference:(NSString*) URLGroup;
 
 @property (strong,nonatomic) NSString *group;
 @property (strong,nonatomic) NSString *reference;

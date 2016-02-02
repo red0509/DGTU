@@ -8,6 +8,8 @@
 
 #import "TableViewControllerSelection.h"
 #import "TableViewControllerRegister.h"
+#import "TableViewControllerGraph.h"
+
 
 @interface TableViewControllerSelection () 
 
@@ -50,7 +52,23 @@
         
         
     }else if(indexPath.row == 2){//Графики
-//        [viewControllerPageView loadGroupReference:[NSString stringWithFormat:@"http://stud.sssu.ru/Graph/Graph.aspx?group=%@&sem=1",[self numberGroupString]]];
+        
+        NSDate *date = [NSDate date];
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
+        
+        [dateFormatter setDateFormat:@"M"];
+        NSString * strintDate = [dateFormatter stringFromDate:date];
+        NSInteger intDate = [strintDate integerValue];
+        NSString *semester;
+        if (intDate > 8 || intDate == 1) {
+            semester =  @"1";
+        }else{
+            semester = @"2";
+        }
+        TableViewControllerGraph *tableViewControllerGraph = [self.storyboard instantiateViewControllerWithIdentifier:@"TableViewControllerGraph"];
+        [tableViewControllerGraph loadGraph:[NSString stringWithFormat:@"http://stud.sssu.ru/Graph/Graph.aspx?group=%@&sem=%@",self.numberGroupString,semester] sem:semester];
+        
+        [self.navigationController pushViewController:tableViewControllerGraph animated:YES];
         
     }
     
@@ -58,27 +76,27 @@
 }
 
 
--(void) loadGroupReference:(NSString*) URLGroup{
-    
-        NSURL *URL = [NSURL URLWithString:URLGroup];
-        self.sess = [NSURLSession sharedSession];
-        [[self.sess dataTaskWithURL:URL completionHandler:
-          ^(NSData *data, NSURLResponse *response, NSError *error) {
-              NSString *contentType = nil;
-              if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
-                  NSDictionary *headers = [(NSHTTPURLResponse *)response allHeaderFields];
-                  contentType = headers[@"Content-Type"];
-              }
-//              HTMLDocument *home = [HTMLDocument documentWithData:data
-//                                                contentTypeHeader:contentType];
-              
-              dispatch_async(dispatch_get_main_queue(), ^{
-                  
-              });
-              
-          }
-          ] resume];
-   }
+//-(void) loadGroupReference:(NSString*) URLGroup{
+//    
+//        NSURL *URL = [NSURL URLWithString:URLGroup];
+//        self.sess = [NSURLSession sharedSession];
+//        [[self.sess dataTaskWithURL:URL completionHandler:
+//          ^(NSData *data, NSURLResponse *response, NSError *error) {
+//              NSString *contentType = nil;
+//              if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
+//                  NSDictionary *headers = [(NSHTTPURLResponse *)response allHeaderFields];
+//                  contentType = headers[@"Content-Type"];
+//              }
+////              HTMLDocument *home = [HTMLDocument documentWithData:data
+////                                                contentTypeHeader:contentType];
+//              
+//              dispatch_async(dispatch_get_main_queue(), ^{
+//                  
+//              });
+//              
+//          }
+//          ] resume];
+//   }
 
 //-(void) loadTimeTable:(HTMLDocument*)home day:(NSString*) day
 //{

@@ -7,6 +7,8 @@
 //
 
 #import "TableViewControllerRegister.h"
+#import "TableViewCellSubject.h"
+#import "TableViewControllerInfo.h"
 
 @interface TableViewControllerRegister ()
 
@@ -22,7 +24,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"Дисциплины";
-    [self.tableView reloadData];
 
 }
 
@@ -106,24 +107,33 @@
 }
 #pragma mark - Table view data source
 
+- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath{
+
+    TableViewControllerInfo *tableViewControllerInfo = [self.storyboard instantiateViewControllerWithIdentifier:@"TableViewControllerInfo"];
+    tableViewControllerInfo.referenceInfo = self.registerReferences[indexPath.row];
+    [self.navigationController pushViewController:tableViewControllerInfo animated:YES];
+    
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return [self.subjectArray count];
 }
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return UITableViewAutomaticDimension;
+}
 
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return UITableViewAutomaticDimension;
+}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    static NSString *identifier = @"cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
-    if (!cell) {
-        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:identifier];
-    }
-    cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:17];
-    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    cell.textLabel.lineBreakMode = 2;
-    cell.textLabel.text = self.subjectArray[indexPath.row];
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"Тип ведомости: %@    Закрыта: %@",self.typeArray[indexPath.row],self.closedArray[indexPath.row]];
-    
+    static NSString *identifier = @"cellSubject";
+    TableViewCellSubject *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
+   cell.subjectLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    cell.subjectLabel.numberOfLines = 4;
+    cell.subjectLabel.text = self.subjectArray[indexPath.row];
+    cell.typeLabel.text = [NSString stringWithFormat:@"Тип ведомости: %@    Закрыта: %@",self.typeArray[indexPath.row],self.closedArray[indexPath.row]];
     return cell;
 }
 
@@ -136,12 +146,11 @@
         viewRegisterPageView.referencePageView = self.registerReferences[indexPath.row];
     
     
+    
     [self.navigationController pushViewController:viewRegisterPageView animated:YES];
     
-
-    
-    
 }
+
 
 
 @end

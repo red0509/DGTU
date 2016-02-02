@@ -29,12 +29,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.titleLabel.text = self.titleText;
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-//    [self loadReference:[NSString stringWithFormat:@"http://stud.sssu.ru/Ved/Ved.aspx?id=%@",self.referenceContent]];
    
     
     if (self.pageIndex == 0) {
@@ -73,7 +67,10 @@
     self.projectNameArray = [NSMutableArray array];
     self.projectExamArray = [NSMutableArray array];
     NSURL *URL = [NSURL URLWithString:URLGroup];
-    NSURLSession *session = [NSURLSession sharedSession];
+    NSURLSessionConfiguration *sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
+    sessionConfig.timeoutIntervalForResource = 5;
+    sessionConfig.timeoutIntervalForRequest = 5;
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfig];
     [[session dataTaskWithURL:URL completionHandler:
       ^(NSData *data, NSURLResponse *response, NSError *error) {
           
