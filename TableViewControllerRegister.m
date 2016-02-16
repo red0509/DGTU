@@ -118,13 +118,13 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return [self.subjectArray count];
 }
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return UITableViewAutomaticDimension;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return UITableViewAutomaticDimension;
-}
+//- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+//    return UITableViewAutomaticDimension;
+//}
+//
+//- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath{
+//    return UITableViewAutomaticDimension;
+//}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
@@ -133,7 +133,7 @@
    cell.subjectLabel.lineBreakMode = NSLineBreakByWordWrapping;
     cell.subjectLabel.numberOfLines = 4;
     cell.subjectLabel.text = self.subjectArray[indexPath.row];
-    cell.typeLabel.text = [NSString stringWithFormat:@"Тип ведомости: %@    Закрыта: %@",self.typeArray[indexPath.row],self.closedArray[indexPath.row]];
+    cell.typeLabel.text = [NSString stringWithFormat:@"Тип ведомости: %@  Закрыта: %@",self.typeArray[indexPath.row],self.closedArray[indexPath.row]];
     return cell;
 }
 

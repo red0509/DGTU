@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "TableViewFav.h"
 
 @interface ViewController ()
 
@@ -21,6 +22,8 @@
 //    self.button.layer.shadowRadius = 75;
 //    self.button.layer.shadowOpacity = 1;
 //    self.button.layer.shadowOffset = CGSizeMake(2, 2);
+//    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:100.0/255.0 green:181.0/255.0 blue:246.0/255.0 alpha:0.0];
+//    self.navigationController.navigationBar.translucent = YES;
 }
 
 
@@ -29,6 +32,11 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (IBAction)buttonActionGroup:(id)sender {
+- (IBAction)favorites:(id)sender {
+    
+//    TableViewFav *fav = [[TableViewFav alloc] init];
+//    [self.navigationController pushViewController:fav animated:YES];
+    
 }
+
 @end

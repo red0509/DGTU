@@ -10,7 +10,6 @@
 
 @interface ViewController : UIViewController
 
-- (IBAction)buttonActionGroup:(id)sender;
 @property (weak, nonatomic) IBOutlet UIButton *button;
 
 @end

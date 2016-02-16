@@ -52,6 +52,7 @@
     NSURLSessionConfiguration *sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
     sessionConfig.timeoutIntervalForResource = 7;
     sessionConfig.timeoutIntervalForRequest = 7;
+        
     NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfig];
     [[session dataTaskWithURL:URL completionHandler:
       ^(NSData *data, NSURLResponse *response, NSError *error) {
