@@ -45,36 +45,23 @@
     }
     
     
-    
     if (self.pageIndex == 0) {
-        [self loadGroupReference:
-         [NSString stringWithFormat:@"http://stud.sssu.ru/Rasp/Rasp.aspx?group=%@&sem=%@",self.referenceContent,semester]
-                             day:@"Понедельник"];
+        [self loadGroupReference:self.timeTable day:@"Понедельник"];
         
     }else if (self.pageIndex == 1){
-        [self loadGroupReference:
-         [NSString stringWithFormat:@"http://stud.sssu.ru/Rasp/Rasp.aspx?group=%@&sem=%@",self.referenceContent,semester]
-                             day:@"Вторник"];
+        [self loadGroupReference:self.timeTable day:@"Вторник"];
         
     }else if (self.pageIndex == 2){
-        [self loadGroupReference:
-         [NSString stringWithFormat:@"http://stud.sssu.ru/Rasp/Rasp.aspx?group=%@&sem=%@",self.referenceContent,semester]
-                             day:@"Среда"];
+        [self loadGroupReference:self.timeTable day:@"Среда"];
         
     }else if (self.pageIndex == 3){
-        [self loadGroupReference:
-         [NSString stringWithFormat:@"http://stud.sssu.ru/Rasp/Rasp.aspx?group=%@&sem=%@",self.referenceContent,semester]
-                             day:@"Четверг"];
+        [self loadGroupReference:self.timeTable day:@"Четверг"];
         
     }else if (self.pageIndex == 4){
-        [self loadGroupReference:
-         [NSString stringWithFormat:@"http://stud.sssu.ru/Rasp/Rasp.aspx?group=%@&sem=%@",self.referenceContent,semester]
-                             day:@"Пятница"];
+        [self loadGroupReference:self.timeTable day:@"Пятница"];
         
     }else if (self.pageIndex == 5){
-        [self loadGroupReference:
-         [NSString stringWithFormat:@"http://stud.sssu.ru/Rasp/Rasp.aspx?group=%@&sem=%@",self.referenceContent,semester]
-                             day:@"Суббота"];
+        [self loadGroupReference:self.timeTable day:@"Суббота"];
     }
     
     
@@ -89,43 +76,9 @@
 
 -(void) loadGroupReference:(NSString*) URLGroup day:(NSString*) weekDay{
     
-    NSURL *URL = [NSURL URLWithString:URLGroup];
-    NSURLSessionConfiguration *sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
-    sessionConfig.timeoutIntervalForResource = 5;
-    sessionConfig.timeoutIntervalForRequest = 5;
-    NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfig];
+    HTMLDocument *home = [[HTMLDocument alloc] initWithString:URLGroup];
     
-    [[session dataTaskWithURL:URL completionHandler:
-      ^(NSData *data, NSURLResponse *response, NSError *error) {
-          
-          if (error != nil) {
-              dispatch_async(dispatch_get_main_queue(), ^{
-                  UIAlertController *alert= [UIAlertController alertControllerWithTitle:@"Ошибка" message:@"Не удается подключится." preferredStyle:UIAlertControllerStyleAlert];
-                  
-                  UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK"
-                                                                          style:UIAlertActionStyleDefault
-                                                                        handler:^(UIAlertAction * action) {
-                                                                            [self.navigationController popViewControllerAnimated:YES];
-                                                                        }];
-                  [alert addAction:defaultAction];
-                  
-                  [self.navigationController presentViewController:alert animated:YES completion:nil];
-              });
-          }else{
-              
-              NSString *contentType = nil;
-              if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
-                  NSDictionary *headers = [(NSHTTPURLResponse *)response allHeaderFields];
-                  contentType = headers[@"Content-Type"];
-              }
-              HTMLDocument *home = [HTMLDocument documentWithData:data
-                                                contentTypeHeader:contentType];
-              
-              dispatch_async(dispatch_get_main_queue(), ^{
-                  [self loadTimeTable:home day:weekDay];
-              });
-          }
-      }] resume];
+    [self loadTimeTable:home day:weekDay];
 }
 
 

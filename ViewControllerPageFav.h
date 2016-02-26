@@ -13,6 +13,6 @@
 
 @property (strong, nonatomic) UIPageViewController *pageViewController;
 @property (strong, nonatomic) NSArray *pageTitles;
-@property (strong,nonatomic) NSString *referencePageView;
+@property (strong ,nonatomic) NSString *tableTime;
 @end
 

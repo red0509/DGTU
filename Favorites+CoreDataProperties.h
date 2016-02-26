@@ -16,10 +16,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface Favorites (CoreDataProperties)
 
-@property (nullable, nonatomic, retain) HTMLDocument *graph;
+@property (nullable, nonatomic, retain) NSString *graph;
 @property (nullable, nonatomic, retain) NSString *name;
 @property (nullable, nonatomic, retain) NSString *semester;
-@property (nullable, nonatomic, retain) HTMLDocument *tableTime;
+@property (nullable, nonatomic, retain) NSString *tableTime;
 
 @end
 

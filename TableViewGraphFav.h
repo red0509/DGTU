@@ -11,6 +11,6 @@
 
 @interface TableViewGraphFav : UITableViewController
 
--(void) loadGraph:(HTMLDocument*) home sem:(NSString*) sem;
+-(void) loadGraph:(NSString*) str sem:(NSString*) sem;
 
 @end

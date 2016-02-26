@@ -34,7 +34,7 @@
 
 
 
--(void) loadGraph:(HTMLDocument*) home sem:(NSString*) sem{
+-(void) loadGraph:(NSString*) str sem:(NSString*) sem{
     
     self.subjectArray = [NSMutableArray array];
     self.typeArray = [NSMutableArray array];
@@ -42,7 +42,7 @@
     self.dateArray = [NSMutableArray array];
 //    NSLog(@"doc %@",home.textContent);
    
-    
+    HTMLDocument *home = [[HTMLDocument alloc]initWithString:str];
     
     if ([sem isEqualToString:@"1"]) {
         NSInteger num = 5;

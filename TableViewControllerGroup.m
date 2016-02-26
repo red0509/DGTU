@@ -115,7 +115,7 @@
 
 
 -(void)dealloc {
-//    [self.resultSearchController.view removeFromSuperview];
+    [self.resultSearchController.view removeFromSuperview];
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

@@ -15,60 +15,26 @@
 
 @interface TableViewControllerSelection () 
 
-@property (strong,nonatomic) HTMLDocument* doc;
+@property (strong, nonatomic) HTMLDocument* docTime;
+@property (strong, nonatomic) HTMLDocument* docGraph;
 @property (strong, nonatomic) NSString *docString;
-@property NSURLSession *sess;
+@property BOOL boolRef;
+@property NSMutableArray *array;
 @end
 
 @implementation TableViewControllerSelection
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.doc = [[HTMLDocument alloc]init];
+    self.docTime = [[HTMLDocument alloc]init];
+    self.docGraph = [[HTMLDocument alloc]init];
     self.title = self.group;
     self.numberGroupString = [self.reference substringFromIndex:self.reference.length-5];
     UIBarButtonItem *rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"add1.png"] style:UIBarButtonItemStylePlain target:self action:@selector(addFavorites)];
     self.navigationItem.rightBarButtonItem = rightBarButtonItem;
+  
     
 }
-
--(void) documentGraph:(HTMLDocument*) doc1 documentTableTime:(HTMLDocument*) doc2 semester:(NSString*) sem{
-    
-    DataManager *data = [[DataManager alloc]init];
-    Favorites* favorites =
-    [NSEntityDescription insertNewObjectForEntityForName:@"Favorites"
-                                  inManagedObjectContext:data.managedObjectContext];
-    favorites.name = self.group;
-    favorites.graph = doc1;
-    favorites.tableTime = doc2;
-    favorites.semester = sem;
-    
-    NSError* error = nil;
-    if (![data.managedObjectContext save:&error]) {
-        NSLog(@"%@", [error localizedDescription]);
-    }
-    NSFetchRequest* request = [[NSFetchRequest alloc] init];
-    
-    NSEntityDescription* description =
-    [NSEntityDescription entityForName:@"Favorites"
-                inManagedObjectContext:data.managedObjectContext];
-    
-    [request setEntity:description];
-    
-    NSError* requestError = nil;
-    NSArray* resultArray = [data.managedObjectContext executeFetchRequest:request error:&requestError];
-    
-    
-    
-    for (id object in resultArray) {
-        //                        [data.managedObjectContext deleteObject:object];
-        //                        [data.managedObjectContext save:nil];
-        Favorites *favorites = (Favorites*) object;
-        NSLog(@"NAME: %@ , TABLE:%@ , GRAPH:%@ , SEM:%@" ,favorites.name ,favorites.tableTime,favorites.graph,favorites.semester);
-        
-    }
-}
-
 
 -(void) addFavorites{
     
@@ -84,58 +50,82 @@
     }else{
         semester = @"2";
     }
-    
-    NSURL *URLGraph = [NSURL URLWithString:[NSString stringWithFormat:@"http://stud.sssu.ru/Graph/Graph.aspx?group=%@&sem=%@",self.numberGroupString, semester]];
-    NSURLSessionConfiguration *sessionConfigGraph = [NSURLSessionConfiguration defaultSessionConfiguration];
-    sessionConfigGraph.timeoutIntervalForResource = 5;
-    sessionConfigGraph.timeoutIntervalForRequest = 5;
-    NSURLSession *sessionGraph = [NSURLSession sessionWithConfiguration:sessionConfigGraph];
-    [[sessionGraph dataTaskWithURL:URLGraph completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        NSString *contentType = nil;
-        if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
-            NSDictionary *headers = [(NSHTTPURLResponse *)response allHeaderFields];
-            contentType = headers[@"Content-Type"];
-        }
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSURL *URLTime = [NSURL URLWithString:[NSString stringWithFormat:@"http://stud.sssu.ru/Rasp/Rasp.aspx?group=%@&sem=%@",self.numberGroupString, semester]];
+        NSError *errorData = nil;
+        NSData *dataTime = [[NSData alloc]initWithContentsOfURL:URLTime options:NSDataReadingUncached error:&errorData];
         
-      
+        NSString *contentType = @"text/html; charset=windows-1251";
+        
+        NSURL *URLGraph = [NSURL URLWithString:[NSString stringWithFormat:@"http://stud.sssu.ru/Graph/Graph.aspx?group=%@&sem=%@",self.numberGroupString, semester]];
+        NSData *dataGraph = [[NSData alloc]initWithContentsOfURL:URLGraph options:NSDataReadingUncached error:&errorData];
         dispatch_async(dispatch_get_main_queue(), ^{
-            HTMLDocument *homeGraph = [HTMLDocument documentWithData:data
-                                              contentTypeHeader:contentType];
-            NSString *s=@"str";
-            
-            NSURL *URLTableTime = [NSURL URLWithString:[NSString stringWithFormat:@"http://stud.sssu.ru/Rasp/Rasp.aspx?group=%@&sem=%@",self.numberGroupString, semester]];
-            NSURLSessionConfiguration *sessionConfigTableTime = [NSURLSessionConfiguration defaultSessionConfiguration];
-            sessionConfigTableTime.timeoutIntervalForResource = 5;
-            sessionConfigTableTime.timeoutIntervalForRequest = 5;
-            NSURLSession *sessionTableTime = [NSURLSession sessionWithConfiguration:sessionConfigTableTime];
-            [[sessionTableTime dataTaskWithURL:URLTableTime completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-                NSString *contentType = nil;
-                if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
-                    NSDictionary *headers = [(NSHTTPURLResponse *)response allHeaderFields];
-                    contentType = headers[@"Content-Type"];
-                }
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    NSLog(@"%@",s);
-                    HTMLDocument *homeTableTime = [HTMLDocument documentWithData:data
+            if (errorData != nil) {
+                NSLog(@"error %@", [errorData localizedDescription]);
+               
+            } else {
+                NSLog(@"Data has loaded successfully.");
+                
+                HTMLDocument *homeTime = [HTMLDocument documentWithData:dataTime
                                                       contentTypeHeader:contentType];
-                    [self documentGraph:homeGraph documentTableTime:homeTableTime semester:semester];
-                });
-            }]resume];
+                HTMLDocument *homeTable = [HTMLDocument documentWithData:dataGraph
+                                                       contentTypeHeader:contentType];
+                
+                DataManager *data = [[DataManager alloc]init];
+                Favorites* favorites =
+                [NSEntityDescription insertNewObjectForEntityForName:@"Favorites"
+                                              inManagedObjectContext:data.managedObjectContext];
+                
+                NSString *graph= homeTable.serializedFragment;
+                NSString *time= homeTime.serializedFragment;
+                favorites.name = self.group;
+                favorites.graph = graph;
+                favorites.tableTime = time;
+                favorites.semester = semester;
+                
+                NSError* error = nil;
+                if (![data.managedObjectContext save:&error]) {
+                    NSLog(@"%@", [error localizedDescription]);
+                }
+                
+                UIAlertController *alert= [UIAlertController alertControllerWithTitle:@"Добавлено в избранное" message:nil preferredStyle:UIAlertControllerStyleAlert];
+                
+                UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK"
+                                                                        style:UIAlertActionStyleDefault
+                                                                      handler:nil];
+                [alert addAction:defaultAction];
+                
+                [self.navigationController presentViewController:alert animated:YES completion:nil];
+                
+                NSFetchRequest* request = [[NSFetchRequest alloc] init];
+                
+                NSEntityDescription* description =
+                [NSEntityDescription entityForName:@"Favorites"
+                            inManagedObjectContext:data.managedObjectContext];
+                
+                [request setEntity:description];
+                
+                NSError* requestError = nil;
+                NSArray* resultArray = [data.managedObjectContext executeFetchRequest:request error:&requestError];
+                
+                
+                
+                for (id object in resultArray) {
+                    //                        [data.managedObjectContext deleteObject:object];
+                    //                        [data.managedObjectContext save:nil];
+                    Favorites *favorites = (Favorites*) object;
+                    //        NSLog(@"NAME: %@ , TABLE:%@ , GRAPH:%@ , SEM:%@" ,favorites.name ,favorites.tableTime,favorites.graph,favorites.semester);
+                    NSLog(@"NAME: %@ " ,favorites.name );
+                }
+            }
         });
-    }]resume];
-
-    
-    
-  
-    
-
+    });
 }
 
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
-
 
 
 #pragma mark - Table view data source

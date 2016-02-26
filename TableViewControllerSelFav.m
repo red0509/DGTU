@@ -8,6 +8,7 @@
 
 #import "TableViewControllerSelFav.h"
 #import "ViewControllerPageFav.h"
+#import "TableViewPageContFav.h"
 #import "TableViewGraphFav.h"
 
 @interface TableViewControllerSelFav ()
@@ -18,8 +19,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    NSLog(@"1");
-    
+    self.title = self.name;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -33,8 +33,9 @@
     
     
     if (indexPath.row == 0) {
-        ViewControllerPageFav *viewControllerPageFav = [self.storyboard instantiateViewControllerWithIdentifier:@"ViewControllerPageFav"];
 
+        ViewControllerPageFav *viewControllerPageFav = [self.storyboard instantiateViewControllerWithIdentifier:@"ViewControllerPageFav"];
+        viewControllerPageFav.tableTime = self.tableTime;
         [self.navigationController pushViewController:viewControllerPageFav animated:YES];
 
     }else if (indexPath.row == 1){

@@ -11,8 +11,8 @@
 
 @interface TableViewControllerSelFav : UITableViewController
 @property(strong,nonatomic) NSString *name;
-@property(strong,nonatomic) HTMLDocument *graph;
-@property(strong,nonatomic) HTMLDocument *tableTime;
+@property(strong,nonatomic) NSString *graph;
+@property(strong,nonatomic) NSString *tableTime;
 @property(strong,nonatomic) NSString *semester;
 
 @end

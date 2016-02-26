@@ -92,9 +92,10 @@
     fav.graph = favorites.graph;
     fav.tableTime = favorites.tableTime;
     fav.semester = favorites.semester;
-    NSLog(@"name %@:", favorites.name);
-    NSLog(@"favor %@",favorites.graph);
-    NSLog(@"fav %@",fav.graph.serializedFragment);
+//    NSLog(@"name %@:", favorites.name);
+//    NSLog(@"graph %@",favorites.graph);
+//    NSLog(@"tableTime %@",favorites.tableTime);
+//    NSLog(@"semester  %@",fav.semester);
     [self.navigationController pushViewController:fav animated:YES];
 }
 

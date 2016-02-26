@@ -15,6 +15,6 @@
 
 @property NSUInteger pageIndex;
 @property NSString *titleText;
-@property (strong,nonatomic) HTMLDocument *document;
-@property NSString *referenceContent;
+//@property (strong,nonatomic) HTMLDocument *document;
+@property NSString *timeTable;
 @end

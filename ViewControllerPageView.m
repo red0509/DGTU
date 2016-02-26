@@ -47,6 +47,7 @@
     }else{
         self.index=0;
     }
+
     ViewControllerPageContent *startingViewController = [self viewControllerAtIndex:self.index];
     NSArray *viewControllers = @[startingViewController];
     [self.pageViewController setViewControllers:viewControllers direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];

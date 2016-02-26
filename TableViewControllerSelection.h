@@ -14,13 +14,10 @@
 
 
 
-@interface TableViewControllerSelection : UITableViewController 
-
-
+@interface TableViewControllerSelection : UITableViewController
 
 @property (strong,nonatomic) NSString *group;
 @property (strong,nonatomic) NSString *reference;
 @property (strong,nonatomic) NSString *numberGroupString;
-
 
 @end

@@ -54,9 +54,9 @@
               NSDictionary *headers = [(NSHTTPURLResponse *)response allHeaderFields];
               contentType = headers[@"Content-Type"];
           }
+          NSLog(@"respo %@",response);
         HTMLDocument *home = [HTMLDocument documentWithData:data
                                           contentTypeHeader:contentType];
-          NSLog(@"%@",home.serializedFragment);
           dispatch_async(dispatch_get_main_queue(), ^{
               if ([sem isEqualToString:@"1"]) {
                   NSInteger num = 5;

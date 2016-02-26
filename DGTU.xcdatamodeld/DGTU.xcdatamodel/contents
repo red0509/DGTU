@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="9525" systemVersion="15D21" minimumToolsVersion="Automatic">
     <entity name="Favorites" representedClassName="Favorites" syncable="YES">
-        <attribute name="graph" transient="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="graph" optional="YES" attributeType="String" maxValueString="50000" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="semester" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="tableTime" transient="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="tableTime" optional="YES" attributeType="String" maxValueString="50000" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Favorites" positionX="-513" positionY="-351" width="128" height="103"/>
+        <element name="Favorites" positionX="-513" positionY="-351" width="128" height="105"/>
     </elements>
 </model>

@@ -75,7 +75,7 @@
     TableViewPageContFav *viewControllerPageContent = [self.storyboard instantiateViewControllerWithIdentifier:@"TableViewPageContFav"];
     viewControllerPageContent.titleText = self.pageTitles[index];
     viewControllerPageContent.pageIndex = index;
-    viewControllerPageContent.referenceContent = self.referencePageView;
+    viewControllerPageContent.timeTable = self.tableTime;
     return viewControllerPageContent;
 }
 
