@@ -9,6 +9,9 @@
 #import "AppDelegate.h"
 
 
+
+
+
 @interface AppDelegate ()
 
 @end
@@ -24,6 +27,16 @@
     pageControl.pageIndicatorTintColor = [UIColor lightGrayColor];
     pageControl.currentPageIndicatorTintColor = [UIColor blackColor];
     pageControl.backgroundColor = [UIColor whiteColor];
+    
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main"
+                                                             bundle: nil];
+    
+    LeftMenuViewController *leftMenu = (LeftMenuViewController*)[mainStoryboard
+                                                                 instantiateViewControllerWithIdentifier: @"LeftMenuViewController"];
+    
+    
+    [SlideNavigationController sharedInstance].leftMenu = leftMenu;
+    [SlideNavigationController sharedInstance].menuRevealAnimationDuration = .18;
     
 //    DataManager *data = [[DataManager alloc]init];
     

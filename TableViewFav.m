@@ -20,7 +20,26 @@
     // Do any additional setup after loading the view, typically from a nib.
     self.title = @"Избранное";
     self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    self.editButtonItem.title = @"Правка";
     
+}
+- (BOOL)slideNavigationControllerShouldDisplayLeftMenu
+{
+    return YES;
+}
+- (void)setEditing:(BOOL)editing animated:(BOOL)animated
+{
+    // Make sure you call super first
+    [super setEditing:editing animated:animated];
+    
+    if (editing)
+    {
+        self.editButtonItem.title = @"Готово";
+    }
+    else
+    {
+        self.editButtonItem.title = @"Правка";
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -32,6 +51,8 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+
 
 - (NSManagedObjectContext*) managedObjectContext {
     
@@ -92,10 +113,7 @@
     fav.graph = favorites.graph;
     fav.tableTime = favorites.tableTime;
     fav.semester = favorites.semester;
-//    NSLog(@"name %@:", favorites.name);
-//    NSLog(@"graph %@",favorites.graph);
-//    NSLog(@"tableTime %@",favorites.tableTime);
-//    NSLog(@"semester  %@",fav.semester);
+
     [self.navigationController pushViewController:fav animated:YES];
 }
 

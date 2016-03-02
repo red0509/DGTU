@@ -9,9 +9,10 @@
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
 #import "DataManager.h"
-#import "Favorites+CoreDataProperties.h"   
+#import "Favorites+CoreDataProperties.h"
+#import "SlideNavigationController.h"
 
-@interface TableViewFav : UITableViewController <NSFetchedResultsControllerDelegate>
+@interface TableViewFav : UITableViewController <NSFetchedResultsControllerDelegate ,SlideNavigationControllerDelegate>
 
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;

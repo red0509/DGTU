@@ -7,6 +7,8 @@
 //
 
 #import "TableViewControllerFaculties.h"
+#import "LeftMenuViewController.h"
+
 
 @interface TableViewControllerFaculties ()
 
@@ -16,7 +18,13 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.tableView.separatorColor = [UIColor colorWithRed:0.48 green:0.75 blue:0.97 alpha:1];
     
+}
+
+- (BOOL)slideNavigationControllerShouldDisplayLeftMenu
+{
+    return YES;
 }
 
 

@@ -36,82 +36,84 @@
     [self.resultSearchController.searchBar sizeToFit];
     self.tableView.tableHeaderView = self.resultSearchController.searchBar;
     self.definesPresentationContext = YES;
-
+    
     [self.tableView reloadData];
     
     
     
     
-     }
+}
 
 -(void) loadGroup: (NSString*) URLFacul{
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-    self.EFfacul= [NSMutableArray array];
-    self.EFfaculReferences= [NSMutableArray array];
-    NSURL *URL = [NSURL URLWithString:URLFacul];
-    NSURLSessionConfiguration *sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
-    sessionConfig.timeoutIntervalForResource = 7;
-    sessionConfig.timeoutIntervalForRequest = 7;
+        self.EFfacul= [NSMutableArray array];
+        self.EFfaculReferences= [NSMutableArray array];
+        NSURL *URL = [NSURL URLWithString:URLFacul];
+        NSURLSessionConfiguration *sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
+        sessionConfig.timeoutIntervalForResource = 7;
+        sessionConfig.timeoutIntervalForRequest = 7;
         
-    NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfig];
-    [[session dataTaskWithURL:URL completionHandler:
-      ^(NSData *data, NSURLResponse *response, NSError *error) {
-          
-          if (error != nil) {
-              dispatch_async(dispatch_get_main_queue(), ^{
-                  UIAlertController *alert= [UIAlertController alertControllerWithTitle:@"Ошибка" message:@"Не удается подключится." preferredStyle:UIAlertControllerStyleAlert];
-                  
-                  UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK"
-                                                                          style:UIAlertActionStyleDefault
-                                                                        handler:^(UIAlertAction * action) {
-                                                                            [self.navigationController popViewControllerAnimated:YES];
-                                                                        }];
-                [alert addAction:defaultAction];
-
-                [self.navigationController presentViewController:alert animated:YES completion:nil];
-              });
-          }else{
+        NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfig];
+        [[session dataTaskWithURL:URL completionHandler:
+          ^(NSData *data, NSURLResponse *response, NSError *error) {
               
-          NSString *contentType = nil;
-          if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
-              NSDictionary *headers = [(NSHTTPURLResponse *)response allHeaderFields];
-              contentType = headers[@"Content-Type"];
-          }
-          
-          HTMLDocument *home = [HTMLDocument documentWithData:data
-                                            contentTypeHeader:contentType];
-          NSInteger numFacul = 2;
-
-          HTMLElement *div = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#_ctl0_ContentPage_ucGroups_Grid > tbody > tr:nth-child(%ld) > td:nth-child(1) > a",(long)numFacul]];
-          double startTime = CACurrentMediaTime();
-          
-          NSLog(@"%@ started", [[NSThread currentThread] name]);
-          
-          while (!(div == nil)) {
-              
-                div = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#_ctl0_ContentPage_ucGroups_Grid > tbody > tr:nth-child(%ld) > td:nth-child(1) > a",(long)numFacul]];
-              
-
+              if (error != nil) {
                   dispatch_async(dispatch_get_main_queue(), ^{
-                      if (div != nil) {
-                          
-                  [self.EFfacul addObject:div.textContent];
-                  [self.EFfaculReferences addObject:div.attributes.allValues.lastObject];
-                  [self.tableView reloadData];
-                      }
-                });
-          
-              numFacul++;
-              
-          }
-      
-          NSLog(@"%@ finished in %f", [[NSThread currentThread] name], CACurrentMediaTime() - startTime);
-          
-
-          }
-      }] resume];
+                      UIAlertController *alert= [UIAlertController alertControllerWithTitle:@"Ошибка" message:@"Не удается подключится." preferredStyle:UIAlertControllerStyleAlert];
+                      
+                      UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK"
+                                                                              style:UIAlertActionStyleDefault
+                                                                            handler:^(UIAlertAction * action) {
+                                                                                [self.navigationController popViewControllerAnimated:YES];
+                                                                            }];
+                      [alert addAction:defaultAction];
+                      
+                      [self.navigationController presentViewController:alert animated:YES completion:nil];
+                  });
+              }else{
+                  
+                  NSString *contentType = nil;
+                  if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
+                      NSDictionary *headers = [(NSHTTPURLResponse *)response allHeaderFields];
+                      contentType = headers[@"Content-Type"];
+                  }
+                  
+                  HTMLDocument *home = [HTMLDocument documentWithData:data
+                                                    contentTypeHeader:contentType];
+                  NSInteger numFacul = 2;
+                  
+                  HTMLElement *div = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#_ctl0_ContentPage_ucGroups_Grid > tbody > tr:nth-child(%ld) > td:nth-child(1) > a",(long)numFacul]];
+                  double startTime = CACurrentMediaTime();
+                  
+                  NSLog(@"%@ started", [[NSThread currentThread] name]);
+                  
+                  while (!(div == nil)) {
+                      
+                      div = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#_ctl0_ContentPage_ucGroups_Grid > tbody > tr:nth-child(%ld) > td:nth-child(1) > a",(long)numFacul]];
+                      
+                      
+                      dispatch_async(dispatch_get_main_queue(), ^{
+                          if (div != nil) {
+//                              [self.tableView beginUpdates];
+                              [self.EFfacul addObject:div.textContent];
+                              [self.EFfaculReferences addObject:div.attributes.allValues.lastObject];
+                              [self.tableView reloadData ];
+//                              [self.tableView insertSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationLeft];
+//                              [self.tableView endUpdates];
+                          }
+                      });
+                      
+                      numFacul++;
+                      
+                  }
+                  
+                  NSLog(@"%@ finished in %f", [[NSThread currentThread] name], CACurrentMediaTime() - startTime);
+                  
+                  
+              }
+          }] resume];
     });
-    }
+}
 
 
 -(void)dealloc {
@@ -125,7 +127,7 @@
 
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-   
+    
     return 1;
 }
 
@@ -151,9 +153,9 @@
     cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:17];
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     
-
     
-     if (self.resultSearchController.active)
+    
+    if (self.resultSearchController.active)
     {
         cell.textLabel.text = [self.searchResult objectAtIndex:indexPath.row];
     }
@@ -170,10 +172,10 @@
     if (self.resultSearchController.active)
     {
         tableViewControllerSelection.group = self.searchResult[indexPath.row];
-       
+        
         for (int i = 0; i < [self.EFfacul count]; i++) {
             if ([self.EFfacul[i] isEqualToString:self.searchResult[indexPath.row]]) {
-                 tableViewControllerSelection.reference = self.EFfaculReferences[i];
+                tableViewControllerSelection.reference = self.EFfaculReferences[i];
             }
         }
     }
@@ -181,7 +183,7 @@
     {
         tableViewControllerSelection.group = self.EFfacul[indexPath.row];
         tableViewControllerSelection.reference = self.EFfaculReferences[indexPath.row];
-
+        
     }
     
     [self.navigationController pushViewController:tableViewControllerSelection animated:YES];
@@ -207,47 +209,47 @@
 
 
 /*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
+ // Override to support conditional editing of the table view.
+ - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+ // Return NO if you do not want the specified item to be editable.
+ return YES;
+ }
+ */
 
 /*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
+ // Override to support editing the table view.
+ - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+ if (editingStyle == UITableViewCellEditingStyleDelete) {
+ // Delete the row from the data source
+ [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+ } else if (editingStyle == UITableViewCellEditingStyleInsert) {
+ // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+ }
+ }
+ */
 
 /*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
+ // Override to support rearranging the table view.
+ - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
+ }
+ */
 
 /*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
+ // Override to support conditional rearranging of the table view.
+ - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
+ // Return NO if you do not want the item to be re-orderable.
+ return YES;
+ }
+ */
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

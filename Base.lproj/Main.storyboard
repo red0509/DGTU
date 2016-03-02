@@ -6,11 +6,71 @@
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
-        <!--Navigation Controller-->
+        <!--Left Menu View Controller-->
+        <scene sceneID="yYQ-j6-bj8">
+            <objects>
+                <viewController storyboardIdentifier="LeftMenuViewController" id="Dad-OR-Rzi" customClass="LeftMenuViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="uBh-go-t9j"/>
+                        <viewControllerLayoutGuide type="bottom" id="gbw-kR-JFO"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="huN-WD-tvQ">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Blw-hZ-Jk8">
+                                <rect key="frame" x="0.0" y="0.0" width="525" height="1400"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="leftMenuCell" id="fzs-mW-QEF" customClass="TableViewCellMenu">
+                                        <rect key="frame" x="0.0" y="28" width="525" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="fzs-mW-QEF" id="pAL-HD-Daw">
+                                            <rect key="frame" x="0.0" y="0.0" width="525" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="users.png" translatesAutoresizingMaskIntoConstraints="NO" id="eua-Hg-U9H">
+                                                    <rect key="frame" x="8" y="10" width="24" height="24"/>
+                                                </imageView>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" fixedFrame="YES" text="Home" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wr2-UH-FIN">
+                                                    <rect key="frame" x="61" y="0.0" width="165" height="43"/>
+                                                    <fontDescription key="fontDescription" type="system" weight="light" pointSize="17"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="tintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="image" destination="eua-Hg-U9H" id="x9i-d4-AJQ"/>
+                                            <outlet property="labelName" destination="wr2-UH-FIN" id="2SL-5n-coz"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="Dad-OR-Rzi" id="Jpg-fd-vIc"/>
+                                    <outlet property="delegate" destination="Dad-OR-Rzi" id="2cD-O3-QDm"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <nil key="simulatedBottomBarMetrics"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
+                    <connections>
+                        <outlet property="tableView" destination="Blw-hZ-Jk8" id="mdz-Ns-6Kz"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ewb-Re-DBf" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="15.5" y="595.5"/>
+        </scene>
+        <!--Slide Navigation Controller-->
         <scene sceneID="cFB-nI-IDT">
             <objects>
-                <navigationController toolbarHidden="NO" id="uOP-pT-ddd" sceneMemberID="viewController">
+                <navigationController id="uOP-pT-ddd" customClass="SlideNavigationController" sceneMemberID="viewController">
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
+                    <nil key="simulatedBottomBarMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="bXH-cG-mqv">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -18,83 +78,187 @@
                         <color key="barTintColor" red="0.3921568627" green="0.70980392160000005" blue="0.96470588239999999" alpha="1" colorSpace="calibratedRGB"/>
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <color key="textShadowColor" red="0.3921568627" green="0.70980392160000005" blue="0.96470588239999999" alpha="1" colorSpace="calibratedRGB"/>
                         </textAttributes>
                     </navigationBar>
                     <connections>
-                        <segue destination="KUM-7D-CAj" kind="relationship" relationship="rootViewController" id="Fka-LI-eN8"/>
+                        <segue destination="DBS-eT-nDM" kind="relationship" relationship="rootViewController" id="k5B-oE-y4R"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YQp-bM-pZr" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="477.5" y="595.5"/>
+            <point key="canvasLocation" x="519.5" y="595.5"/>
         </scene>
-        <!--Меню-->
-        <scene sceneID="24f-IE-3zw">
+        <!--View Controller-->
+        <scene sceneID="rgg-jO-g4q">
             <objects>
-                <viewController storyboardIdentifier="ViewController" id="KUM-7D-CAj" customClass="ViewController" sceneMemberID="viewController">
+                <viewController id="Ysc-h3-1aO" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="Thu-xV-jeG"/>
-                        <viewControllerLayoutGuide type="bottom" id="Hp7-cc-QZW"/>
+                        <viewControllerLayoutGuide type="top" id="0In-Lv-8NU"/>
+                        <viewControllerLayoutGuide type="bottom" id="SUc-KH-ed7"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="kWm-i4-J9Y">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="623"/>
+                    <view key="view" contentMode="scaleToFill" id="5qL-da-4TT">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bK3-Dp-h4p">
-                                <rect key="frame" x="67" y="297" width="241" height="30"/>
-                                <color key="backgroundColor" red="0.92941176470588238" green="1" blue="0.066666666666666666" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="241" id="LS1-jw-xnB"/>
-                                    <constraint firstAttribute="height" constant="30" id="UAU-CU-hEp"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="15"/>
-                                <state key="normal" title="Группы">
-                                    <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L4x-cE-UxW">
+                                <rect key="frame" x="0.0" y="368" width="375" height="75"/>
+                                <color key="backgroundColor" red="0.52864830080000003" green="0.82379250150000005" blue="0.3921568627" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="21"/>
+                                <inset key="titleEdgeInsets" minX="100" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <inset key="imageEdgeInsets" minX="25" minY="0.0" maxX="190" maxY="0.0"/>
+                                <state key="normal" title="Группы" image="users-2.png">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sST-X4-ckW">
+                                <rect key="frame" x="0.0" y="592" width="375" height="75"/>
+                                <color key="backgroundColor" red="0.3921568627" green="0.81036968269999998" blue="0.55286314400000003" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="21"/>
+                                <inset key="titleEdgeInsets" minX="100" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <inset key="imageEdgeInsets" minX="25" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <state key="normal" title="О программе" image="information-button-2.png">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rj5-3B-Wkd">
+                                <rect key="frame" x="0.0" y="517" width="375" height="75"/>
+                                <color key="backgroundColor" red="0.86274509803921573" green="0.2196078431372549" blue="0.70980392156862748" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="21"/>
+                                <inset key="titleEdgeInsets" minX="100" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <inset key="imageEdgeInsets" minX="25" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <state key="normal" title="Кафедры" image="tribune-2.png">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sPs-6N-Fxz">
+                                <rect key="frame" x="0.0" y="64" width="375" height="305"/>
+                                <color key="backgroundColor" red="0.38431372549999998" green="0.6588235294" blue="0.92156862750000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="5kz-Eq-b25">
+                                <rect key="frame" x="87" y="85" width="200" height="200"/>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0e8-Do-415">
+                                <rect key="frame" x="0.0" y="442" width="375" height="75"/>
+                                <color key="backgroundColor" red="0.96470588235294119" green="0.83137254901960778" blue="0.2627450980392157" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="21"/>
+                                <inset key="titleEdgeInsets" minX="100" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <inset key="imageEdgeInsets" minX="25" minY="0.0" maxX="180" maxY="0.0"/>
+                                <state key="normal" title="Избранное " image="star-2.png">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="DBS-eT-nDM" kind="show" id="dQc-YO-4BS"/>
+                                    <action selector="favorites:" destination="Ysc-h3-1aO" eventType="touchUpInside" id="dQf-5C-pTb"/>
                                 </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FF8-7V-NiO">
-                                <rect key="frame" x="67" y="379" width="241" height="30"/>
-                                <color key="backgroundColor" red="0.92941176469999998" green="1" blue="0.066666666669999999" alpha="1" colorSpace="calibratedRGB"/>
-                                <state key="normal" title="Избранное ">
-                                    <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="favorites:" destination="KUM-7D-CAj" eventType="touchUpInside" id="TH1-jD-8fg"/>
-                                    <segue destination="U7d-A9-eNX" kind="show" id="wfI-Sq-qoF"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sre-dk-Wk1">
-                                <rect key="frame" x="0.0" y="59" width="375" height="98"/>
-                                <color key="backgroundColor" red="0.3921568627" green="0.70980392160000005" blue="0.96470588239999999" alpha="1" colorSpace="calibratedRGB"/>
-                                <state key="normal" title="Button"/>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="bK3-Dp-h4p" firstAttribute="centerY" secondItem="kWm-i4-J9Y" secondAttribute="centerY" id="FuW-h3-neV"/>
-                            <constraint firstItem="bK3-Dp-h4p" firstAttribute="centerX" secondItem="kWm-i4-J9Y" secondAttribute="centerX" id="PdI-m2-uJH"/>
-                        </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Меню" id="Gqx-qt-Chz"/>
+                    <navigationItem key="navigationItem" id="C1P-2o-ILR"/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
+                    <nil key="simulatedBottomBarMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
-                        <outlet property="button" destination="bK3-Dp-h4p" id="S8a-WI-RDJ"/>
+                        <outlet property="button" destination="L4x-cE-UxW" id="gth-ZK-ZSS"/>
+                        <outlet property="label" destination="sPs-6N-Fxz" id="4w6-Eb-SVG"/>
+                        <outlet property="logo" destination="5kz-Eq-b25" id="54V-ZM-KPk"/>
                     </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="fgV-vu-yNF" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="z0h-3F-9BI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="994.5" y="595.5"/>
+            <point key="canvasLocation" x="519.5" y="1369.5"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="25N-Jv-9S7">
+            <objects>
+                <viewController id="bZh-V6-kue" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="vcu-mu-aMm"/>
+                        <viewControllerLayoutGuide type="bottom" id="SA3-JA-DlZ"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Z8p-0I-qsU">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4eQ-7M-7Gb">
+                                <rect key="frame" x="0.0" y="442" width="375" height="75"/>
+                                <color key="backgroundColor" red="0.96470588239999999" green="0.3921568627" blue="0.42352941179999998" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="21"/>
+                                <inset key="titleEdgeInsets" minX="100" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <inset key="imageEdgeInsets" minX="25" minY="0.0" maxX="180" maxY="0.0"/>
+                                <state key="normal" title="Избранное " image="star.png">
+                                    <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="favorites:" destination="bZh-V6-kue" eventType="touchUpInside" id="bID-AF-ywN"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DNX-g9-EEV">
+                                <rect key="frame" x="0.0" y="592" width="375" height="75"/>
+                                <color key="backgroundColor" red="0.3921568627" green="0.96470588239999999" blue="0.64705882349999999" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="21"/>
+                                <inset key="titleEdgeInsets" minX="100" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <inset key="imageEdgeInsets" minX="25" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <state key="normal" title="О программе" image="information-button.png">
+                                    <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v33-xk-8Us">
+                                <rect key="frame" x="0.0" y="64" width="375" height="305"/>
+                                <color key="backgroundColor" red="0.38431372549999998" green="0.6588235294" blue="0.92156862750000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="3k8-DN-I1h">
+                                <rect key="frame" x="87" y="85" width="200" height="200"/>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L59-9H-z5n">
+                                <rect key="frame" x="0.0" y="368" width="375" height="75"/>
+                                <color key="backgroundColor" red="0.70980392160000005" green="0.96470588239999999" blue="0.3921568627" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="21"/>
+                                <inset key="titleEdgeInsets" minX="100" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <inset key="imageEdgeInsets" minX="25" minY="0.0" maxX="190" maxY="0.0"/>
+                                <state key="normal" title="Группы" image="users.png">
+                                    <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="A3e-wM-AHI">
+                                <rect key="frame" x="0.0" y="518" width="375" height="75"/>
+                                <color key="backgroundColor" red="0.96470588239999999" green="0.93333333330000001" blue="0.3921568627" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="21"/>
+                                <inset key="titleEdgeInsets" minX="100" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <inset key="imageEdgeInsets" minX="25" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <state key="normal" title="Кафедры" image="tribune.png">
+                                    <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="ofW-Jc-wag"/>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
+                    <nil key="simulatedBottomBarMetrics"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
+                    <connections>
+                        <outlet property="button" destination="L59-9H-z5n" id="uzO-z8-0hW"/>
+                        <outlet property="label" destination="v33-xk-8Us" id="fZv-aD-AvD"/>
+                        <outlet property="logo" destination="3k8-DN-I1h" id="fa2-4n-32S"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="tWr-DD-Ih0" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1020.5" y="1369.5"/>
         </scene>
         <!--Факультеты-->
         <scene sceneID="ZTz-vL-KMd">
             <objects>
-                <tableViewController id="DBS-eT-nDM" customClass="TableViewControllerFaculties" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="TableViewControllerFaculties" id="DBS-eT-nDM" customClass="TableViewControllerFaculties" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="rAp-Sc-khl">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="623"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <sections>
@@ -230,12 +394,12 @@
             <objects>
                 <tableViewController storyboardIdentifier="TableViewFav" id="U7d-A9-eNX" customClass="TableViewFav" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="0qK-az-732">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="623"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="CellFav" textLabel="ToN-qT-JCL" style="IBUITableViewCellStyleDefault" id="fT9-XV-gSV">
-                                <rect key="frame" x="0.0" y="92" width="375" height="44"/>
+                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="fT9-XV-gSV" id="oVG-Hv-6uE">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
@@ -953,6 +1117,67 @@
             </objects>
             <point key="canvasLocation" x="1511.5" y="1795.5"/>
         </scene>
+        <!--Table View Controller Dept-->
+        <scene sceneID="Irn-NF-Lab">
+            <objects>
+                <tableViewController storyboardIdentifier="TableViewControllerDept" id="cQU-TX-R7H" customClass="TableViewControllerDept" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="110" sectionHeaderHeight="28" sectionFooterHeight="28" id="E3d-qs-rj1">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="gray" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="cellDept" rowHeight="110" id="hmW-Sv-bUK" customClass="TableViewCellDept">
+                                <rect key="frame" x="0.0" y="28" width="375" height="110"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hmW-Sv-bUK" id="OpU-Qf-w4o">
+                                    <rect key="frame" x="0.0" y="0.0" width="342" height="109"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Зав. Кафедрой: Масленников Станислав Александрович" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PKZ-ng-vEn">
+                                            <rect key="frame" x="8" y="22" width="334" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Телефон:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="teY-0v-zWQ">
+                                            <rect key="frame" x="8" y="44" width="334" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Аудитория:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="G0N-io-iHw">
+                                            <rect key="frame" x="8" y="66" width="334" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Технические системы жилищно-коммунального хозяйства и сферы услуг" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dqJ-E0-pGn">
+                                            <rect key="frame" x="8" y="0.0" width="334" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="LabelCab" destination="G0N-io-iHw" id="BqL-nm-Dhv"/>
+                                    <outlet property="LabelNum" destination="teY-0v-zWQ" id="W9z-ur-OB7"/>
+                                    <outlet property="labelName" destination="dqJ-E0-pGn" id="jf0-li-nST"/>
+                                    <outlet property="labelZav" destination="PKZ-ng-vEn" id="KsT-KA-8Rc"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="cQU-TX-R7H" id="zFo-LF-2o8"/>
+                            <outlet property="delegate" destination="cQU-TX-R7H" id="c68-LJ-CNW"/>
+                        </connections>
+                    </tableView>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="MvX-ca-Buo" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1511.5" y="2582.5"/>
+        </scene>
         <!--Root View Controller-->
         <scene sceneID="IDt-pm-cHu">
             <objects>
@@ -1127,5 +1352,16 @@
             <point key="canvasLocation" x="2477.5" y="1795.5"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="information-button-2.png" width="32" height="32"/>
+        <image name="information-button.png" width="32" height="32"/>
+        <image name="logo.png" width="2357" height="2500"/>
+        <image name="star-2.png" width="32" height="32"/>
+        <image name="star.png" width="32" height="32"/>
+        <image name="tribune-2.png" width="32" height="32"/>
+        <image name="tribune.png" width="32" height="32"/>
+        <image name="users-2.png" width="32" height="32"/>
+        <image name="users.png" width="32" height="32"/>
+    </resources>
     <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
 </document>
