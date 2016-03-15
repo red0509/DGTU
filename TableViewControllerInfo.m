@@ -25,6 +25,8 @@
     [self loadInfo:
      [NSString stringWithFormat:@"http://stud.sssu.ru/Ved/Ved.aspx?id=%@",self.referenceInfo]];
     self.title = @"Информация";
+    self.tableView.estimatedRowHeight = 68.0;
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
 
 }
 

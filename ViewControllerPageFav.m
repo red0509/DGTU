@@ -26,6 +26,7 @@
     self.pageViewController.dataSource = self;
     self.title = @"Расписание";
     
+    
     NSDate *date = [NSDate date];
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];

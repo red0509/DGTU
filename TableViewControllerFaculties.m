@@ -18,8 +18,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.tableView.separatorColor = [UIColor colorWithRed:0.48 green:0.75 blue:0.97 alpha:1];
-    
+//    self.tableView.separatorColor = [UIColor colorWithRed:0.48 green:0.75 blue:0.97 alpha:1];
+//    self.tableView.separatorColor = [UIColor clearColor];
+    [SlideNavigationController sharedInstance].leftBarButtonItem = self.navigationItem.leftBarButtonItem;
 }
 
 - (BOOL)slideNavigationControllerShouldDisplayLeftMenu

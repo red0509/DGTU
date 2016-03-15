@@ -18,7 +18,6 @@
 @property (strong,nonatomic) NSMutableArray *ref;
 @property (nonatomic, strong) NSString *nameSize;
 
-
 @end
 
 @implementation TableViewControllerDept
@@ -26,14 +25,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    self.tableView.estimatedRowHeight = 68.0;
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.title = @"Кафедры";
     [self loadDept];
-    CGSizeMake(100.0f, CGFLOAT_MAX);
 }
 
 - (BOOL)slideNavigationControllerShouldDisplayLeftMenu
@@ -83,7 +78,7 @@
                       NSDictionary *headers = [(NSHTTPURLResponse *)response allHeaderFields];
                       contentType = headers[@"Content-Type"];
                   }
-
+                  
                   HTMLDocument *home = [HTMLDocument documentWithData:data
                                                     contentTypeHeader:contentType];
                   NSInteger numFacul = 2;
@@ -129,39 +124,16 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return [self.name count];
 }
-//- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    CGSize constraintSize = CGSizeMake(286.0f, CGFLOAT_MAX);
-//    UIFont *theFont  = [UIFont systemFontOfSize:14.0f];
-//    CGSize theSize;
-//    
-//    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
-//    {
-//        CGRect frame = [[self.name objectAtIndex:indexPath.row] boundingRectWithSize:constraintSize options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading) attributes:@{NSFontAttributeName:theFont} context:nil];
-//        theSize = frame.size;
-//    }
-//    else
-//    {
-//        theSize = [[self.name objectAtIndex:indexPath.row] sizeWithFont:theFont constrainedToSize:constraintSize lineBreakMode:NSLineBreakByWordWrapping];
-//    }
-//    
-//    return theSize.height;
-//}
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *identifier = @"cellDept";
     TableViewCellDept *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
     
-    cell.labelName.numberOfLines = 0;
-    cell.labelZav.numberOfLines = 0;
-    [cell.labelName sizeToFit];
-    
     cell.labelName.text = self.name[indexPath.row];
     cell.labelZav.text =  [NSString stringWithFormat:@"Зав. Кафедрой: %@",self.zavDept[indexPath.row]];
     cell.labelNum.text = [NSString stringWithFormat:@"Телефон: %@",self.number[indexPath.row]];
     cell.labelCab.text = [NSString stringWithFormat:@"Аудитория: %@",self.cab[indexPath.row]];
-    
     
     return cell;
     

@@ -10,6 +10,7 @@
 #import "ViewController.h"
 
 
+
 @interface TableViewControllerGroup ()
 
 @property (strong,nonatomic) NSMutableArray *EFfacul;
@@ -37,11 +38,28 @@
     self.tableView.tableHeaderView = self.resultSearchController.searchBar;
     self.definesPresentationContext = YES;
     
-    [self.tableView reloadData];
+    
+    UIButton *button  = [[UIButton alloc] initWithFrame:CGRectMake(0, 0,20, 20)];
+    [button setImage:[UIImage imageNamed:@"backward-arrow-4"] forState:UIControlStateNormal];
+    [button addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
+    [button setImageEdgeInsets:UIEdgeInsetsMake(0, -19, 0, 0)];
+    UIBarButtonItem *leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
+    self.navigationItem.backBarButtonItem = leftBarButtonItem;
+    [SlideNavigationController sharedInstance].leftBarButtonItem=self.navigationItem.backBarButtonItem;
     
     
-    
-    
+}
+
+-(IBAction) back{
+    [self.navigationController popViewControllerAnimated:YES];
+    [SlideNavigationController sharedInstance].leftBarButtonItem = nil;
+}
+
+
+
+- (BOOL)slideNavigationControllerShouldDisplayLeftMenu
+{
+    return YES;
 }
 
 -(void) loadGroup: (NSString*) URLFacul{

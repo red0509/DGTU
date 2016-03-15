@@ -32,8 +32,26 @@
     self.numberGroupString = [self.reference substringFromIndex:self.reference.length-5];
     UIBarButtonItem *rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"add1.png"] style:UIBarButtonItemStylePlain target:self action:@selector(addFavorites)];
     self.navigationItem.rightBarButtonItem = rightBarButtonItem;
-  
+  NSLog(@"%@",self.navigationItem.backBarButtonItem.title);
     
+    UIButton *button  = [[UIButton alloc] initWithFrame:CGRectMake(0, 0,20, 20)];
+    [button setImage:[UIImage imageNamed:@"backward-arrow-4"] forState:UIControlStateNormal];
+    [button addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
+    [button setImageEdgeInsets:UIEdgeInsetsMake(0, -19, 0, 0)];
+    UIBarButtonItem *leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
+    [leftBarButtonItem setStyle:UIBarButtonItemStylePlain];
+    [SlideNavigationController sharedInstance].leftBarButtonItem=leftBarButtonItem;
+    
+    
+}
+
+-(IBAction) back{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (BOOL)slideNavigationControllerShouldDisplayLeftMenu
+{
+    return YES;
 }
 
 -(void) addFavorites{

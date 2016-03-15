@@ -8,10 +8,6 @@
 
 #import "LeftMenuViewController.h"
 #import "TableViewCellMenu.h"
-#import "SlideNavigationContorllerAnimatorFade.h"
-#import "SlideNavigationContorllerAnimatorSlide.h"
-#import "SlideNavigationContorllerAnimatorScale.h"
-#import "SlideNavigationContorllerAnimatorScaleAndFade.h"
 #import "SlideNavigationContorllerAnimatorSlideAndFade.h"
 
 #define IDIOM    UI_USER_INTERFACE_IDIOM()
@@ -40,8 +36,7 @@
 
     self.tableView.separatorColor = [UIColor clearColor];
     
-    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menu.jpg"]];
-    self.tableView.backgroundView = imageView;
+    
     
 
     revealAnimator = [[SlideNavigationContorllerAnimatorSlideAndFade alloc] initWithMaximumFadeAlpha:.8 fadeColor:[UIColor blackColor] andSlideMovement:100];
@@ -49,21 +44,16 @@
     [SlideNavigationController sharedInstance].menuRevealAnimationDuration = animationDuration;
     [SlideNavigationController sharedInstance].menuRevealAnimator = revealAnimator;
     
-
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menuIpad.jpg"]];
+    self.tableView.backgroundView = imageView;
     
     if ( IDIOM == IPAD ) {
         [SlideNavigationController sharedInstance].portraitSlideOffset = 500.0;
-        NSLog(@"%f",self.tableView.frame.size.height);
-//       ViewGetFrame(GetTableView(self)).size.height = 0;
-        NSLog(@"ipad");
+        
     } else {
         [SlideNavigationController sharedInstance].portraitSlideOffset = 120.0;
- self.view.autoresizesSubviews = NO;
-        [self.tableView setFrame:CGRectMake(0, 0, 50, 50)];
-        
-        NSLog(@"%f",self.tableView.frame.size.height);
-       NSLog(@"iPhone");
     }
+
 
 }
 

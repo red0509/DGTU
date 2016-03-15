@@ -25,6 +25,10 @@
     [super viewDidLoad];
     
     self.title = @"График";
+    self.tableView.estimatedRowHeight = 68.0;
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -40,7 +44,7 @@
     self.typeArray = [NSMutableArray array];
     self.teacherArray = [NSMutableArray array];
     self.dateArray = [NSMutableArray array];
-
+    
     
     NSURL *URL = [NSURL URLWithString:URLGroup];
     NSURLSessionConfiguration *sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
@@ -49,94 +53,110 @@
     NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfig];
     [[session dataTaskWithURL:URL completionHandler:
       ^(NSData *data, NSURLResponse *response, NSError *error) {
-          NSString *contentType = nil;
-          if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
-              NSDictionary *headers = [(NSHTTPURLResponse *)response allHeaderFields];
-              contentType = headers[@"Content-Type"];
-          }
-          NSLog(@"respo %@",response);
-        HTMLDocument *home = [HTMLDocument documentWithData:data
-                                          contentTypeHeader:contentType];
-          dispatch_async(dispatch_get_main_queue(), ^{
-              if ([sem isEqualToString:@"1"]) {
-                  NSInteger num = 5;
-                  while (YES) {
-                      HTMLElement *subject = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(2)",(long)num]];
-                      if (subject.textContent == nil) {
-                          break;
-                      }else{
-                          [self.subjectArray addObject:subject.textContent];
-                          num++;
-                      }
-                  }
-                  
-                  for (NSInteger i = 5; i<num; i++) {
-                      HTMLElement *type = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(3)",(long)i]];
-                      [self.typeArray addObject:type.textContent];
-                      
-                      HTMLElement *teacher = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(31)",(long)i]];
-                      if (teacher.textContent == nil) {
-                          [self.teacherArray addObject:@" "];
-                      }else{
-                          [self.teacherArray addObject:teacher.textContent];
-                      }
-                      
-                      HTMLElement *date;
-                      if ([self.typeArray[i-5] isEqualToString:@"Зачет"]) {
-                          date = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(29)",(long)i]];
-                      }else{
-                          date = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(30)",(long)i]];
-                      }
-                      if (date.textContent == nil) {
-                          [self.dateArray addObject:@" "];
-                      }else{
-                          [self.dateArray addObject:date.textContent];
-                      }
-                      [self.tableView reloadData];
-                  }
-
-                }else if([sem isEqualToString:@"2"]){
-                    NSInteger num = 5;
-                    while (YES) {
-                        HTMLElement *subject = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(2)",(long)num]];
-                        if (subject.textContent == nil) {
-                            break;
-                        }else{
-                            [self.subjectArray addObject:subject.textContent];
-                            num++;
-                        }
-                    }
-                    
-                    for (NSInteger i = 5; i<num; i++) {
-                        HTMLElement *type = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(3)",(long)i]];
-                        [self.typeArray addObject:type.textContent];
-                        
-                        HTMLElement *teacher = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(37)",(long)i]];
-                       
-                        if (teacher.textContent == nil) {
-                            [self.teacherArray addObject:@" "];
-                        }else{
-                            [self.teacherArray addObject:teacher.textContent];
-                        }
-                        
-                        HTMLElement *date;
-                        if ([self.typeArray[i-5] isEqualToString:@"Зачет"]) {
-                            date = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(35)",(long)i]];
-                        }else{
-                            date = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(36)",(long)i]];
-                        }
-                        if (date.textContent == nil) {
-                            [self.dateArray addObject:@" "];
-                        }else{
-                            [self.dateArray addObject:date.textContent];
-                        }
-                        
-                        [self.tableView reloadData];
-                    }
-
-              }
-          });
           
+          if (error != nil) {
+              dispatch_async(dispatch_get_main_queue(), ^{
+                  UIAlertController *alert= [UIAlertController alertControllerWithTitle:@"Ошибка" message:@"Не удается подключится." preferredStyle:UIAlertControllerStyleAlert];
+                  
+                  UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK"
+                                                                          style:UIAlertActionStyleDefault
+                                                                        handler:^(UIAlertAction * action) {
+                                                                            [self.navigationController popViewControllerAnimated:YES];
+                                                                        }];
+                  [alert addAction:defaultAction];
+                  
+                  [self.navigationController presentViewController:alert animated:YES completion:nil];
+              });
+          }else{
+              
+              NSString *contentType = nil;
+              if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
+                  NSDictionary *headers = [(NSHTTPURLResponse *)response allHeaderFields];
+                  contentType = headers[@"Content-Type"];
+              }
+              NSLog(@"respo %@",response);
+              HTMLDocument *home = [HTMLDocument documentWithData:data
+                                                contentTypeHeader:contentType];
+              dispatch_async(dispatch_get_main_queue(), ^{
+                  if ([sem isEqualToString:@"1"]) {
+                      NSInteger num = 5;
+                      while (YES) {
+                          HTMLElement *subject = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(2)",(long)num]];
+                          if (subject.textContent == nil) {
+                              break;
+                          }else{
+                              [self.subjectArray addObject:subject.textContent];
+                              num++;
+                          }
+                      }
+                      
+                      for (NSInteger i = 5; i<num; i++) {
+                          HTMLElement *type = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(3)",(long)i]];
+                          [self.typeArray addObject:type.textContent];
+                          
+                          HTMLElement *teacher = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(31)",(long)i]];
+                          if (teacher.textContent == nil) {
+                              [self.teacherArray addObject:@" "];
+                          }else{
+                              [self.teacherArray addObject:teacher.textContent];
+                          }
+                          
+                          HTMLElement *date;
+                          if ([self.typeArray[i-5] isEqualToString:@"Зачет"]) {
+                              date = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(29)",(long)i]];
+                          }else{
+                              date = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(30)",(long)i]];
+                          }
+                          if (date.textContent == nil) {
+                              [self.dateArray addObject:@" "];
+                          }else{
+                              [self.dateArray addObject:date.textContent];
+                          }
+                          [self.tableView reloadData];
+                      }
+                      
+                  }else if([sem isEqualToString:@"2"]){
+                      NSInteger num = 5;
+                      while (YES) {
+                          HTMLElement *subject = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(2)",(long)num]];
+                          if (subject.textContent == nil) {
+                              break;
+                          }else{
+                              [self.subjectArray addObject:subject.textContent];
+                              num++;
+                          }
+                      }
+                      
+                      for (NSInteger i = 5; i<num; i++) {
+                          HTMLElement *type = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(3)",(long)i]];
+                          [self.typeArray addObject:type.textContent];
+                          
+                          HTMLElement *teacher = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(37)",(long)i]];
+                          
+                          if (teacher.textContent == nil) {
+                              [self.teacherArray addObject:@" "];
+                          }else{
+                              [self.teacherArray addObject:teacher.textContent];
+                          }
+                          
+                          HTMLElement *date;
+                          if ([self.typeArray[i-5] isEqualToString:@"Зачет"]) {
+                              date = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(35)",(long)i]];
+                          }else{
+                              date = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(36)",(long)i]];
+                          }
+                          if (date.textContent == nil) {
+                              [self.dateArray addObject:@" "];
+                          }else{
+                              [self.dateArray addObject:date.textContent];
+                          }
+                          
+                          [self.tableView reloadData];
+                      }
+                      
+                  }
+              });
+          }
       }
       ] resume];
 }
@@ -145,10 +165,6 @@
 
 #pragma mark - Table view data source
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-        return 240;
-}
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return [self.subjectArray count];
@@ -160,18 +176,18 @@
     TableViewCellGraph *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
     
     cell.disLabel.text = [NSString stringWithFormat:@"Дисциплина: %@",self.subjectArray[indexPath.row]];
-     NSString *pred =self.teacherArray[indexPath.row];
+    NSString *pred =self.teacherArray[indexPath.row];
     
-     NSArray* array = [pred componentsSeparatedByString:@"-Лек"];
-     pred = [array componentsJoinedByString:@"-Лек\n"];
+    NSArray* array = [pred componentsSeparatedByString:@"-Лек"];
+    pred = [array componentsJoinedByString:@"-Лек\n"];
     array = [pred componentsSeparatedByString:@"-Пр"];
     pred = [array componentsJoinedByString:@"-Пр\n"];
     array = [pred componentsSeparatedByString:@"-Лаб"];
     pred = [array componentsJoinedByString:@"-Лаб\n"];
     array = [pred componentsSeparatedByString:@"(За)"];
-    pred = [array componentsJoinedByString:@"(За)\n"];
+    pred = [array componentsJoinedByString:@"(За)"];
     array = [pred componentsSeparatedByString:@"(Эк)"];
-    pred = [array componentsJoinedByString:@"(Эк)\n"];
+    pred = [array componentsJoinedByString:@"(Эк)"];
     
     cell.PredLabel.text = [NSString stringWithFormat:@"Преподаватели: %@",pred];
     cell.typeLabel.text = [NSString stringWithFormat:@"Вид контроля: %@",self.typeArray[indexPath.row]];

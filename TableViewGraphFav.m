@@ -25,6 +25,8 @@
     [super viewDidLoad];
     
     self.title = @"График";
+    self.tableView.estimatedRowHeight = 68.0;
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -131,10 +133,6 @@
 
 #pragma mark - Table view data source
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return 240;
-}
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return [self.subjectArray count];
@@ -155,9 +153,9 @@
     array = [pred componentsSeparatedByString:@"-Лаб"];
     pred = [array componentsJoinedByString:@"-Лаб\n"];
     array = [pred componentsSeparatedByString:@"(За)"];
-    pred = [array componentsJoinedByString:@"(За)\n"];
+    pred = [array componentsJoinedByString:@"(За)"];
     array = [pred componentsSeparatedByString:@"(Эк)"];
-    pred = [array componentsJoinedByString:@"(Эк)\n"];
+    pred = [array componentsJoinedByString:@"(Эк)"];
     
     cell.PredLabel.text = [NSString stringWithFormat:@"Преподаватели: %@",pred];
     cell.typeLabel.text = [NSString stringWithFormat:@"Вид контроля: %@",self.typeArray[indexPath.row]];
