@@ -335,28 +335,23 @@
     TableViewCellContent *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
     if (indexPath.section == 0) {
         cell.num.text = [NSString stringWithFormat:@"%d",(int)indexPath.row+1];
-        if ([self.timeArray[indexPath.row] isEqualToString:@"8-3010-05"]) {
-            cell.time.text = @"8-30 10-05";
-        }else{
-            cell.time.text = self.timeArray[indexPath.row];
-        }
-        cell.subject.text = self.subjectArray[indexPath.row];
-        cell.room.text =[NSString stringWithFormat:@"Аудитория %@",  self.classroomArray[indexPath.row]];
-        cell.teacher.text = self.teacherArray[indexPath.row];
+        NSMutableString* time= self.timeArray[indexPath.row];
+        [time insertString:@" " atIndex:time.length-5];
+        cell.time.text = [NSString stringWithFormat:@"Время: %@",time];
+        cell.subject.text = [NSString stringWithFormat:@"Дисциплина: %@",self.subjectArray[indexPath.row]];
+        cell.room.text =[NSString stringWithFormat:@"Аудитория: %@",  self.classroomArray[indexPath.row]];
+        cell.teacher.text = [NSString stringWithFormat:@"Преподаватель: %@",self.teacherArray[indexPath.row]];
         
     }else{
         cell.num.text = [NSString stringWithFormat:@"%d",(int)indexPath.row+1];
-        if ([self.timeArrayWeekTwo[indexPath.row] isEqualToString:@"8-3010-05"]) {
-            cell.time.text = @"8-30 10-05";
-        }else{
-            cell.time.text = self.timeArrayWeekTwo[indexPath.row];
-        }
-        cell.subject.text = self.subjectArrayWeekTwo[indexPath.row];
-        cell.room.text =[NSString stringWithFormat:@"Аудитория %@",  self.classroomArrayWeekTwo[indexPath.row]];
-        cell.teacher.text = self.teacherArrayWeekTwo[indexPath.row];
+        NSMutableString* time2= self.timeArrayWeekTwo[indexPath.row];
+        [time2 insertString:@" " atIndex:time2.length-5];
+        cell.time.text = [NSString stringWithFormat:@"Время: %@",time2];
+        cell.subject.text = [NSString stringWithFormat:@"Дисциплина: %@",self.subjectArrayWeekTwo[indexPath.row]];
+        cell.room.text =[NSString stringWithFormat:@"Аудитория: %@",  self.classroomArrayWeekTwo[indexPath.row]];
+        cell.teacher.text = [NSString stringWithFormat:@"Преподаватель: %@",self.teacherArrayWeekTwo[indexPath.row]];
         
     }
-    
     return cell;
     
 }

@@ -174,7 +174,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *identifier = @"cellGraph";
     TableViewCellGraph *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
-    
+
     cell.disLabel.text = [NSString stringWithFormat:@"Дисциплина: %@",self.subjectArray[indexPath.row]];
     NSString *pred =self.teacherArray[indexPath.row];
     

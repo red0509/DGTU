@@ -47,6 +47,9 @@
         [self loadReference:
          [NSString stringWithFormat:@"http://stud.sssu.ru/Ved/Ved.aspx?id=%@",self.referenceContent] KT:NO];
     }
+    
+    self.tableView.estimatedRowHeight = 68.0;
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -357,18 +360,18 @@
     return [self.nameArray count];
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (self.pageIndex == 3) {
-        return 40;
-    }
-    else if(self.pageIndex == 4) {
-        return 120;
-    }else{
-        return 68;
-    }
-   
-}
+//- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    if (self.pageIndex == 3) {
+//        return 40;
+//    }
+//    else if(self.pageIndex == 4) {
+//        return 120;
+//    }else{
+//        return 68;
+//    }
+//   
+//}
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     NSString *identifier = nil;

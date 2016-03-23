@@ -34,8 +34,10 @@
     NSDate *date = [NSDate date];
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
     
-    self.tableView.estimatedRowHeight = 68.0;
+    self.tableView.estimatedRowHeight = 135.0;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
+
+    
     
     [dateFormatter setDateFormat:@"M"];
     NSString * strintDate = [dateFormatter stringFromDate:date];
@@ -231,6 +233,16 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
     return 35;
 }
+//- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath{
+//    static NSString *identifier = @"cell";
+//    TableViewCellContent *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
+//    if (cell.frame.size.height > 133.0) {
+//        return cell.frame.size.height - 75.0;
+//        
+//    }else{
+//        return UITableViewAutomaticDimension;
+//    }
+//}
 - (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     
     UIView *sectionHeaderView = [[UIView alloc] initWithFrame:
@@ -288,25 +300,23 @@
     TableViewCellContent *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
     if (indexPath.section == 0) {
         cell.num.text = [NSString stringWithFormat:@"%d",(int)indexPath.row+1];
-        if ([self.timeArray[indexPath.row] isEqualToString:@"8-3010-05"]) {
-            cell.time.text = @"8-30 10-05";
-        }else{
-            cell.time.text = self.timeArray[indexPath.row];
-        }
-        cell.subject.text = self.subjectArray[indexPath.row];
-        cell.room.text =[NSString stringWithFormat:@"Аудитория %@",  self.classroomArray[indexPath.row]];
-        cell.teacher.text = self.teacherArray[indexPath.row];
+        NSMutableString* time= self.timeArray[indexPath.row];
+        [time insertString:@" " atIndex:time.length-5];
+        cell.time.text = [NSString stringWithFormat:@"Время: %@",time];
+        cell.subject.text = [NSString stringWithFormat:@"Дисциплина: %@",self.subjectArray[indexPath.row]];
+        cell.room.text =[NSString stringWithFormat:@"Аудитория: %@",  self.classroomArray[indexPath.row]];
+        cell.teacher.text = [NSString stringWithFormat:@"Преподаватель: %@",self.teacherArray[indexPath.row]];
         
     }else{
         cell.num.text = [NSString stringWithFormat:@"%d",(int)indexPath.row+1];
-        if ([self.timeArrayWeekTwo[indexPath.row] isEqualToString:@"8-3010-05"]) {
-            cell.time.text = @"8-30 10-05";
-        }else{
-            cell.time.text = self.timeArrayWeekTwo[indexPath.row];
-        }
-        cell.subject.text = self.subjectArrayWeekTwo[indexPath.row];
-        cell.room.text =[NSString stringWithFormat:@"Аудитория %@",  self.classroomArrayWeekTwo[indexPath.row]];
-        cell.teacher.text = self.teacherArrayWeekTwo[indexPath.row];
+        NSMutableString* time2= self.timeArrayWeekTwo[indexPath.row];
+        [time2 insertString:@" " atIndex:time2.length-5];
+        
+        cell.time.text = [NSString stringWithFormat:@"Время: %@",time2];
+        
+        cell.subject.text = [NSString stringWithFormat:@"Дисциплина: %@",self.subjectArrayWeekTwo[indexPath.row]];
+        cell.room.text =[NSString stringWithFormat:@"Аудитория: %@",  self.classroomArrayWeekTwo[indexPath.row]];
+        cell.teacher.text = [NSString stringWithFormat:@"Преподаватель: %@",self.teacherArrayWeekTwo[indexPath.row]];
         
     }
     
