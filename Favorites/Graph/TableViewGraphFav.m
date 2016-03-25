@@ -24,7 +24,6 @@
 @property (strong,nonatomic) NSMutableArray *ktEndArray2;
 @property (strong,nonatomic) NSMutableArray *monthArray2;
 
-
 @property BOOL oneTwo;
 @end
 
@@ -32,6 +31,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     self.oneTwo = NO;
     self.title = @"График";
     self.tableView.estimatedRowHeight = 68.0;
@@ -57,10 +57,10 @@
     self.ktBeginArray2 = [NSMutableArray array];
     self.ktEndArray2 = [NSMutableArray array];
     self.monthArray2 = [NSMutableArray array];
-   
+    
     HTMLDocument *home = [[HTMLDocument alloc]initWithString:str];
     
-    if ([sem isEqualToString:@"1"]) { //27 max
+    if ([sem isEqualToString:@"1"]) {
         NSInteger num = 5;
         while (YES) {
             HTMLElement *subject = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(2)",(long)num]];
@@ -72,7 +72,7 @@
             }
         }
         
-         [self graphKT:num max:27 document:home];
+        [self graphKT:num max:27 document:home];
         
         for (NSInteger i = 5; i<num; i++) {
             HTMLElement *type = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(3)",(long)i]];
@@ -99,7 +99,7 @@
             [self.tableView reloadData];
         }
         
-    }else if([sem isEqualToString:@"2"]){ //34 max
+    }else if([sem isEqualToString:@"2"]){
         NSInteger num = 5;
         while (YES) {
             HTMLElement *subject = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(2)",(long)num]];
@@ -112,7 +112,7 @@
         }
         
         [self graphKT:num max:34 document:home];
-
+        
         
         for (NSInteger i = 5; i<num; i++) {
             HTMLElement *type = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(3)",(long)i]];
@@ -158,7 +158,7 @@
                     HTMLElement *end = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(3) > td:nth-child(%ld)", (long)j-5]];
                     [self.ktEndArray addObject:end.textContent];
                     
-                    [self num:j-5 document:home array:self.monthArray];
+                    [self num:j-5 document:home max:max array:self.monthArray];
                     self.oneTwo = YES;
                     continue;
                 }
@@ -169,7 +169,7 @@
                     HTMLElement *end = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(3) > td:nth-child(%ld)", (long)j-5]];
                     [self.ktEndArray2 addObject:end.textContent];
                     
-                    [self num:j-5 document:home array:self.monthArray2];
+                    [self num:j-5 document:home max:max array:self.monthArray2];
                     self.oneTwo = NO;
                     break;
                 }
@@ -187,38 +187,53 @@
     }
 }
 
--(void) num:(NSInteger) num document:(HTMLDocument*) home array:(NSMutableArray*) array{
+-(void) num:(NSInteger) num document:(HTMLDocument*) home max:(NSInteger) max array:(NSMutableArray*) array{
     
-        HTMLElement *month1 =[home firstNodeMatchingSelector:@"#Row1 > td:nth-child(6)"];
-        HTMLElement *month2 =[home firstNodeMatchingSelector:@"#Row1 > td:nth-child(7)"];
-        HTMLElement *month3 =[home firstNodeMatchingSelector:@"#Row1 > td:nth-child(8)"];
-        HTMLElement *month4 =[home firstNodeMatchingSelector:@"#Row1 > td:nth-child(9)"];
-        HTMLElement *month5 =[home firstNodeMatchingSelector:@"#Row1 > td:nth-child(10)"];
-        
-        NSNumber *m1 =month1.attributes.allValues.firstObject;
-        NSNumber *m2 =month2.attributes.allValues.firstObject;
-        NSNumber *m3 =month3.attributes.allValues.firstObject;
-        NSNumber *m4 =month4.attributes.allValues.firstObject;
-        NSNumber *m5 =month5.attributes.allValues.firstObject;
-        
-        NSInteger intMonth1 = [m1 integerValue];
-        NSInteger intMonth2 = [m2 integerValue];
-        NSInteger intMonth3 = [m3 integerValue];
-        NSInteger intMonth4 = [m4 integerValue];
-        NSInteger intMonth5 = [m5 integerValue];
-        
+    HTMLElement *month1 =[home firstNodeMatchingSelector:@"#Row1 > td:nth-child(6)"];
+    HTMLElement *month2 =[home firstNodeMatchingSelector:@"#Row1 > td:nth-child(7)"];
+    HTMLElement *month3 =[home firstNodeMatchingSelector:@"#Row1 > td:nth-child(8)"];
+    HTMLElement *month4 =[home firstNodeMatchingSelector:@"#Row1 > td:nth-child(9)"];
+    HTMLElement *month5 =[home firstNodeMatchingSelector:@"#Row1 > td:nth-child(10)"];
+    
+    NSNumber *m1 =month1.attributes.allValues.firstObject;
+    NSNumber *m2 =month2.attributes.allValues.firstObject;
+    NSNumber *m3 =month3.attributes.allValues.firstObject;
+    NSNumber *m4 =month4.attributes.allValues.firstObject;
+    NSNumber *m5 =month5.attributes.allValues.firstObject;
+    
+    NSInteger intMonth1 = [m1 integerValue];
+    NSInteger intMonth2 = [m2 integerValue];
+    NSInteger intMonth3 = [m3 integerValue];
+    NSInteger intMonth4 = [m4 integerValue];
+    NSInteger intMonth5 = [m5 integerValue];
+    
+    if (max==27) {
         if (num<=intMonth1) {
-            [array addObject:@"2"];
+            [array addObject:@9];
         }else if(num<=intMonth2+intMonth1){
-            [array addObject:@"3"];
+            [array addObject:@10];
         }else if(num<=intMonth3+intMonth2+intMonth1){
-            [array addObject:@"4"];
+            [array addObject:@11];
         }else if(num<=intMonth4+intMonth3+intMonth2+intMonth1){
-            [array addObject:@"5"];
+            [array addObject:@12];
         }else if(num<=intMonth5+intMonth4+intMonth3+intMonth2+intMonth1){
-            [array addObject:@"6"];
+            [array addObject:@1];
+        }
+        
+    }else if (max==34){
+        if (num<=intMonth1) {
+            [array addObject:@2];
+        }else if(num<=intMonth2+intMonth1){
+            [array addObject:@3];
+        }else if(num<=intMonth3+intMonth2+intMonth1){
+            [array addObject:@4];
+        }else if(num<=intMonth4+intMonth3+intMonth2+intMonth1){
+            [array addObject:@5];
+        }else if(num<=intMonth5+intMonth4+intMonth3+intMonth2+intMonth1){
+            [array addObject:@6];
         }
     }
+}
 
 
 #pragma mark - Table view data source
@@ -249,28 +264,34 @@
     
     cell.PredLabel.text = [NSString stringWithFormat:@"Преподаватели: %@",pred];
     cell.typeLabel.text = [NSString stringWithFormat:@"Вид контроля: %@",self.typeArray[indexPath.row]];
+    
     NSInteger intM;
     NSInteger intM2;
     
-    
     NSString *len =self.dateArray[indexPath.row];
     
-    if (self.ktBeginArray[indexPath.row]>self.ktEndArray[indexPath.row]) {
-        NSNumber *m =self.monthArray[indexPath.row];
-        intM = [m integerValue];
+    NSInteger beginInt = [self.ktBeginArray[indexPath.row] integerValue];
+    NSInteger endInt = [self.ktEndArray[indexPath.row] integerValue];
+    
+    if (beginInt>endInt) {
+        intM = [self.monthArray[indexPath.row] integerValue];
         intM++;
-        NSLog(@"1");
     }else{
         NSNumber *m =self.monthArray[indexPath.row];
         intM = [m integerValue];
     }
     
     
-    if (self.ktBeginArray2[indexPath.row]>self.ktEndArray2[indexPath.row]) {
-        NSNumber *m1 =self.monthArray2[indexPath.row];
-        intM2 = [m1 integerValue];
-        intM2++;
-        NSLog(@"2");
+    NSInteger beginInt2 = [self.ktBeginArray2[indexPath.row] integerValue];
+    NSInteger endInt2 = [self.ktEndArray2[indexPath.row] integerValue];
+    
+    if (beginInt2>endInt2) {
+        intM2 = [self.monthArray2[indexPath.row] integerValue];
+        if (intM2==12) {
+            intM2=1;
+        }else{
+            intM2++;
+        }
     }else{
         NSNumber *m1 =self.monthArray2[indexPath.row];
         intM2 = [m1 integerValue];
@@ -280,18 +301,18 @@
         NSString *date = [self.dateArray[indexPath.row] substringToIndex:10];
         
         NSString *cab = [self.dateArray[indexPath.row] substringFromIndex:10];
-       
-        cell.dateLabel.text = [NSString stringWithFormat:@"Дата сдачи: %@\nКТ1: с %@.%@ по %@.%ld\nКТ2: с %@.%@ по %@.%ld",date,self.ktBeginArray[indexPath.row],self.monthArray[indexPath.row],self.ktEndArray[indexPath.row],intM,self.ktBeginArray2[indexPath.row],self.monthArray2[indexPath.row],self.ktEndArray2[indexPath.row],intM2];
+        
+        cell.dateLabel.text = [NSString stringWithFormat:@"Дата сдачи: %@\nКТ1: с %@.%@ по %@.%ld\nКТ2: с %@.%@ по %@.%ld",date,self.ktBeginArray[indexPath.row],self.monthArray[indexPath.row],self.ktEndArray[indexPath.row],(long)intM,self.ktBeginArray2[indexPath.row],self.monthArray2[indexPath.row],self.ktEndArray2[indexPath.row],(long)intM2];
         cell.cabLabel.text = [NSString stringWithFormat:@"Аудитория: %@",cab];
     }else{
         cell.cabLabel.text = @" ";
-        cell.dateLabel.text = [NSString stringWithFormat:@"Дата сдачи: %@\nКТ1: с %@.%@ по %@.%ld\nКТ2: с %@.%@ по %@.%ld",self.dateArray[indexPath.row],self.ktBeginArray[indexPath.row],self.monthArray[indexPath.row],self.ktEndArray[indexPath.row],intM,self.ktBeginArray2[indexPath.row],self.monthArray2[indexPath.row],self.ktEndArray2[indexPath.row],intM2];
+        cell.dateLabel.text = [NSString stringWithFormat:@"Дата сдачи: %@\nКТ1: с %@.%@ по %@.%ld\nКТ2: с %@.%@ по %@.%ld",self.dateArray[indexPath.row],self.ktBeginArray[indexPath.row],self.monthArray[indexPath.row],self.ktEndArray[indexPath.row],(long)intM,self.ktBeginArray2[indexPath.row],self.monthArray2[indexPath.row],self.ktEndArray2[indexPath.row],(long)intM2];
     }
     if ([self.dateArray[indexPath.row] isEqualToString:@"*"]|| [self.dateArray[indexPath.row] isEqualToString:@"+"]) {
         cell.dateLabel.text = @" ";
         cell.cabLabel.text = @" ";
     }
-
+    
     return cell;
 }
 

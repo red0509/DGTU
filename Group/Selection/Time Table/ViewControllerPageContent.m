@@ -1,15 +1,15 @@
 //
-//  TableViewPageContFav.m
+//  ViewControllerPageContent.m
 //  DGTU
 //
 //  Created by Anton Pavlov on 18.01.16.
 //  Copyright © 2016 Anton Pavlov. All rights reserved.
 //
 
-#import "TableViewPageContFav.h"
+#import "ViewControllerPageContent.h"
 #import "TableViewCellContent.h"
 
-@interface TableViewPageContFav ()
+@interface ViewControllerPageContent ()
 
 @property (strong,nonatomic) NSMutableArray *timeArray;
 @property (strong,nonatomic) NSMutableArray *weekArray;
@@ -25,7 +25,7 @@
 
 @end
 
-@implementation TableViewPageContFav
+@implementation ViewControllerPageContent
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -33,11 +33,6 @@
     
     NSDate *date = [NSDate date];
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
-    
-    self.tableView.estimatedRowHeight = 135.0;
-    self.tableView.rowHeight = UITableViewAutomaticDimension;
-
-    
     
     [dateFormatter setDateFormat:@"M"];
     NSString * strintDate = [dateFormatter stringFromDate:date];
@@ -49,24 +44,39 @@
         semester = @"2";
     }
     
+    self.tableView.estimatedRowHeight = 135.0;
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+
     
     if (self.pageIndex == 0) {
-        [self loadGroupReference:self.timeTable day:@"Понедельник"];
+        [self loadGroupReference:
+         [NSString stringWithFormat:@"http://stud.sssu.ru/Rasp/Rasp.aspx?group=%@&sem=%@",self.referenceContent,semester]
+                             day:@"Понедельник"];
         
     }else if (self.pageIndex == 1){
-        [self loadGroupReference:self.timeTable day:@"Вторник"];
+        [self loadGroupReference:
+         [NSString stringWithFormat:@"http://stud.sssu.ru/Rasp/Rasp.aspx?group=%@&sem=%@",self.referenceContent,semester]
+                             day:@"Вторник"];
         
     }else if (self.pageIndex == 2){
-        [self loadGroupReference:self.timeTable day:@"Среда"];
+        [self loadGroupReference:
+         [NSString stringWithFormat:@"http://stud.sssu.ru/Rasp/Rasp.aspx?group=%@&sem=%@",self.referenceContent,semester]
+                             day:@"Среда"];
         
     }else if (self.pageIndex == 3){
-        [self loadGroupReference:self.timeTable day:@"Четверг"];
+        [self loadGroupReference:
+         [NSString stringWithFormat:@"http://stud.sssu.ru/Rasp/Rasp.aspx?group=%@&sem=%@",self.referenceContent,semester]
+                             day:@"Четверг"];
         
     }else if (self.pageIndex == 4){
-        [self loadGroupReference:self.timeTable day:@"Пятница"];
+        [self loadGroupReference:
+         [NSString stringWithFormat:@"http://stud.sssu.ru/Rasp/Rasp.aspx?group=%@&sem=%@",self.referenceContent,semester]
+                             day:@"Пятница"];
         
     }else if (self.pageIndex == 5){
-        [self loadGroupReference:self.timeTable day:@"Суббота"];
+        [self loadGroupReference:
+         [NSString stringWithFormat:@"http://stud.sssu.ru/Rasp/Rasp.aspx?group=%@&sem=%@",self.referenceContent,semester]
+                             day:@"Суббота"];
     }
     
     
@@ -81,9 +91,43 @@
 
 -(void) loadGroupReference:(NSString*) URLGroup day:(NSString*) weekDay{
     
-    HTMLDocument *home = [[HTMLDocument alloc] initWithString:URLGroup];
+    NSURL *URL = [NSURL URLWithString:URLGroup];
+    NSURLSessionConfiguration *sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
+    sessionConfig.timeoutIntervalForResource = 5;
+    sessionConfig.timeoutIntervalForRequest = 5;
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfig];
     
-    [self loadTimeTable:home day:weekDay];
+    [[session dataTaskWithURL:URL completionHandler:
+      ^(NSData *data, NSURLResponse *response, NSError *error) {
+          
+          if (error != nil) {
+              dispatch_async(dispatch_get_main_queue(), ^{
+                  UIAlertController *alert= [UIAlertController alertControllerWithTitle:@"Ошибка" message:@"Не удается подключится." preferredStyle:UIAlertControllerStyleAlert];
+                  
+                  UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK"
+                                                                          style:UIAlertActionStyleDefault
+                                                                        handler:^(UIAlertAction * action) {
+                                                                            [self.navigationController popViewControllerAnimated:YES];
+                                                                        }];
+                  [alert addAction:defaultAction];
+                  
+                  [self.navigationController presentViewController:alert animated:YES completion:nil];
+              });
+          }else{
+              
+              NSString *contentType = nil;
+              if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
+                  NSDictionary *headers = [(NSHTTPURLResponse *)response allHeaderFields];
+                  contentType = headers[@"Content-Type"];
+              }
+              HTMLDocument *home = [HTMLDocument documentWithData:data
+                                                contentTypeHeader:contentType];
+              
+              dispatch_async(dispatch_get_main_queue(), ^{
+                  [self loadTimeTable:home day:weekDay];
+              });
+          }
+      }] resume];
 }
 
 
@@ -131,7 +175,6 @@
             NSInteger subjectRow;
             NSInteger teacherRow;
             NSInteger classroomRow;
-            
             for (; section < dayRowInt+dayNum; section++) {
                 if (section == dayNum) {
                     timeRow = 2;
@@ -146,18 +189,18 @@
                     teacherRow = 4;
                     classroomRow = 5;
                 }
-                
                 HTMLElement *teacher = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(%ld)",(long)section,(long)teacherRow]];
+                HTMLElement *classroom;
                 if (teacher.textContent == nil) {
                     
                     section++;
                 }
-                
+                HTMLElement *subject = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(%ld)",(long)section,(long)subjectRow]];
                 HTMLElement *time = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(%ld)",(long)section,(long)timeRow]];
                 HTMLElement *week = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(%ld)",(long)section,(long)weekRow]];
-                HTMLElement *subject = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(%ld)",(long)section,(long)subjectRow]];
+                
                 teacher = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(%ld)",(long)section,(long)teacherRow]];
-                HTMLElement *classroom = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(%ld)",(long)section,(long)classroomRow]];
+                classroom = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(%ld)",(long)section,(long)classroomRow]];
                 if ([week.attributes.allValues.lastObject isEqual:@"2"]) {
                     [self.timeArray addObject:time.textContent];
                     [self.timeArray addObject:time.textContent];
@@ -201,6 +244,9 @@
                         [self.classroomArray addObject:classroom.textContent];
                     }
                 }
+                
+                
+                
             }
             
             for (NSInteger i = 0; i<[self.weekArray count]; i++) {
@@ -224,6 +270,7 @@
                 }
                 [self.tableView reloadData];
             }
+            
         });
     });
 }
@@ -233,16 +280,6 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
     return 35;
 }
-//- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath{
-//    static NSString *identifier = @"cell";
-//    TableViewCellContent *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
-//    if (cell.frame.size.height > 133.0) {
-//        return cell.frame.size.height - 75.0;
-//        
-//    }else{
-//        return UITableViewAutomaticDimension;
-//    }
-//}
 - (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     
     UIView *sectionHeaderView = [[UIView alloc] initWithFrame:
@@ -301,7 +338,9 @@
     if (indexPath.section == 0) {
         cell.num.text = [NSString stringWithFormat:@"%d",(int)indexPath.row+1];
         NSMutableString* time= self.timeArray[indexPath.row];
-        [time insertString:@" " atIndex:time.length-5];
+        if (time.length>6) {
+            [time insertString:@" " atIndex:time.length-5];
+        }
         cell.time.text = [NSString stringWithFormat:@"Время: %@",time];
         cell.subject.text = [NSString stringWithFormat:@"Дисциплина: %@",self.subjectArray[indexPath.row]];
         cell.room.text =[NSString stringWithFormat:@"Аудитория: %@",  self.classroomArray[indexPath.row]];
@@ -310,16 +349,15 @@
     }else{
         cell.num.text = [NSString stringWithFormat:@"%d",(int)indexPath.row+1];
         NSMutableString* time2= self.timeArrayWeekTwo[indexPath.row];
-        [time2 insertString:@" " atIndex:time2.length-5];
-        
+        if (time2.length>6) {
+            [time2 insertString:@" " atIndex:time2.length-5];
+        }
         cell.time.text = [NSString stringWithFormat:@"Время: %@",time2];
-        
         cell.subject.text = [NSString stringWithFormat:@"Дисциплина: %@",self.subjectArrayWeekTwo[indexPath.row]];
         cell.room.text =[NSString stringWithFormat:@"Аудитория: %@",  self.classroomArrayWeekTwo[indexPath.row]];
         cell.teacher.text = [NSString stringWithFormat:@"Преподаватель: %@",self.teacherArrayWeekTwo[indexPath.row]];
         
     }
-    
     return cell;
     
 }

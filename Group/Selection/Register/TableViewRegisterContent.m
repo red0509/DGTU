@@ -360,18 +360,7 @@
     return [self.nameArray count];
 }
 
-//- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    if (self.pageIndex == 3) {
-//        return 40;
-//    }
-//    else if(self.pageIndex == 4) {
-//        return 120;
-//    }else{
-//        return 68;
-//    }
-//   
-//}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     NSString *identifier = nil;
