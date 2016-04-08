@@ -44,7 +44,7 @@
     [SlideNavigationController sharedInstance].menuRevealAnimationDuration = animationDuration;
     [SlideNavigationController sharedInstance].menuRevealAnimator = revealAnimator;
     
-    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menuIpad.jpg"]];
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menu.jpg"]];
     self.tableView.backgroundView = imageView;
     
     if ( IDIOM == IPAD ) {
@@ -63,7 +63,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 4;
+    return 5;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
@@ -90,16 +90,21 @@
             break;
             
         case 1:
+            cell.labelName.text = @"Преподаватель";
+            cell.image.image = [UIImage imageNamed:@"users-2.png"];
+            break;
+            
+        case 2:
             cell.labelName.text = @"Избранное";
             cell.image.image = [UIImage imageNamed:@"star-2.png"];
             break;
             
-        case 2:
+        case 3:
             cell.labelName.text = @"Кафедры";
             cell.image.image = [UIImage imageNamed:@"tribune-2.png"];
             break;
             
-        case 3:
+        case 4:
             cell.labelName.text = @"О программе";
             cell.image.image = [UIImage imageNamed:@"information-button-2.png"];
             break;
@@ -123,16 +128,19 @@
             break;
             
         case 1:
-            vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"TableViewFav"];
+            vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"TabBarController"];
             break;
             
         case 2:
-            vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"TableViewControllerDept"];
+            vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"TableViewFav"];
             break;
             
         case 3:
+            vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"TableViewControllerDept"];
+            break;
+            
+        case 4:
             NSLog(@"info");
-            return;
             break;
     }
     

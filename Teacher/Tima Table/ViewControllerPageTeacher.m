@@ -1,22 +1,21 @@
 //
-//  ViewControllerPageFav.m
+//  ViewControllerPageTeacher.m
 //  DGTU
 //
-//  Created by Anton Pavlov on 18.01.16.
+//  Created by Anton Pavlov on 25.03.16.
 //  Copyright © 2016 Anton Pavlov. All rights reserved.
 //
 
-#import "ViewControllerPageFav.h"
+#import "ViewControllerPageTeacher.h"
 
-@interface ViewControllerPageFav ()
+@interface ViewControllerPageTeacher ()
 
-@property(strong,nonatomic) TableViewPageContFav * content;
+@property(strong,nonatomic) TableViewPageContTeacher * content;
 @property(assign,nonatomic) NSInteger index;
 
 @end
 
-@implementation ViewControllerPageFav
-
+@implementation ViewControllerPageTeacher
 
 - (void)viewDidLoad
 {
@@ -49,7 +48,7 @@
     }else{
         self.index=0;
     }
-    TableViewPageContFav *startingViewController = [self viewControllerAtIndex:self.index];
+    TableViewPageContTeacher *startingViewController = [self viewControllerAtIndex:self.index];
     NSArray *viewControllers = @[startingViewController];
     [self.pageViewController setViewControllers:viewControllers direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
     
@@ -68,13 +67,13 @@
 }
 
 
-- (TableViewPageContFav *)viewControllerAtIndex:(NSUInteger)index
+- (TableViewPageContTeacher *)viewControllerAtIndex:(NSUInteger)index
 {
     if (([self.pageTitles count] == 0) || (index >= [self.pageTitles count])) {
         return nil;
     }
     
-    TableViewPageContFav *viewControllerPageContent = [self.storyboard instantiateViewControllerWithIdentifier:@"TableViewPageContFav"];
+    TableViewPageContTeacher *viewControllerPageContent = [self.storyboard instantiateViewControllerWithIdentifier:@"TableViewPageContTeacher"];
     viewControllerPageContent.titleText = self.pageTitles[index];
     viewControllerPageContent.pageIndex = index;
     viewControllerPageContent.timeTable = self.tableTime;
@@ -85,7 +84,7 @@
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController
 {
-    NSUInteger index = ((TableViewPageContFav*) viewController).pageIndex;
+    NSUInteger index = ((TableViewPageContTeacher*) viewController).pageIndex;
     
     if ((index == 0) || (index == NSNotFound)) {
         return nil;
@@ -97,7 +96,7 @@
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController
 {
-    NSUInteger index = ((TableViewPageContFav*) viewController).pageIndex;
+    NSUInteger index = ((TableViewPageContTeacher*) viewController).pageIndex;
     
     if (index == NSNotFound) {
         return nil;

@@ -1,19 +1,18 @@
 //
-//  ViewControllerPageFav.h
+//  ViewControllerPageTeacher.h
 //  DGTU
 //
-//  Created by Anton Pavlov on 15.02.16.
+//  Created by Anton Pavlov on 25.03.16.
 //  Copyright © 2016 Anton Pavlov. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
-#import "TableViewPageContFav.h"
+#import "TableViewPageContTeacher.h"
 
-@interface ViewControllerPageFav : UIViewController <UIPageViewControllerDataSource>
+@interface ViewControllerPageTeacher : UIViewController <UIPageViewControllerDataSource>
 
 @property (strong, nonatomic) UIPageViewController *pageViewController;
 @property (strong, nonatomic) NSArray *pageTitles;
 @property (strong ,nonatomic) NSString *tableTime;
 
 @end
-

@@ -113,27 +113,6 @@
                 [alert addAction:defaultAction];
                 
                 [self.navigationController presentViewController:alert animated:YES completion:nil];
-                
-                NSFetchRequest* request = [[NSFetchRequest alloc] init];
-                
-                NSEntityDescription* description =
-                [NSEntityDescription entityForName:@"Favorites"
-                            inManagedObjectContext:data.managedObjectContext];
-                
-                [request setEntity:description];
-                
-                NSError* requestError = nil;
-                NSArray* resultArray = [data.managedObjectContext executeFetchRequest:request error:&requestError];
-                
-                
-                
-                for (id object in resultArray) {
-                    //                        [data.managedObjectContext deleteObject:object];
-                    //                        [data.managedObjectContext save:nil];
-                    Favorites *favorites = (Favorites*) object;
-                    //        NSLog(@"NAME: %@ , TABLE:%@ , GRAPH:%@ , SEM:%@" ,favorites.name ,favorites.tableTime,favorites.graph,favorites.semester);
-                    NSLog(@"NAME: %@ " ,favorites.name );
-                }
             }
         });
     });
