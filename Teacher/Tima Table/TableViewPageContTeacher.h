@@ -16,6 +16,9 @@
 
 @property NSUInteger pageIndex;
 @property NSString *titleText;
-@property NSString *timeTable;
+
+@property(strong,nonatomic) NSString *graph;
+@property(strong,nonatomic) NSString *tableTime;
+@property(strong,nonatomic) NSString *reference;
 
 @end

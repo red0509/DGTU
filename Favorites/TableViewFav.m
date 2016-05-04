@@ -8,6 +8,9 @@
 
 #import "TableViewFav.h"
 #import "TableViewControllerSelFav.h"
+#import "TabBarTeacher.h"
+#import "TableViewControllerClamping.h"
+#import "LeftMenuViewController.h"
 
 @interface TableViewFav ()
 
@@ -17,11 +20,19 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
     self.title = @"Избранное";
     self.navigationItem.rightBarButtonItem = self.editButtonItem;
     self.editButtonItem.title = @"Правка";
     
+    UIImage *image = [UIImage imageNamed:@"menu-button"];
+    UIBarButtonItem *leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:image style:UIBarButtonItemStylePlain target:self action:@selector(slideMenu)];
+    self.navigationItem.leftBarButtonItem = leftBarButtonItem;
+    
+}
+
+-(void) slideMenu{
+    
+    [[SlideNavigationController sharedInstance] toggleLeftMenu];
 }
 - (BOOL)slideNavigationControllerShouldDisplayLeftMenu
 {
@@ -29,7 +40,6 @@
 }
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated
 {
-    // Make sure you call super first
     [super setEditing:editing animated:animated];
     
     if (editing)
@@ -112,14 +122,27 @@
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    TableViewControllerSelFav *fav = [self.storyboard instantiateViewControllerWithIdentifier:@"TableViewControllerSelFav"];
+    
     Favorites *favorites = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    fav.name = favorites.name;
-    fav.graph = favorites.graph;
-    fav.tableTime = favorites.tableTime;
-    fav.semester = favorites.semester;
+    if ([favorites.graph isEqualToString:@"teacher"]) {
+        TabBarTeacher *favTeacher = [self.storyboard instantiateViewControllerWithIdentifier:@"TabBarTeacher"];
+        favTeacher.name = favorites.name;
+        favTeacher.graph = favorites.graph;
+        favTeacher.tableTime = favorites.tableTime;
 
-    [self.navigationController pushViewController:fav animated:YES];
+        [self.navigationController pushViewController:favTeacher animated:YES];
+    }else{
+        TableViewControllerSelFav *fav = [self.storyboard instantiateViewControllerWithIdentifier:@"TableViewControllerSelFav"];
+        
+        fav.name = favorites.name;
+        fav.graph = favorites.graph;
+        fav.tableTime = favorites.tableTime;
+        fav.semester = favorites.semester;
+        [self.navigationController pushViewController:fav animated:YES];
+    }
+    
+
+    
 }
 
 #pragma mark - Fetched results controller
@@ -213,14 +236,6 @@
     [self.tableView endUpdates];
 }
 
-/*
- // Implementing the above methods to update the table view in response to individual changes may have performance implications if a large number of changes are made simultaneously. If this proves to be an issue, you can instead just implement controllerDidChangeContent: which notifies the delegate that all section and object changes have been processed.
- 
- - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
- {
- // In the simplest, most efficient, case, reload the table view.
- [self.tableView reloadData];
- }
- */
+
 
 @end

@@ -45,44 +45,62 @@
         semester = @"2";
     }
     
+    
     self.tableView.estimatedRowHeight = 135.0;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
-    // мальцев
-    // http://stud.sssu.ru/Rasp/Rasp.aspx?&year=2015-2016&prep=%CC%E0%EB%FC%F6%E5%E2%20%C8.%CC.&sem=2
-    // михайлов
-    // http://stud.sssu.ru/Rasp/Rasp.aspx?&year=2015-2016&prep=%CC%E8%F5%E0%E9%EB%EE%E2%20%C0.%C1.&sem=2
-    // медведев
-    // http://stud.sssu.ru/Rasp/Rasp.aspx?&year=2015-2016&prep=%CC%E5%E4%E2%E5%E4%E5%E2%20%C4.%C2.&sem=2
-    
-    
-    if (self.pageIndex == 0) {
-        [self loadGroupReference:@"http://stud.sssu.ru/Rasp/Rasp.aspx?&year=2015-2016&prep=%C1%E0%F0%E0%F8%FF%ED%20%CB.%D0.&sem=2" day:@"Понедельник"];
+
+
+    if ([self.graph isEqualToString:@"teacher"]) {
         
-    }else if (self.pageIndex == 1){
-        [self loadGroupReference:
-         @"http://stud.sssu.ru/Rasp/Rasp.aspx?&year=2015-2016&prep=%C1%E0%F0%E0%F8%FF%ED%20%CB.%D0.&sem=2"day:@"Вторник"];
-        
-    }else if (self.pageIndex == 2){
-        [self loadGroupReference:
-         @"http://stud.sssu.ru/Rasp/Rasp.aspx?&year=2015-2016&prep=%C1%E0%F0%E0%F8%FF%ED%20%CB.%D0.&sem=2" day:@"Среда"];
-        
-    }else if (self.pageIndex == 3){
-        [self loadGroupReference:
-         @"http://stud.sssu.ru/Rasp/Rasp.aspx?&year=2015-2016&prep=%C1%E0%F0%E0%F8%FF%ED%20%CB.%D0.&sem=2" day:@"Четверг"];
-        
-    }else if (self.pageIndex == 4){
-        [self loadGroupReference:
-         @"http://stud.sssu.ru/Rasp/Rasp.aspx?&year=2015-2016&prep=%C1%E5%F0%E5%E7%E0%20%C0.%CD.&sem=2"  day:@"Пятница"];
-        
-    }else if (self.pageIndex == 5){
-        [self loadGroupReference:
-         @"http://stud.sssu.ru/Rasp/Rasp.aspx?&year=2015-2016&prep=%C1%E5%F0%E5%E7%E0%20%C0.%CD.&sem=2"
-                             day:@"Суббота"];
+        HTMLDocument *home = [HTMLDocument documentWithString:self.tableTime];
+        switch (self.pageIndex) {
+            case 0:
+                [self loadTimeTable:home day:@"Понедельник"];
+                break;
+            case 1:
+                [self loadTimeTable:home day:@"Вторник"];
+                break;
+            case 2:
+                [self loadTimeTable:home day:@"Среда"];
+                break;
+            case 3:
+                [self loadTimeTable:home day:@"Четверг"];
+                break;
+            case 4:
+                [self loadTimeTable:home day:@"Пятница"];
+                break;
+            case 5:
+                [self loadTimeTable:home day:@"Суббота"];
+                break;
+            default:
+                break;
+        }
+    }else{
+        switch (self.pageIndex) {
+            case 0:
+                [self loadGroupReference:self.reference day:@"Понедельник"];
+                break;
+            case 1:
+                [self loadGroupReference:self.reference day:@"Вторник"];
+                break;
+            case 2:
+                [self loadGroupReference:self.reference day:@"Среда"];
+                break;
+            case 3:
+                [self loadGroupReference:self.reference day:@"Четверг"];
+                break;
+            case 4:
+                [self loadGroupReference:self.reference day:@"Пятница"];
+                break;
+            case 5:
+                [self loadGroupReference:self.reference day:@"Суббота"];
+                break;
+            default:
+                break;
+        }
+
     }
-    
-    
-    
-    
+   
 }
 
 
@@ -169,10 +187,6 @@
             }
             dayNum++;
         }
-        NSLog(@"%@",day.textContent);
-        NSLog(@"dayNum - %ld",dayNum);
-        NSLog(@"dayRow - %@",dayRow);
-        
         
         dispatch_async(dispatch_get_main_queue(), ^{
             
@@ -263,6 +277,16 @@
                 
             }
             
+            for (NSMutableString *time in self.timeArray) {
+                
+                NSRange range = [time rangeOfString:@":"];
+                if (![NSStringFromRange(range) isEqualToString:@"{2, 1}"]) {
+                    [time insertString:@"-" atIndex:time.length-5];
+                    [time replaceCharactersInRange:NSMakeRange(time.length-3, 1) withString:@":"];
+                    [time replaceCharactersInRange:NSMakeRange(time.length-9, 1) withString:@":"];
+                }
+            }
+            
             
             for (NSInteger i = 0; i<[self.weekArray count]; i++) {
                 if ([self.weekArray[i] isEqual:@"2"]) {
@@ -286,9 +310,6 @@
                 [self.tableView reloadData];
             }
             
-            
-
-            NSLog(@"------------------------");
         });
     });
 }
@@ -315,7 +336,7 @@
     switch (section) {
         case 0:
             if ([self.timeArray count]==0) {
-                headerLabel.text = @"Первая неделя - выходной";
+                headerLabel.text = @"Первая неделя - занятий нет";
             }else{
                 headerLabel.text = @"Первая неделя";
             }
@@ -324,7 +345,7 @@
             break;
         case 1:
             if ([self.timeArrayWeekTwo count]==0) {
-                headerLabel.text = @"Вторая неделя - выходной";
+                headerLabel.text = @"Вторая неделя - занятий нет";
             }else{
                 headerLabel.text = @"Вторая неделя";
             }
@@ -348,29 +369,40 @@
     }
 }
 
+- (NSString*) arrayString:(NSString*) string{
+    
+    if ([string isEqualToString:@"8:30-10:05"]) {
+        return @"1";
+    }else if ([string isEqualToString:@"10:20-11:55"]) {
+        return @"2";
+    }else if ([string isEqualToString:@"12:30-14:05"]) {
+        return @"3";
+    }else if ([string isEqualToString:@"14:20-15:55"]) {
+        return @"4";
+    }else if ([string isEqualToString:@"16:10-17:45"]) {
+        return @"5";
+    }else if ([string isEqualToString:@"18:00-19:35"]) {
+        return @"6";
+    }else {
+        return @"7";
+    }
+}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
     static NSString *identifier = @"cell";
     TableViewCellContent *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
     if (indexPath.section == 0) {
-        cell.num.text = [NSString stringWithFormat:@"%d",(int)indexPath.row+1];
-        NSMutableString* time= self.timeArray[indexPath.row];
-        if (time.length>6) {
-            [time insertString:@" " atIndex:time.length-5];
-        }
-        cell.time.text = [NSString stringWithFormat:@"Время: %@",time];
+        cell.num.text = [self arrayString:self.timeArray[indexPath.row]];
+
+        cell.time.text = [NSString stringWithFormat:@"Время: %@",self.timeArray[indexPath.row]];
         cell.subject.text = [NSString stringWithFormat:@"Дисциплина: %@",self.subjectArray[indexPath.row]];
         cell.room.text =[NSString stringWithFormat:@"Аудитория: %@",  self.classroomArray[indexPath.row]];
         cell.teacher.text = [NSString stringWithFormat:@"Группа: %@",self.groupArray[indexPath.row]];
         
     }else{
-        cell.num.text = [NSString stringWithFormat:@"%d",(int)indexPath.row+1];
-        NSMutableString* time2= self.timeArrayWeekTwo[indexPath.row];
-        if (time2.length>6) {
-            [time2 insertString:@" " atIndex:time2.length-5];
-        }
-        cell.time.text = [NSString stringWithFormat:@"Время: %@",time2];
+        cell.num.text = [self arrayString:self.timeArrayWeekTwo[indexPath.row]];
+        cell.time.text = [NSString stringWithFormat:@"Время: %@",self.timeArrayWeekTwo[indexPath.row]];
         cell.subject.text = [NSString stringWithFormat:@"Дисциплина: %@",self.subjectArrayWeekTwo[indexPath.row]];
         cell.room.text =[NSString stringWithFormat:@"Аудитория: %@",  self.classroomArrayWeekTwo[indexPath.row]];
         cell.teacher.text = [NSString stringWithFormat:@"Группа: %@",self.groupArrayWeekTwo[indexPath.row]];

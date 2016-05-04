@@ -12,4 +12,9 @@
 
 @interface TableViewControllerClamping : UITableViewController
 
+@property(strong,nonatomic) NSString *graph;
+@property(strong,nonatomic) NSString *tableTime;
+@property(strong,nonatomic) NSString *reference;
+
+
 @end

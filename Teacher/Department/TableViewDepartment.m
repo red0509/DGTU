@@ -1,28 +1,26 @@
 //
-//  TableViewControllerDept.m
+//  TableViewDepartment.m
 //  DGTU
 //
-//  Created by Anton Pavlov on 29.02.16.
+//  Created by Anton Pavlov on 01.05.16.
 //  Copyright © 2016 Anton Pavlov. All rights reserved.
 //
 
-#import "TableViewControllerDept.h"
+#import "TableViewDepartment.h"
 #import <HTMLReader.h>
-#import "TableViewCellDept.h"
+#import "TableViewTeacher.h"
 #import "LeftMenuViewController.h"
 
 
-@interface TableViewControllerDept ()
+@interface TableViewDepartment ()
+
 @property (strong,nonatomic) NSMutableArray *name;
-@property (strong,nonatomic) NSMutableArray *zavDept;
-@property (strong,nonatomic) NSMutableArray *number;
-@property (strong,nonatomic) NSMutableArray *cab;
 @property (strong,nonatomic) NSMutableArray *ref;
-@property (nonatomic, strong) NSString *nameSize;
+
 
 @end
 
-@implementation TableViewControllerDept
+@implementation TableViewDepartment
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -30,7 +28,9 @@
     self.tableView.estimatedRowHeight = 68.0;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.title = @"Кафедры";
+    [SlideNavigationController sharedInstance].leftBarButtonItem = self.navigationItem.leftBarButtonItem;
     [self loadDept];
+    
     UIImage *image = [UIImage imageNamed:@"menu-button"];
     UIBarButtonItem *leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:image style:UIBarButtonItemStylePlain target:self action:@selector(slideMenu)];
     self.navigationItem.leftBarButtonItem = leftBarButtonItem;
@@ -56,9 +56,6 @@
 -(void) loadDept{
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         self.name= [NSMutableArray array];
-        self.zavDept= [NSMutableArray array];
-        self.number= [NSMutableArray array];
-        self.cab= [NSMutableArray array];
         self.ref= [NSMutableArray array];
         NSURL *URL = [NSURL URLWithString:@"http://stud.sssu.ru/Dek/Default.aspx?mode=kaf"];
         NSURLSessionConfiguration *sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
@@ -95,29 +92,19 @@
                   NSInteger numFacul = 2;
                   
                   HTMLElement *div = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#_ctl0_ContentPage_ucKaf_Grid > tbody > tr:nth-child(%ld) > td:nth-child(1) > a",(long)numFacul]];
-                  HTMLElement *zav;
-                  HTMLElement *num;
-                  HTMLElement *cab;
-                  
-                  double startTime = CACurrentMediaTime();
-                  
-                  NSLog(@"%@ started", [[NSThread currentThread] name]);
-                  
+                  HTMLElement *ref;
+                                    
                   while (!(div == nil)) {
                       
                       div = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#_ctl0_ContentPage_ucKaf_Grid > tbody > tr:nth-child(%ld) > td:nth-child(1) > a",(long)numFacul]];
-                      
-                      zav = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#_ctl0_ContentPage_ucKaf_Grid > tbody > tr:nth-child(%ld) > td:nth-child(3)",(long)numFacul]];
-                      num = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#_ctl0_ContentPage_ucKaf_Grid > tbody > tr:nth-child(%ld) > td:nth-child(4)",(long)numFacul]];
-                      cab = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#_ctl0_ContentPage_ucKaf_Grid > tbody > tr:nth-child(%ld) > td:nth-child(5)",(long)numFacul]];
+                      ref = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#_ctl0_ContentPage_ucKaf_Grid > tbody > tr:nth-child(%ld) > td:nth-child(2) > a",(long)numFacul]];
+                     
                       dispatch_async(dispatch_get_main_queue(), ^{
                           if (div != nil) {
                               
                               [self.name addObject:div.textContent];
-                              [self.ref addObject:div.attributes.allValues.firstObject];
-                              [self.zavDept addObject:zav.textContent];
-                              [self.number addObject:num.textContent];
-                              [self.cab addObject:cab.textContent];
+                              [self.ref addObject:ref.attributes.allValues.firstObject];
+
                               [self.tableView reloadData];
                           }
                       });
@@ -125,9 +112,7 @@
                       numFacul++;
                       
                   }
-                  
-                  NSLog(@"%@ finished in %f", [[NSThread currentThread] name], CACurrentMediaTime() - startTime);
-              }
+                }
           }] resume];
     });
 }
@@ -138,23 +123,28 @@
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *identifier = @"cellDept";
-    TableViewCellDept *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
+    static NSString *identifier = @"cellDepTeach";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
     
-    cell.labelName.text = self.name[indexPath.row];
-    cell.labelZav.text =  [NSString stringWithFormat:@"Зав. Кафедрой: %@",self.zavDept[indexPath.row]];
-    cell.labelNum.text = [NSString stringWithFormat:@"Телефон: %@",self.number[indexPath.row]];
-    cell.labelCab.text = [NSString stringWithFormat:@"Аудитория: %@",self.cab[indexPath.row]];
+    if (!cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
+    }
+    
+    cell.textLabel.text = self.name[indexPath.row];
+
     
     return cell;
     
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    NSURL *url = [NSURL URLWithString:self.ref[indexPath.row]];
     
-    if (![[UIApplication sharedApplication] openURL:url]) {
-        NSLog(@"%@%@",@"Failed to open url:",[url description]);
-    }}
+    TableViewTeacher * tableViewTeacher = [self.storyboard instantiateViewControllerWithIdentifier:@"TableViewTeacher"];
+    
+    tableViewTeacher.nameSize = [NSString stringWithFormat:@"http://stud.sssu.ru%@",self.ref[indexPath.row]];
+    
+    [self.navigationController pushViewController:tableViewTeacher animated:YES];
+    
+}
 
 @end

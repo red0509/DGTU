@@ -21,8 +21,6 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
-    
-//    application.statusBarStyle = UIStatusBarStyleLightContent;
     UIPageControl *pageControl = [UIPageControl appearance];
     pageControl.pageIndicatorTintColor = [UIColor lightGrayColor];
     pageControl.currentPageIndicatorTintColor = [UIColor blackColor];
@@ -36,38 +34,6 @@
     
     [SlideNavigationController sharedInstance].leftMenu = leftMenu;
     [SlideNavigationController sharedInstance].menuRevealAnimationDuration = .18;
-    
-//    DataManager *data = [[DataManager alloc]init];
-    
-//    Favorites* favorites =
-//    [NSEntityDescription insertNewObjectForEntityForName:@"Favorites"
-//                                 inManagedObjectContext:data.managedObjectContext];
-//    favorites.name= @"1";
-//    NSError* error = nil;
-//    if (![data.managedObjectContext save:&error]) {
-//        NSLog(@"%@", [error localizedDescription]);
-//    }
-//    NSFetchRequest* request = [[NSFetchRequest alloc] init];
-//    
-//    NSEntityDescription* description =
-//    [NSEntityDescription entityForName:@"Favorites"
-//                inManagedObjectContext:data.managedObjectContext];
-//    
-//    [request setEntity:description];
-//    
-//    NSError* requestError = nil;
-//    NSArray* resultArray = [data.managedObjectContext executeFetchRequest:request error:&requestError];
-//  
-//    
-//
-//        for (id object in resultArray) {
-////            [data.managedObjectContext deleteObject:object];
-////            [data.managedObjectContext save:nil];
-//            Favorites *favorites = (Favorites*) object;
-//            NSLog(@"NAME: %@ , TABLE:%@ , GRAPH%@",favorites.name ,favorites.tableTime,favorites.graph);
-//           
-//           }
-
     
     return YES;
 }

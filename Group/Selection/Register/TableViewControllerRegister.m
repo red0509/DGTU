@@ -10,6 +10,7 @@
 #import "TableViewCellSubject.h"
 #import "TableViewControllerInfo.h"
 
+
 @interface TableViewControllerRegister ()
 
 @property (strong,nonatomic) NSMutableArray *subjectArray;
@@ -26,10 +27,18 @@
     self.title = @"Дисциплины";
     self.tableView.estimatedRowHeight = 68.0;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
+    
 }
+
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
+}
+
+- (BOOL)slideNavigationControllerShouldDisplayLeftMenu
+{
+    return YES;
 }
 -(void) loadRegister: (NSString*) URLFacul{
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{

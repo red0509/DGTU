@@ -63,7 +63,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 5;
+    return 6;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
@@ -84,13 +84,14 @@
     
     switch (indexPath.row)
     {
+            
         case 0:
-            cell.labelName.text = @"Группы";
-            cell.image.image = [UIImage imageNamed:@"users-2.png"];
+            cell.labelName.text = @"Преподаватель";
+            cell.image.image = [UIImage imageNamed:@"social.png"];
             break;
             
         case 1:
-            cell.labelName.text = @"Преподаватель";
+            cell.labelName.text = @"Учебная группа";
             cell.image.image = [UIImage imageNamed:@"users-2.png"];
             break;
             
@@ -105,6 +106,11 @@
             break;
             
         case 4:
+            cell.labelName.text = @"Справка";
+            cell.image.image = [UIImage imageNamed:@"signs.png"];
+            break;
+            
+        case 5:
             cell.labelName.text = @"О программе";
             cell.image.image = [UIImage imageNamed:@"information-button-2.png"];
             break;
@@ -123,12 +129,14 @@
     
     switch (indexPath.row)
     {
-        case 0:
-            vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"TableViewControllerFaculties"];
-            break;
             
+        case 0:
+            
+            vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"TableViewDepartment"];
+            break;
+
         case 1:
-            vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"TabBarController"];
+            vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"TableViewControllerFaculties"];
             break;
             
         case 2:
@@ -140,6 +148,9 @@
             break;
             
         case 4:
+            vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"TableViewHelp"];
+            break;
+        case 5:
             NSLog(@"info");
             break;
     }

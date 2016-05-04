@@ -9,13 +9,12 @@
 #import <UIKit/UIKit.h>
 #import "TableViewControllerSelection.h"
 #import <HTMLReader.h>
-#import "SlideNavigationController.h"
 
 
 
 
 
-@interface TableViewControllerGroup : UITableViewController <UITableViewDataSource ,UISearchResultsUpdating,SlideNavigationControllerDelegate>
+@interface TableViewControllerGroup : UITableViewController <UITableViewDataSource ,UISearchResultsUpdating>
 
 -(void) loadGroup: (NSString*) URLFacul;
 

@@ -10,6 +10,8 @@
 #import "TableViewCellContent.h"
 
 
+
+
 @interface TableViewControllerClamping ()
 
 @property (strong,nonatomic) NSMutableArray *timeArray;
@@ -25,31 +27,19 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    NSDate *date = [NSDate date];
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
-    
-    [dateFormatter setDateFormat:@"M"];
-    NSString * strintDate = [dateFormatter stringFromDate:date];
-    NSInteger intDate = [strintDate integerValue];
-    NSString *semester;
-    if (intDate > 8 || intDate == 1) {
-        semester =  @"1";
-    }else{
-        semester = @"2";
-    }
-    
     self.tableView.estimatedRowHeight = 135.0;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
-    // мальцев
-    // http://stud.sssu.ru/Rasp/Rasp.aspx?&year=2015-2016&prep=%CC%E0%EB%FC%F6%E5%E2%20%C8.%CC.&sem=2
-    // михайлов
-    // http://stud.sssu.ru/Rasp/Rasp.aspx?&year=2015-2016&prep=%CC%E8%F5%E0%E9%EB%EE%E2%20%C0.%C1.&sem=2
-    // медведев
-    // http://stud.sssu.ru/Rasp/Rasp.aspx?&year=2015-2016&prep=%CC%E5%E4%E2%E5%E4%E5%E2%20%C4.%C2.&sem=2
-    
+       
     self.tableView.contentInset = UIEdgeInsetsMake(0., 0., CGRectGetHeight(self.tabBarController.tabBar.frame), 0);
-        [self loadGroupReference:@"http://stud.sssu.ru/Rasp/Rasp.aspx?&year=2015-2016&prep=%CC%E5%E4%E2%E5%E4%E5%E2%20%C4.%C2.&sem=2"];
 
+    if ([self.graph isEqualToString:@"teacher"]) {
+        HTMLDocument *home = [HTMLDocument documentWithString:self.tableTime];
+        [self loadTimeTable:home];
+    }else{
+        [self loadGroupReference:self.reference];
+
+    }
+    
 }
 
 
@@ -92,7 +82,7 @@
                                                 contentTypeHeader:contentType];
               
               dispatch_async(dispatch_get_main_queue(), ^{
-                  [self loadTimeTable:home];
+                  [self loadTimeTable:home ];
               });
           }
       }] resume];
@@ -151,8 +141,6 @@
                 classroomRow = 4;
                 
                 HTMLElement *date = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(1)",(long)section]];
-                
-                
                 HTMLElement *time = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(%ld)",(long)section,(long)timeRow]];
                 HTMLElement *group = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(%ld)",(long)section,(long)groupRow]];
                 HTMLElement *classroom = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(%ld)",(long)section,(long)classroomRow]];
@@ -205,10 +193,16 @@
                 
                 [self.tableView reloadData];
             }
+            for (NSMutableString *time in self.timeArray) {
+                
+                NSRange range = [time rangeOfString:@":"];
+                if (![NSStringFromRange(range) isEqualToString:@"{2, 1}"]) {
+                    [time insertString:@"-" atIndex:time.length-5];
+                    [time replaceCharactersInRange:NSMakeRange(time.length-3, 1) withString:@":"];
+                    [time replaceCharactersInRange:NSMakeRange(time.length-9, 1) withString:@":"];
+                }
+            }
             
-            
-            
-            NSLog(@"------------------------");
         });
     });
 }
@@ -252,11 +246,7 @@
     static NSString *identifier = @"cell";
     TableViewCellContent *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
         cell.num.text = self.dateArray[indexPath.row];
-        NSMutableString* time= self.timeArray[indexPath.row];
-        if (time.length>6) {
-            [time insertString:@" " atIndex:time.length-5];
-        }
-        cell.time.text = [NSString stringWithFormat:@"Время: %@",time];
+        cell.time.text = [NSString stringWithFormat:@"Время: %@",self.timeArray[indexPath.row]];
         cell.subject.text = [NSString stringWithFormat:@"Дисциплина: %@",self.subjectArray[indexPath.row]];
         cell.room.text =[NSString stringWithFormat:@"Аудитория: %@",  self.classroomArray[indexPath.row]];
         cell.teacher.text = [NSString stringWithFormat:@"Группа: %@",self.groupArray[indexPath.row]];

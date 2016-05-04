@@ -10,6 +10,7 @@
 #import "LeftMenuViewController.h"
 
 
+
 @interface TableViewControllerFaculties ()
 
 @end
@@ -20,7 +21,16 @@
     [super viewDidLoad];
 //    self.tableView.separatorColor = [UIColor colorWithRed:0.48 green:0.75 blue:0.97 alpha:1];
 //    self.tableView.separatorColor = [UIColor clearColor];
-    [SlideNavigationController sharedInstance].leftBarButtonItem = self.navigationItem.leftBarButtonItem;
+    
+    UIImage *image = [UIImage imageNamed:@"menu-button"];
+    UIBarButtonItem *leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:image style:UIBarButtonItemStylePlain target:self action:@selector(slideMenu)];
+    self.navigationItem.leftBarButtonItem = leftBarButtonItem;
+
+}
+
+-(void) slideMenu{
+    
+    [[SlideNavigationController sharedInstance] toggleLeftMenu];
 }
 
 - (BOOL)slideNavigationControllerShouldDisplayLeftMenu

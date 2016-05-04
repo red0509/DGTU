@@ -35,6 +35,11 @@
     
 }
 
+- (BOOL)slideNavigationControllerShouldDisplayLeftMenu
+{
+    return YES;
+}
+
 -(void) loadInfo:(NSString*) URLIngo{
     self.valueArray = [NSMutableArray array];
     self.nameArray = [NSMutableArray array];

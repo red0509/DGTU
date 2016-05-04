@@ -245,9 +245,16 @@
                         [self.classroomArray addObject:classroom.textContent];
                     }
                 }
+            }
+            
+            for (NSMutableString *time in self.timeArray) {
                 
-                
-                
+                NSRange range = [time rangeOfString:@":"];
+                if (![NSStringFromRange(range) isEqualToString:@"{2, 1}"]) {
+                    [time insertString:@"-" atIndex:time.length-5];
+                    [time replaceCharactersInRange:NSMakeRange(time.length-3, 1) withString:@":"];
+                    [time replaceCharactersInRange:NSMakeRange(time.length-9, 1) withString:@":"];
+                }
             }
             
             for (NSInteger i = 0; i<[self.weekArray count]; i++) {
@@ -298,7 +305,7 @@
     switch (section) {
         case 0:
             if ([self.timeArray count]==0) {
-                headerLabel.text = @"Первая неделя - выходной";
+                headerLabel.text = @"Первая неделя - занятий нет";
             }else{
                 headerLabel.text = @"Первая неделя";
             }
@@ -307,7 +314,7 @@
             break;
         case 1:
             if ([self.timeArrayWeekTwo count]==0) {
-                headerLabel.text = @"Вторая неделя - выходной";
+                headerLabel.text = @"Вторая неделя - занятий нет";
             }else{
                 headerLabel.text = @"Вторая неделя";
             }
@@ -332,28 +339,41 @@
 }
 
 
+- (NSString*) arrayString:(NSString*) string{
+    
+    if ([string isEqualToString:@"8:30-10:05"]) {
+        return @"1";
+    }else if ([string isEqualToString:@"10:20-11:55"]) {
+        return @"2";
+    }else if ([string isEqualToString:@"12:30-14:05"]) {
+        return @"3";
+    }else if ([string isEqualToString:@"14:20-15:55"]) {
+        return @"4";
+    }else if ([string isEqualToString:@"16:10-17:45"]) {
+        return @"5";
+    }else if ([string isEqualToString:@"18:00-19:35"]) {
+        return @"6";
+    }else {
+        return @"7";
+    }
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
     static NSString *identifier = @"cell";
     TableViewCellContent *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
     if (indexPath.section == 0) {
-        cell.num.text = [NSString stringWithFormat:@"%d",(int)indexPath.row+1];
-        NSMutableString* time= self.timeArray[indexPath.row];
-        if (time.length>6) {
-            [time insertString:@" " atIndex:time.length-5];
-        }
-        cell.time.text = [NSString stringWithFormat:@"Время: %@",time];
+        cell.num.text = [self arrayString:self.timeArray[indexPath.row]];
+        cell.time.text = [NSString stringWithFormat:@"Время: %@",self.timeArray[indexPath.row]];
+        
         cell.subject.text = [NSString stringWithFormat:@"Дисциплина: %@",self.subjectArray[indexPath.row]];
         cell.room.text =[NSString stringWithFormat:@"Аудитория: %@",  self.classroomArray[indexPath.row]];
         cell.teacher.text = [NSString stringWithFormat:@"Преподаватель: %@",self.teacherArray[indexPath.row]];
         
     }else{
-        cell.num.text = [NSString stringWithFormat:@"%d",(int)indexPath.row+1];
-        NSMutableString* time2= self.timeArrayWeekTwo[indexPath.row];
-        if (time2.length>6) {
-            [time2 insertString:@" " atIndex:time2.length-5];
-        }
-        cell.time.text = [NSString stringWithFormat:@"Время: %@",time2];
+        cell.num.text = [self arrayString:self.timeArrayWeekTwo[indexPath.row]];
+       
+        cell.time.text = [NSString stringWithFormat:@"Время: %@",self.timeArrayWeekTwo[indexPath.row]];
         cell.subject.text = [NSString stringWithFormat:@"Дисциплина: %@",self.subjectArrayWeekTwo[indexPath.row]];
         cell.room.text =[NSString stringWithFormat:@"Аудитория: %@",  self.classroomArrayWeekTwo[indexPath.row]];
         cell.teacher.text = [NSString stringWithFormat:@"Преподаватель: %@",self.teacherArrayWeekTwo[indexPath.row]];

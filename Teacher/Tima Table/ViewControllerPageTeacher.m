@@ -24,7 +24,6 @@
     
     self.pageViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"PageViewController"];
     self.pageViewController.dataSource = self;
-    self.title = @"Расписание";
     
     
     NSDate *date = [NSDate date];
@@ -74,9 +73,12 @@
     }
     
     TableViewPageContTeacher *viewControllerPageContent = [self.storyboard instantiateViewControllerWithIdentifier:@"TableViewPageContTeacher"];
+
     viewControllerPageContent.titleText = self.pageTitles[index];
     viewControllerPageContent.pageIndex = index;
-    viewControllerPageContent.timeTable = self.tableTime;
+    viewControllerPageContent.tableTime = self.tableTime;
+    viewControllerPageContent.graph = self.graph;
+    viewControllerPageContent.reference = self.reference;
     return viewControllerPageContent;
 }
 

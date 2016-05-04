@@ -8,10 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "TableViewControllerGroup.h"
-#import "SlideNavigationController.h"
 
 
 
-@interface TableViewControllerFaculties : UITableViewController <SlideNavigationControllerDelegate>
+@interface TableViewControllerFaculties : UITableViewController
 
 @end

@@ -11,6 +11,7 @@
 
 
 
+
 @interface TableViewControllerGroup ()
 
 @property (strong,nonatomic) NSMutableArray *EFfacul;
@@ -38,23 +39,7 @@
     self.tableView.tableHeaderView = self.resultSearchController.searchBar;
     self.definesPresentationContext = YES;
     
-    
-    UIButton *button  = [[UIButton alloc] initWithFrame:CGRectMake(0, 0,20, 20)];
-    [button setImage:[UIImage imageNamed:@"backward-arrow-4"] forState:UIControlStateNormal];
-    [button addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
-    [button setImageEdgeInsets:UIEdgeInsetsMake(0, -19, 0, 0)];
-    UIBarButtonItem *leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
-    self.navigationItem.backBarButtonItem = leftBarButtonItem;
-    [SlideNavigationController sharedInstance].leftBarButtonItem=self.navigationItem.backBarButtonItem;
-    
-    
 }
-
--(IBAction) back{
-    [self.navigationController popViewControllerAnimated:YES];
-    [SlideNavigationController sharedInstance].leftBarButtonItem = nil;
-}
-
 
 
 - (BOOL)slideNavigationControllerShouldDisplayLeftMenu
@@ -101,9 +86,6 @@
                   NSInteger numFacul = 2;
                   
                   HTMLElement *div = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#_ctl0_ContentPage_ucGroups_Grid > tbody > tr:nth-child(%ld) > td:nth-child(1) > a",(long)numFacul]];
-                  double startTime = CACurrentMediaTime();
-                  
-                  NSLog(@"%@ started", [[NSThread currentThread] name]);
                   
                   while (!(div == nil)) {
                       
@@ -112,22 +94,16 @@
                       
                       dispatch_async(dispatch_get_main_queue(), ^{
                           if (div != nil) {
-//                              [self.tableView beginUpdates];
                               [self.EFfacul addObject:div.textContent];
                               [self.EFfaculReferences addObject:div.attributes.allValues.lastObject];
                               [self.tableView reloadData ];
-//                              [self.tableView insertSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationLeft];
-//                              [self.tableView endUpdates];
+                              
                           }
                       });
                       
                       numFacul++;
                       
                   }
-                  
-                  NSLog(@"%@ finished in %f", [[NSThread currentThread] name], CACurrentMediaTime() - startTime);
-                  
-                  
               }
           }] resume];
     });

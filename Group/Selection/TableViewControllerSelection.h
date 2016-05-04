@@ -10,10 +10,9 @@
 #import "ViewControllerPageView.h"
 #import <HTMLReader.h>
 #import "ViewControllerPageContent.h"
-#import "SlideNavigationController.h"
 
 
-@interface TableViewControllerSelection : UITableViewController <SlideNavigationControllerDelegate>
+@interface TableViewControllerSelection : UITableViewController
 
 @property (strong,nonatomic) NSString *group;
 @property (strong,nonatomic) NSString *reference;

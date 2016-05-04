@@ -40,12 +40,16 @@
     
 }
 
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
-
+- (BOOL)slideNavigationControllerShouldDisplayLeftMenu
+{
+    return YES;
+}
 
 -(void) loadGraph:(NSString*) URLGroup sem:(NSString*) sem{
     
@@ -337,11 +341,11 @@
         
         NSString *cab = [self.dateArray[indexPath.row] substringFromIndex:10];
         
-        cell.dateLabel.text = [NSString stringWithFormat:@"Дата сдачи: %@\nКТ1: с %@.%@ по %@.%ld\nКТ2: с %@.%@ по %@.%ld",date,self.ktBeginArray[indexPath.row],self.monthArray[indexPath.row],self.ktEndArray[indexPath.row],(long)intM,self.ktBeginArray2[indexPath.row],self.monthArray2[indexPath.row],self.ktEndArray2[indexPath.row],(long)intM2];
+        cell.dateLabel.text = [NSString stringWithFormat:@"КТ1: с %@.%@ по %@.%ld\nКТ2: с %@.%@ по %@.%ld\nДата сдачи: %@",self.ktBeginArray[indexPath.row],self.monthArray[indexPath.row],self.ktEndArray[indexPath.row],(long)intM,self.ktBeginArray2[indexPath.row],self.monthArray2[indexPath.row],self.ktEndArray2[indexPath.row],(long)intM2,date];
         cell.cabLabel.text = [NSString stringWithFormat:@"Аудитория: %@",cab];
     }else{
         cell.cabLabel.text = @" ";
-        cell.dateLabel.text = [NSString stringWithFormat:@"Дата сдачи: %@\nКТ1: с %@.%@ по %@.%ld\nКТ2: с %@.%@ по %@.%ld",self.dateArray[indexPath.row],self.ktBeginArray[indexPath.row],self.monthArray[indexPath.row],self.ktEndArray[indexPath.row],(long)intM,self.ktBeginArray2[indexPath.row],self.monthArray2[indexPath.row],self.ktEndArray2[indexPath.row],(long)intM2];
+        cell.dateLabel.text = [NSString stringWithFormat:@"КТ1: с %@.%@ по %@.%ld\nКТ2: с %@.%@ по %@.%ld\nДата сдачи: %@",self.ktBeginArray[indexPath.row],self.monthArray[indexPath.row],self.ktEndArray[indexPath.row],(long)intM,self.ktBeginArray2[indexPath.row],self.monthArray2[indexPath.row],self.ktEndArray2[indexPath.row],(long)intM2,self.dateArray[indexPath.row]];
     }
     if ([self.dateArray[indexPath.row] isEqualToString:@"*"]|| [self.dateArray[indexPath.row] isEqualToString:@"+"]) {
         cell.dateLabel.text = @" ";
