@@ -138,6 +138,7 @@
         fav.graph = favorites.graph;
         fav.tableTime = favorites.tableTime;
         fav.semester = favorites.semester;
+        fav.university = favorites.university;
         [self.navigationController pushViewController:fav animated:YES];
     }
     

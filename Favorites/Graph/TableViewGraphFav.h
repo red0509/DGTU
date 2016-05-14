@@ -11,6 +11,10 @@
 
 @interface TableViewGraphFav : UITableViewController
 
+@property(strong,nonatomic) NSNumber *university;
+
 -(void) loadGraph:(NSString*) str sem:(NSString*) sem;
+-(void) loadGraph1:(NSString*) str;
+
 
 @end

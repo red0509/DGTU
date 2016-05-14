@@ -41,13 +41,18 @@
 
         ViewControllerPageFav *viewControllerPageFav = [self.storyboard instantiateViewControllerWithIdentifier:@"ViewControllerPageFav"];
         viewControllerPageFav.tableTime = self.tableTime;
+        viewControllerPageFav.university = self.university;
         [self.navigationController pushViewController:viewControllerPageFav animated:YES];
 
     }else if (indexPath.row == 1){
         
         TableViewGraphFav *tableViewGraphFav = [self.storyboard instantiateViewControllerWithIdentifier:@"TableViewGraphFav"];
-        [tableViewGraphFav loadGraph:self.graph sem:self.semester];
-        
+        if ([self.university isEqual:@0]) {
+            [tableViewGraphFav loadGraph:self.graph sem:self.semester];
+        }else if([self.university isEqual:@1]){
+            [tableViewGraphFav loadGraph1:self.graph];
+        }
+        tableViewGraphFav.university = self.university;
         [self.navigationController pushViewController:tableViewGraphFav animated:YES];
         
     }

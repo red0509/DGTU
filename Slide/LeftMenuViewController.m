@@ -9,6 +9,7 @@
 #import "LeftMenuViewController.h"
 #import "TableViewCellMenu.h"
 #import "SlideNavigationContorllerAnimatorSlideAndFade.h"
+#import "TableViewSettings.h"
 
 #define IDIOM    UI_USER_INTERFACE_IDIOM()
 #define IPAD     UIUserInterfaceIdiomPad
@@ -55,6 +56,18 @@
     }
 
 
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleData) name:@"reload_data" object:nil];
+    
+}
+
+-(void)handleData {
+    [self.tableView reloadData];
+}
+
+- (void)dealloc{
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
 }
 
 
@@ -63,7 +76,15 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 6;
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSInteger numberDefaults = [defaults integerForKey:@"number"];
+    NSInteger count;
+    if (numberDefaults == 0) {
+        count = 7;
+    } else if (numberDefaults == 1){
+        count = 6;
+    }
+    return count;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
@@ -81,40 +102,84 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {static NSString *identifier = @"leftMenuCell";
     TableViewCellMenu *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSInteger numberDefaults = [defaults integerForKey:@"number"];
     
-    switch (indexPath.row)
-    {
-            
-        case 0:
-            cell.labelName.text = @"Преподаватель";
-            cell.image.image = [UIImage imageNamed:@"social.png"];
-            break;
-            
-        case 1:
-            cell.labelName.text = @"Учебная группа";
-            cell.image.image = [UIImage imageNamed:@"users-2.png"];
-            break;
-            
-        case 2:
-            cell.labelName.text = @"Избранное";
-            cell.image.image = [UIImage imageNamed:@"star-2.png"];
-            break;
-            
-        case 3:
-            cell.labelName.text = @"Кафедры";
-            cell.image.image = [UIImage imageNamed:@"tribune-2.png"];
-            break;
-            
-        case 4:
-            cell.labelName.text = @"Справка";
-            cell.image.image = [UIImage imageNamed:@"signs.png"];
-            break;
-            
-        case 5:
-            cell.labelName.text = @"О программе";
-            cell.image.image = [UIImage imageNamed:@"information-button-2.png"];
-            break;
+    if (numberDefaults == 0) {
+        switch (indexPath.row)
+        {
+                
+            case 0:
+                cell.labelName.text = @"Преподаватель";
+                cell.image.image = [UIImage imageNamed:@"social.png"];
+                break;
+                
+            case 1:
+                cell.labelName.text = @"Учебная группа";
+                cell.image.image = [UIImage imageNamed:@"users.png"];
+                break;
+                
+            case 2:
+                cell.labelName.text = @"Избранное";
+                cell.image.image = [UIImage imageNamed:@"star.png"];
+                break;
+                
+            case 3:
+                cell.labelName.text = @"Кафедры";
+                cell.image.image = [UIImage imageNamed:@"tribune.png"];
+                break;
+                
+            case 4:
+                cell.labelName.text = @"Настройки";
+                cell.image.image = [UIImage imageNamed:@"settings.png"];
+                break;
+                
+            case 5:
+                cell.labelName.text = @"Справка";
+                cell.image.image = [UIImage imageNamed:@"signs.png"];
+                break;
+                
+            case 6:
+                cell.labelName.text = @"О программе";
+                cell.image.image = [UIImage imageNamed:@"information-button.png"];
+                break;
+        }
+    } else if (numberDefaults == 1){
+        switch (indexPath.row)
+        {
+                
+            case 0:
+                cell.labelName.text = @"Учебная группа";
+                cell.image.image = [UIImage imageNamed:@"users.png"];
+                break;
+                
+            case 1:
+                cell.labelName.text = @"Избранное";
+                cell.image.image = [UIImage imageNamed:@"star.png"];
+                break;
+                
+            case 2:
+                cell.labelName.text = @"Кафедры";
+                cell.image.image = [UIImage imageNamed:@"tribune.png"];
+                break;
+                
+            case 3:
+                cell.labelName.text = @"Настройки";
+                cell.image.image = [UIImage imageNamed:@"settings.png"];
+                break;
+                
+            case 4:
+                cell.labelName.text = @"Справка";
+                cell.image.image = [UIImage imageNamed:@"signs.png"];
+                break;
+                
+            case 5:
+                cell.labelName.text = @"О программе";
+                cell.image.image = [UIImage imageNamed:@"information-button.png"];
+                break;
+        }
     }
+    
     cell.backgroundColor = [UIColor clearColor];
     
     return cell;
@@ -127,33 +192,73 @@
     
     UIViewController *vc ;
     
-    switch (indexPath.row)
-    {
-            
-        case 0:
-            
-            vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"TableViewDepartment"];
-            break;
+    
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSInteger numberDefaults = [defaults integerForKey:@"number"];
+    if (numberDefaults == 0) {
+        switch (indexPath.row)
+        {
+                
+            case 0:
+                
+                vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"TableViewDepartment"];
+                break;
+                
+            case 1:
+                vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"TableViewControllerFaculties"];
+                break;
+                
+            case 2:
+                vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"TableViewFav"];
+                break;
+                
+            case 3:
+                vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"TableViewControllerDept"];
+                break;
+                
+            case 4:
+                vc = [[TableViewSettings alloc] init];
+                break;
+                
+            case 5:
+                vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"TableViewHelp"];
+                break;
+            case 6:
+                vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"InfoController"];
+                break;
+        }
 
-        case 1:
-            vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"TableViewControllerFaculties"];
-            break;
-            
-        case 2:
-            vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"TableViewFav"];
-            break;
-            
-        case 3:
-            vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"TableViewControllerDept"];
-            break;
-            
-        case 4:
-            vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"TableViewHelp"];
-            break;
-        case 5:
-            NSLog(@"info");
-            break;
+    } else if (numberDefaults == 1){
+        switch (indexPath.row)
+        {
+                
+            case 0:
+                vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"TableViewControllerFaculties"];
+                break;
+                
+            case 1:
+                vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"TableViewFav"];
+                break;
+                
+            case 2:
+                vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"TableViewControllerDept"];
+                break;
+                
+            case 3:
+                vc = [[TableViewSettings alloc] init];
+                break;
+                
+            case 4:
+                vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"TableViewHelp"];
+                break;
+            case 5:
+                vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"InfoController"];
+                break;
+        }
+
     }
+
+    
     
     [[SlideNavigationController sharedInstance] popToRootAndSwitchToViewController:vc
                                                              withSlideOutAnimation:self.slideOutAnimationEnabled

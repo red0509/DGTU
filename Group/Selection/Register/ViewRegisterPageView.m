@@ -17,13 +17,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    if([self.pageTitles[2] isEqualToString:@"Курсовой проект" ]){
-        self.pageTitles = @[@"Курсовой проект"];
-    }else if([self.pageTitles[2] isEqualToString:@"Курсовая работа" ]){
-        self.pageTitles = @[@"Курсовая работа"];
-    }else if([self.pageTitles[2] isEqualToString:@"Практика" ]){
-        self.pageTitles = @[@"Практика"];
-    }
+    
     self.referencePageView = [self.referencePageView substringFromIndex:self.referencePageView.length-6];
     
     self.pageViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"PageViewController"];

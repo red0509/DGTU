@@ -29,14 +29,14 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.titleLabel.text = self.titleText;
-   
+    
     
     if (self.pageIndex == 0) {
         [self loadReference:
          [NSString stringWithFormat:@"http://stud.sssu.ru/Ved/Ved.aspx?id=%@",self.referenceContent] KT:YES];
     }else if (self.pageIndex == 1){
-    [self loadReference:
-     [NSString stringWithFormat:@"http://stud.sssu.ru/Ved/Ved.aspx?id=%@",self.referenceContent] KT:NO];
+        [self loadReference:
+         [NSString stringWithFormat:@"http://stud.sssu.ru/Ved/Ved.aspx?id=%@",self.referenceContent] KT:NO];
     }else if (self.pageIndex == 2){
         [self loadReference:
          [NSString stringWithFormat:@"http://stud.sssu.ru/Ved/Ved.aspx?id=%@",self.referenceContent] KT:NO];
@@ -55,11 +55,9 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 -(void) loadReference:(NSString*) URLGroup KT:(BOOL)KTbool{
-    double startTime = CACurrentMediaTime();
     self.nameArray = [NSMutableArray array];
     self.lecArray = [NSMutableArray array];
     self.praArray = [NSMutableArray array];
@@ -93,199 +91,198 @@
               });
               
           }else{
-          
-          NSString *contentType = nil;
-          if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
-              NSDictionary *headers = [(NSHTTPURLResponse *)response allHeaderFields];
-              contentType = headers[@"Content-Type"];
-          }
-          
-        HTMLDocument *home = [HTMLDocument documentWithData:data
-                                                          contentTypeHeader:contentType];
-          
-          dispatch_async(dispatch_get_main_queue(), ^{
               
-          NSInteger nameNum = 5;
-          
-              HTMLElement *name;
-
-          while (YES) {
-          
-          name = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(3)",(long)nameNum]];
-              
-              if (name != nil) {
-                  [self.nameArray addObject:name.textContent];
-              }else{
-                  break;
+              NSString *contentType = nil;
+              if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
+                  NSDictionary *headers = [(NSHTTPURLResponse *)response allHeaderFields];
+                  contentType = headers[@"Content-Type"];
               }
               
-              nameNum++;
-          }
-          nameNum -=5;
+              HTMLDocument *home = [HTMLDocument documentWithData:data
+                                                contentTypeHeader:contentType];
               
-            HTMLElement *projectName;
-              HTMLElement *projectExam;
-              
-             
-              if (self.pageIndex == 3) {
+              dispatch_async(dispatch_get_main_queue(), ^{
+                  
+                  NSInteger nameNum = 5;
+                  
+                  HTMLElement *name;
+                  
+                  while (YES) {
+                      
+                      name = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(3)",(long)nameNum]];
+                      
+                      if (name != nil) {
+                          [self.nameArray addObject:name.textContent];
+                      }else{
+                          break;
+                      }
+                      
+                      nameNum++;
+                  }
+                  nameNum -=5;
+                  
+                  HTMLElement *projectName;
+                  HTMLElement *projectExam;
+                  
+                  
+                  if (self.pageIndex == 3) {
+                      for (NSInteger i = 5; i<nameNum+5; i++) {
+                          
+                          projectName = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(5)",(long)i]];
+                          if (projectName == nil) {
+                              [self.projectExamArray addObject:@" "];
+                          }else{
+                              [self.projectExamArray addObject:projectName.textContent];
+                          }
+                          
+                      }
+                  }
+                  
+                  if (self.pageIndex == 4) {
+                      for (NSInteger i = 5; i<nameNum+5; i++) {
+                          
+                          projectName = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(13)",(long)i]];
+                          if (projectName == nil) {
+                              [self.projectNameArray addObject:@" "];
+                          }else{
+                              [self.projectNameArray addObject:projectName.textContent];
+                          }
+                          projectExam = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(5)",(long)i]];
+                          if (projectExam == nil) {
+                              [self.projectExamArray addObject:@" "];
+                          }else{
+                              [self.projectExamArray addObject:projectExam.textContent];
+                          }
+                          
+                      }
+                  }
+                  
+                  
+                  HTMLElement *pred;
+                  
+                  if (KTbool == YES) {
+                      for (NSInteger i = 5; i<nameNum+5; i++) {
+                          
+                          pred = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(4)",(long)i]];
+                          if (pred == nil) {
+                              [self.lecArray addObject:@" "];
+                          }else{
+                              [self.lecArray addObject:pred.textContent];
+                          }
+                          
+                          pred = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(5)",(long)i]];
+                          if (pred == nil) {
+                              [self.praArray addObject:@" "];
+                          }else{
+                              [self.praArray addObject:pred.textContent];
+                          }
+                          
+                          pred = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(6)",(long)i]];
+                          if (pred == nil) {
+                              [self.labArray addObject:@" "];
+                          }else{
+                              [self.labArray addObject:pred.textContent];
+                          }
+                          
+                          pred = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(7)",(long)i]];
+                          if (pred == nil) {
+                              [self.drArray addObject:@" "];
+                          }else{
+                              [self.drArray addObject:pred.textContent];
+                          }
+                          
+                          pred = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(8)",(long)i]];
+                          if (pred == nil) {
+                              [self.totalArray addObject:@" "];
+                          }else{
+                              [self.totalArray addObject:pred.textContent];
+                          }
+                          
+                          [self.tableView reloadData];
+                      }
+                      
+                  }else{
+                      for (NSInteger i = 5; i<nameNum+5; i++) {
+                          
+                          pred = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(9)",(long)i]];
+                          if (pred == nil) {
+                              [self.lecArray addObject:@" "];
+                          }else{
+                              [self.lecArray addObject:pred.textContent];
+                          }
+                          
+                          pred = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(10)",(long)i]];
+                          if (pred == nil) {
+                              [self.praArray addObject:@" "];
+                          }else{
+                              [self.praArray addObject:pred.textContent];
+                          }
+                          
+                          pred = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(11)",(long)i]];
+                          if (pred == nil) {
+                              [self.labArray addObject:@" "];
+                          }else{
+                              [self.labArray addObject:pred.textContent];
+                          }
+                          
+                          pred = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(12)",(long)i]];
+                          if (pred == nil) {
+                              [self.drArray addObject:@" "];
+                          }else{
+                              [self.drArray addObject:pred.textContent];
+                          }
+                          
+                          pred = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(13)",(long)i]];
+                          if (pred == nil) {
+                              [self.totalArray addObject:@" "];
+                          }else{
+                              [self.totalArray addObject:pred.textContent];
+                          }
+                          
+                          [self.tableView reloadData];
+                          
+                      }
+                      
+                  }
+                  HTMLElement *examNum;
+                  HTMLElement *exam;
+                  
                   for (NSInteger i = 5; i<nameNum+5; i++) {
                       
-                      projectName = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(5)",(long)i]];
-                      if (projectName == nil) {
-                          [self.projectExamArray addObject:@" "];
+                      examNum = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(15)",(long)i]];
+                      
+                      if (examNum == nil) {
+                          [self.examNumArray addObject:@" "];
                       }else{
-                          [self.projectExamArray addObject:projectName.textContent];
+                          [self.examNumArray addObject:examNum.textContent];
                       }
                       
-                  }
-              }
-              
-              if (self.pageIndex == 4) {
-                  for (NSInteger i = 5; i<nameNum+5; i++) {
-                      
-                      projectName = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(13)",(long)i]];
-                      if (projectName == nil) {
-                          [self.projectNameArray addObject:@" "];
-                      }else{
-                          [self.projectNameArray addObject:projectName.textContent];
-                      }
-                      projectExam = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(5)",(long)i]];
-                      if (projectExam == nil) {
-                          [self.projectExamArray addObject:@" "];
-                      }else{
-                          [self.projectExamArray addObject:projectExam.textContent];
-                      }
-                  
-                  }
-              }
-              
-              
-          HTMLElement *pred;
-          
-          if (KTbool == YES) {
-              for (NSInteger i = 5; i<nameNum+5; i++) {
-                  
-                  pred = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(4)",(long)i]];
-                  if (pred == nil) {
-                      [self.lecArray addObject:@" "];
-                  }else{
-                      [self.lecArray addObject:pred.textContent];
-                  }
-                  
-                  pred = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(5)",(long)i]];
-                  if (pred == nil) {
-                      [self.praArray addObject:@" "];
-                  }else{
-                      [self.praArray addObject:pred.textContent];
-                  }
-                  
-                  pred = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(6)",(long)i]];
-                  if (pred == nil) {
-                      [self.labArray addObject:@" "];
-                  }else{
-                      [self.labArray addObject:pred.textContent];
-                  }
-                  
-                  pred = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(7)",(long)i]];
-                  if (pred == nil) {
-                      [self.drArray addObject:@" "];
-                  }else{
-                      [self.drArray addObject:pred.textContent];
-                  }
-                  
-                  pred = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(8)",(long)i]];
-                  if (pred == nil) {
-                      [self.totalArray addObject:@" "];
-                  }else{
-                      [self.totalArray addObject:pred.textContent];
-                  }
-                  
-                  [self.tableView reloadData];
-              }
-
-          }else{
-              for (NSInteger i = 5; i<nameNum+5; i++) {
-                  
-                  pred = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(9)",(long)i]];
-                  if (pred == nil) {
-                      [self.lecArray addObject:@" "];
-                  }else{
-                      [self.lecArray addObject:pred.textContent];
-                  }
-                  
-                  pred = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(10)",(long)i]];
-                  if (pred == nil) {
-                      [self.praArray addObject:@" "];
-                  }else{
-                      [self.praArray addObject:pred.textContent];
-                  }
-                  
-                  pred = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(11)",(long)i]];
-                  if (pred == nil) {
-                      [self.labArray addObject:@" "];
-                  }else{
-                      [self.labArray addObject:pred.textContent];
-                  }
-                  
-                  pred = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(12)",(long)i]];
-                  if (pred == nil) {
-                      [self.drArray addObject:@" "];
-                  }else{
-                      [self.drArray addObject:pred.textContent];
-                  }
-                  
-                  pred = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(13)",(long)i]];
-                  if (pred == nil) {
-                      [self.totalArray addObject:@" "];
-                  }else{
-                      [self.totalArray addObject:pred.textContent];
-                  }
-                  
-                  [self.tableView reloadData];
-
-              }
-
-          }
-              HTMLElement *examNum;
-              HTMLElement *exam;
-              
-              for (NSInteger i = 5; i<nameNum+5; i++) {
-                  
-                  examNum = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(15)",(long)i]];
-                  
-                  if (examNum == nil) {
-                      [self.examNumArray addObject:@" "];
-                  }else{
-                      [self.examNumArray addObject:examNum.textContent];
-                  }
-                  
-                  exam = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(18)",(long)i]];
-                  
-                  if (exam == nil) {
-                      [self.examArray addObject:@" "];
-                  }else if (([exam.textContent isEqualToString:@"Н/я"])||([exam.textContent isEqualToString:@"Незачет"])||([exam.textContent isEqualToString:@"Неуд"])){
-                          exam = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(21)",(long)i]];
+                      exam = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(18)",(long)i]];
                       
                       if (exam == nil) {
                           [self.examArray addObject:@" "];
-                      }else{
+                      }else if (([exam.textContent isEqualToString:@"Н/я"])||([exam.textContent isEqualToString:@"Незачет"])||([exam.textContent isEqualToString:@"Неуд"])){
+                          exam = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(21)",(long)i]];
+                          
+                          if (exam == nil) {
+                              [self.examArray addObject:@" "];
+                          }else{
+                              [self.examArray addObject:exam.textContent];
+                          }
+                          
+                          
+                      }
+                      else{
                           [self.examArray addObject:exam.textContent];
                       }
-
                       
-                  }
-                  else{
-                      [self.examArray addObject:exam.textContent];
+                      [self.tableView reloadData];
                   }
                   
-                  [self.tableView reloadData];
-              }
+              });
               
-          });
-          
-        }
+          }
       }] resume];
-    NSLog(@"%@ finished in %f", [[NSThread currentThread] name], CACurrentMediaTime() - startTime);
 }
 
 
@@ -294,7 +291,7 @@
 
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-
+    
     if (self.pageIndex == 2) {
         return 0;
         
@@ -306,7 +303,7 @@
         
     }else{
         return 30;
-
+        
     }
 }
 - (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
@@ -315,14 +312,14 @@
                                  CGRectMake(0, 0, tableView.frame.size.width, 20)];
     sectionHeaderView.backgroundColor = [UIColor colorWithRed:100.0f/255.0f green:181.0f/255.0f blue:246.0f/255.0f alpha:1.0f];
     UILabel *lec = [[UILabel alloc] initWithFrame:
-                            CGRectMake(130, 10, 50, 15)];
+                    CGRectMake(130, 10, 50, 15)];
     UILabel *pra = [[UILabel alloc] initWithFrame:
-                            CGRectMake(180, 10, 50, 15)];
+                    CGRectMake(180, 10, 50, 15)];
     UILabel *lab = [[UILabel alloc] initWithFrame:
-                            CGRectMake(230, 10, 50, 15)];
+                    CGRectMake(230, 10, 50, 15)];
     UILabel *dr = [[UILabel alloc] initWithFrame:
-                            CGRectMake(280, 10, 50, 15)];
-
+                   CGRectMake(280, 10, 50, 15)];
+    
     
     lec.textColor = [UIColor whiteColor];
     lec.backgroundColor = [UIColor clearColor];
@@ -348,7 +345,7 @@
     [sectionHeaderView addSubview:pra];
     [sectionHeaderView addSubview:lab];
     [sectionHeaderView addSubview:dr];
-
+    
     lec.text = @"Лек.";
     pra.text = @"Пр.";
     lab.text = @"Лаб.";
@@ -412,7 +409,7 @@
     }
     
     
-
+    
     
     
     return cell;

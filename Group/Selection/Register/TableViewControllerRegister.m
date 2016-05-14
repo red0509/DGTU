@@ -80,21 +80,21 @@
                                                     contentTypeHeader:contentType];
                   NSInteger section = 2;
                   
-
-                HTMLElement *subject = [home firstNodeMatchingSelector:
-                                    [NSString stringWithFormat:@"#_ctl0_ContentPage_ucListVedBox_Grid > tbody > tr:nth-child(%ld) > td:nth-child(1) > a",(long)section]];
-                HTMLElement *type;
-                HTMLElement *closed;
+                  
+                  HTMLElement *subject = [home firstNodeMatchingSelector:
+                                          [NSString stringWithFormat:@"#_ctl0_ContentPage_ucListVedBox_Grid > tbody > tr:nth-child(%ld) > td:nth-child(1) > a",(long)section]];
+                  HTMLElement *type;
+                  HTMLElement *closed;
                   
                   while (subject != nil) {
-                  
+                      
                       
                       subject = [home firstNodeMatchingSelector:
                                  [NSString stringWithFormat:@"#_ctl0_ContentPage_ucListVedBox_Grid > tbody > tr:nth-child(%ld) > td:nth-child(1) > a",(long)section]];
                       type = [home firstNodeMatchingSelector:
                               [NSString stringWithFormat:@"#_ctl0_ContentPage_ucListVedBox_Grid > tbody > tr:nth-child(%ld) > td:nth-child(2)",(long)section]];
                       closed = [home firstNodeMatchingSelector:
-                      [NSString stringWithFormat:@"#_ctl0_ContentPage_ucListVedBox_Grid > tbody > tr:nth-child(%ld) > td:nth-child(3)",(long)section]];
+                                [NSString stringWithFormat:@"#_ctl0_ContentPage_ucListVedBox_Grid > tbody > tr:nth-child(%ld) > td:nth-child(3)",(long)section]];
                       
                       
                       dispatch_async(dispatch_get_main_queue(), ^{
@@ -118,7 +118,7 @@
 #pragma mark - Table view data source
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath{
-
+    
     TableViewControllerInfo *tableViewControllerInfo = [self.storyboard instantiateViewControllerWithIdentifier:@"TableViewControllerInfo"];
     tableViewControllerInfo.referenceInfo = self.registerReferences[indexPath.row];
     [self.navigationController pushViewController:tableViewControllerInfo animated:YES];
@@ -134,7 +134,7 @@
     
     static NSString *identifier = @"cellSubject";
     TableViewCellSubject *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
-   cell.subjectLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    cell.subjectLabel.lineBreakMode = NSLineBreakByWordWrapping;
     cell.subjectLabel.numberOfLines = 4;
     cell.subjectLabel.text = self.subjectArray[indexPath.row];
     cell.typeLabel.text = [NSString stringWithFormat:@"Тип ведомости: %@  Закрыта: %@",self.typeArray[indexPath.row],self.closedArray[indexPath.row]];
@@ -146,8 +146,28 @@
     NSString *type = [NSString stringWithFormat:@"%@",self.typeArray[indexPath.row]];
     ViewRegisterPageView *viewRegisterPageView = [self.storyboard instantiateViewControllerWithIdentifier:@"ViewRegisterPageView"];
     
-    viewRegisterPageView.pageTitles = @[@"Контрольная точка 1", @"Контрольная точка 2",type];
-        viewRegisterPageView.referencePageView = self.registerReferences[indexPath.row];
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSInteger numberDefaults = [defaults integerForKey:@"number"];
+    
+    
+    
+    if (numberDefaults == 0) {
+        viewRegisterPageView.pageTitles = @[@"Контрольная точка 1", @"Контрольная точка 2",type];
+        
+        
+    }else if(numberDefaults == 1){
+        viewRegisterPageView.pageTitles = @[@"Контрольная точка 1", @"Контрольная точка 2",@"Контрольная точка 3",type];
+    }
+    
+    if([type isEqualToString:@"Курсовой проект" ]){
+        viewRegisterPageView.pageTitles = @[@"Курсовой проект"];
+    }else if([type isEqualToString:@"Курсовая работа" ]){
+        viewRegisterPageView.pageTitles = @[@"Курсовая работа"];
+    }else if([type isEqualToString:@"Практика" ]){
+        viewRegisterPageView.pageTitles = @[@"Практика"];
+    }
+    
+    viewRegisterPageView.referencePageView = self.registerReferences[indexPath.row];
     
     
     

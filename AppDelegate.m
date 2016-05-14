@@ -11,7 +11,6 @@
 
 
 
-
 @interface AppDelegate ()
 
 @end
@@ -24,7 +23,8 @@
     UIPageControl *pageControl = [UIPageControl appearance];
     pageControl.pageIndicatorTintColor = [UIColor lightGrayColor];
     pageControl.currentPageIndicatorTintColor = [UIColor blackColor];
-    pageControl.backgroundColor = [UIColor whiteColor];
+    pageControl.backgroundColor = [UIColor clearColor];
+    [pageControl setOpaque:NO];
     
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main"
                                                              bundle: nil];
@@ -35,6 +35,13 @@
     [SlideNavigationController sharedInstance].leftMenu = leftMenu;
     [SlideNavigationController sharedInstance].menuRevealAnimationDuration = .18;
     
+    static NSString* const numberUniversity = @"number";
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    if ([defaults boolForKey:numberUniversity] == NO)
+    {
+        [defaults setInteger:0 forKey:numberUniversity];
+    }
+
     return YES;
 }
 

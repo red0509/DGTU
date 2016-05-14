@@ -30,7 +30,18 @@
     self.tableView.estimatedRowHeight = 68.0;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.title = @"Кафедры";
-    [self loadDept];
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSInteger numberDefaults = [defaults integerForKey:@"number"];
+    
+    NSString *referenceUniversity;
+    
+    if (numberDefaults == 0) {
+        referenceUniversity = @"http://stud.sssu.ru/";
+    } else if(numberDefaults == 1){
+        referenceUniversity = @"http://umu.sibadi.org/";
+    }
+    
+    [self loadDept:referenceUniversity];
     UIImage *image = [UIImage imageNamed:@"menu-button"];
     UIBarButtonItem *leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:image style:UIBarButtonItemStylePlain target:self action:@selector(slideMenu)];
     self.navigationItem.leftBarButtonItem = leftBarButtonItem;
@@ -49,18 +60,19 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 
--(void) loadDept{
+-(void) loadDept: (NSString*) reference{
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        self.name= [NSMutableArray array];
-        self.zavDept= [NSMutableArray array];
-        self.number= [NSMutableArray array];
-        self.cab= [NSMutableArray array];
-        self.ref= [NSMutableArray array];
-        NSURL *URL = [NSURL URLWithString:@"http://stud.sssu.ru/Dek/Default.aspx?mode=kaf"];
+        self.name = [NSMutableArray array];
+        self.zavDept = [NSMutableArray array];
+        self.number = [NSMutableArray array];
+        self.cab = [NSMutableArray array];
+        self.ref = [NSMutableArray array];
+        
+        NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@Dek/Default.aspx?mode=kaf",reference]];
+        
         NSURLSessionConfiguration *sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
         sessionConfig.timeoutIntervalForResource = 7;
         sessionConfig.timeoutIntervalForRequest = 7;
@@ -92,44 +104,81 @@
                   
                   HTMLDocument *home = [HTMLDocument documentWithData:data
                                                     contentTypeHeader:contentType];
-                  NSInteger numFacul = 2;
                   
-                  HTMLElement *div = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#_ctl0_ContentPage_ucKaf_Grid > tbody > tr:nth-child(%ld) > td:nth-child(1) > a",(long)numFacul]];
-                  HTMLElement *zav;
-                  HTMLElement *num;
-                  HTMLElement *cab;
-                  
-                  double startTime = CACurrentMediaTime();
-                  
-                  NSLog(@"%@ started", [[NSThread currentThread] name]);
-                  
-                  while (!(div == nil)) {
-                      
-                      div = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#_ctl0_ContentPage_ucKaf_Grid > tbody > tr:nth-child(%ld) > td:nth-child(1) > a",(long)numFacul]];
-                      
-                      zav = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#_ctl0_ContentPage_ucKaf_Grid > tbody > tr:nth-child(%ld) > td:nth-child(3)",(long)numFacul]];
-                      num = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#_ctl0_ContentPage_ucKaf_Grid > tbody > tr:nth-child(%ld) > td:nth-child(4)",(long)numFacul]];
-                      cab = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#_ctl0_ContentPage_ucKaf_Grid > tbody > tr:nth-child(%ld) > td:nth-child(5)",(long)numFacul]];
-                      dispatch_async(dispatch_get_main_queue(), ^{
-                          if (div != nil) {
-                              
-                              [self.name addObject:div.textContent];
-                              [self.ref addObject:div.attributes.allValues.firstObject];
-                              [self.zavDept addObject:zav.textContent];
-                              [self.number addObject:num.textContent];
-                              [self.cab addObject:cab.textContent];
-                              [self.tableView reloadData];
-                          }
-                      });
-                      
-                      numFacul++;
-                      
+                  if ([reference isEqualToString:@"http://stud.sssu.ru/"]) {
+                      [self universityZero:home];
+                  } else if([reference isEqualToString:@"http://umu.sibadi.org/"]){
+                      [self universityOne:home];
                   }
                   
-                  NSLog(@"%@ finished in %f", [[NSThread currentThread] name], CACurrentMediaTime() - startTime);
+
               }
           }] resume];
     });
+}
+
+- (void) universityZero: (HTMLDocument*) home{
+    
+
+    NSInteger numFacul = 2;
+    
+    HTMLElement *div = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#_ctl0_ContentPage_ucKaf_Grid > tbody > tr:nth-child(%ld) > td:nth-child(1) > a",(long)numFacul]];
+    HTMLElement *zav;
+    HTMLElement *num;
+    HTMLElement *cab;
+    
+    
+    while (!(div == nil)) {
+        
+        div = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#_ctl0_ContentPage_ucKaf_Grid > tbody > tr:nth-child(%ld) > td:nth-child(1) > a",(long)numFacul]];
+        
+        zav = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#_ctl0_ContentPage_ucKaf_Grid > tbody > tr:nth-child(%ld) > td:nth-child(3)",(long)numFacul]];
+        num = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#_ctl0_ContentPage_ucKaf_Grid > tbody > tr:nth-child(%ld) > td:nth-child(4)",(long)numFacul]];
+        cab = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#_ctl0_ContentPage_ucKaf_Grid > tbody > tr:nth-child(%ld) > td:nth-child(5)",(long)numFacul]];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (div != nil) {
+                
+                [self.name addObject:div.textContent];
+                //                              [self.ref addObject:div.attributes.allValues.firstObject];
+                [self.zavDept addObject:zav.textContent];
+                [self.number addObject:num.textContent];
+                [self.cab addObject:cab.textContent];
+                [self.tableView reloadData];
+            }
+        });
+        numFacul++;
+    }
+}
+
+- (void) universityOne: (HTMLDocument*) home{
+    
+    
+    NSInteger numFacul = 2;
+    
+    HTMLElement *div = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#_ctl0_ContentPage_ucKaf_Grid > tbody > tr:nth-child(%ld) > td:nth-child(2)",(long)numFacul]];
+    HTMLElement *zav;
+    HTMLElement *num;
+    HTMLElement *cab;
+    
+    
+    while (!(div == nil)) {
+        
+        div = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#_ctl0_ContentPage_ucKaf_Grid > tbody > tr:nth-child(%ld) > td:nth-child(2)",(long)numFacul]];
+        zav = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#_ctl0_ContentPage_ucKaf_Grid > tbody > tr:nth-child(%ld) > td:nth-child(4)",(long)numFacul]];
+        num = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#_ctl0_ContentPage_ucKaf_Grid > tbody > tr:nth-child(%ld) > td:nth-child(5)",(long)numFacul]];
+        cab = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#_ctl0_ContentPage_ucKaf_Grid > tbody > tr:nth-child(%ld) > td:nth-child(6)",(long)numFacul]];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (div != nil) {
+                
+                [self.name addObject:div.textContent];
+                [self.zavDept addObject:zav.textContent];
+                [self.number addObject:num.textContent];
+                [self.cab addObject:cab.textContent];
+                [self.tableView reloadData];
+            }
+        });
+        numFacul++;
+    }
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -150,11 +199,10 @@
     
 }
 
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    NSURL *url = [NSURL URLWithString:self.ref[indexPath.row]];
-    
-    if (![[UIApplication sharedApplication] openURL:url]) {
-        NSLog(@"%@%@",@"Failed to open url:",[url description]);
-    }}
+//-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+//    NSURL *url = [NSURL URLWithString:self.ref[indexPath.row]];
+//    
+//    if (![[UIApplication sharedApplication] openURL:url]) {
+//    }}
 
 @end

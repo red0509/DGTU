@@ -145,6 +145,60 @@
     
     
 }
+- (void)loadGraph1:(NSString *)str{
+    
+    self.subjectArray = [NSMutableArray array];
+    self.typeArray = [NSMutableArray array];
+    self.teacherArray = [NSMutableArray array];
+    self.dateArray = [NSMutableArray array];
+    self.ktBeginArray = [NSMutableArray array];
+    
+    HTMLDocument *home = [[HTMLDocument alloc]initWithString:str];
+    
+    NSInteger num = 5;
+    while (YES) {
+        HTMLElement *subject = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(2)",(long)num]];
+        if (subject.textContent == nil) {
+            break;
+        }else{
+            [self.subjectArray addObject:subject.textContent];
+            num++;
+        }
+    }
+    for (NSInteger i = 5; i<num; i++) {
+        HTMLElement *type = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(3)",(long)i]];
+        [self.typeArray addObject:type.textContent];
+        
+        HTMLElement *teacher = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(8)",(long)i]];
+        if (teacher.textContent == nil) {
+            [self.teacherArray addObject:@" "];
+        }else{
+            [self.teacherArray addObject:teacher.textContent];
+        }
+        
+        HTMLElement *date;
+        if ([self.typeArray[i-5] isEqualToString:@"Зачет"]) {
+            date = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(6)",(long)i]];
+        }else{
+            date = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(7)",(long)i]];
+        }
+        if (date.textContent == nil) {
+            [self.dateArray addObject:@" "];
+        }else{
+            [self.dateArray addObject:date.textContent];
+        }
+        HTMLElement *hour = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(5)",(long)i]];
+        if (hour.textContent == nil) {
+            [self.ktBeginArray addObject:@" "];
+        }else{
+            [self.ktBeginArray addObject:hour.textContent];
+        }
+
+        [self.tableView reloadData];
+    }
+    
+    
+}
 
 -(void) graphKT:(NSInteger) num max:(NSInteger) max document:(HTMLDocument*) home{
     for (NSInteger i = 5; i<num; i++) {
@@ -245,75 +299,113 @@
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *identifier = @"cellGraph";
-    TableViewCellGraph *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
-    
-    cell.disLabel.text = [NSString stringWithFormat:@"Дисциплина: %@",self.subjectArray[indexPath.row]];
-    NSString *pred =self.teacherArray[indexPath.row];
-    
-    NSArray* array = [pred componentsSeparatedByString:@"-Лек"];
-    pred = [array componentsJoinedByString:@"-Лек\n"];
-    array = [pred componentsSeparatedByString:@"-Пр"];
-    pred = [array componentsJoinedByString:@"-Пр\n"];
-    array = [pred componentsSeparatedByString:@"-Лаб"];
-    pred = [array componentsJoinedByString:@"-Лаб\n"];
-    array = [pred componentsSeparatedByString:@"(За)"];
-    pred = [array componentsJoinedByString:@"(За)"];
-    array = [pred componentsSeparatedByString:@"(Эк)"];
-    pred = [array componentsJoinedByString:@"(Эк)"];
-    
-    cell.PredLabel.text = [NSString stringWithFormat:@"Преподаватели: %@",pred];
-    cell.typeLabel.text = [NSString stringWithFormat:@"Вид контроля: %@",self.typeArray[indexPath.row]];
-    
-    NSInteger intM;
-    NSInteger intM2;
-    
-    NSString *len =self.dateArray[indexPath.row];
-    
-    NSInteger beginInt = [self.ktBeginArray[indexPath.row] integerValue];
-    NSInteger endInt = [self.ktEndArray[indexPath.row] integerValue];
-    
-    if (beginInt>endInt) {
-        intM = [self.monthArray[indexPath.row] integerValue];
-        intM++;
-    }else{
-        NSNumber *m =self.monthArray[indexPath.row];
-        intM = [m integerValue];
-    }
-    
-    
-    NSInteger beginInt2 = [self.ktBeginArray2[indexPath.row] integerValue];
-    NSInteger endInt2 = [self.ktEndArray2[indexPath.row] integerValue];
-    
-    if (beginInt2>endInt2) {
-        intM2 = [self.monthArray2[indexPath.row] integerValue];
-        if (intM2==12) {
-            intM2=1;
+    TableViewCellGraph *cell;
+    if ([self.university isEqual:@0]) {
+        static NSString *identifier = @"cellGraph";
+        cell = [tableView dequeueReusableCellWithIdentifier:identifier];
+        
+        cell.disLabel.text = [NSString stringWithFormat:@"Дисциплина: %@",self.subjectArray[indexPath.row]];
+        NSString *pred =self.teacherArray[indexPath.row];
+        
+        NSArray* array = [pred componentsSeparatedByString:@"-Лек"];
+        pred = [array componentsJoinedByString:@"-Лек\n"];
+        array = [pred componentsSeparatedByString:@"-Пр"];
+        pred = [array componentsJoinedByString:@"-Пр\n"];
+        array = [pred componentsSeparatedByString:@"-Лаб"];
+        pred = [array componentsJoinedByString:@"-Лаб\n"];
+        array = [pred componentsSeparatedByString:@"(За)"];
+        pred = [array componentsJoinedByString:@"(За)"];
+        array = [pred componentsSeparatedByString:@"(Эк)"];
+        pred = [array componentsJoinedByString:@"(Эк)"];
+        
+        cell.PredLabel.text = [NSString stringWithFormat:@"Преподаватели: %@",pred];
+        cell.typeLabel.text = [NSString stringWithFormat:@"Вид контроля: %@",self.typeArray[indexPath.row]];
+        
+        NSInteger intM;
+        NSInteger intM2;
+        
+        NSString *len =self.dateArray[indexPath.row];
+        
+        NSInteger beginInt = [self.ktBeginArray[indexPath.row] integerValue];
+        NSInteger endInt = [self.ktEndArray[indexPath.row] integerValue];
+        
+        if (beginInt>endInt) {
+            intM = [self.monthArray[indexPath.row] integerValue];
+            intM++;
         }else{
-            intM2++;
+            NSNumber *m =self.monthArray[indexPath.row];
+            intM = [m integerValue];
         }
-    }else{
-        NSNumber *m1 =self.monthArray2[indexPath.row];
-        intM2 = [m1 integerValue];
-    }
-    
-    if (len.length >10) {
-        NSString *date = [self.dateArray[indexPath.row] substringToIndex:10];
         
-        NSString *cab = [self.dateArray[indexPath.row] substringFromIndex:10];
         
-        cell.dateLabel.text = [NSString stringWithFormat:@"КТ1: с %@.%@ по %@.%ld\nКТ2: с %@.%@ по %@.%ld\nДата сдачи: %@",self.ktBeginArray[indexPath.row],self.monthArray[indexPath.row],self.ktEndArray[indexPath.row],(long)intM,self.ktBeginArray2[indexPath.row],self.monthArray2[indexPath.row],self.ktEndArray2[indexPath.row],(long)intM2,date];
-        cell.cabLabel.text = [NSString stringWithFormat:@"Аудитория: %@",cab];
-    }else{
-        cell.cabLabel.text = @" ";
-        cell.dateLabel.text = [NSString stringWithFormat:@"КТ1: с %@.%@ по %@.%ld\nКТ2: с %@.%@ по %@.%ld\nДата сдачи: %@",self.ktBeginArray[indexPath.row],self.monthArray[indexPath.row],self.ktEndArray[indexPath.row],(long)intM,self.ktBeginArray2[indexPath.row],self.monthArray2[indexPath.row],self.ktEndArray2[indexPath.row],(long)intM2,self.dateArray[indexPath.row]];
+        NSInteger beginInt2 = [self.ktBeginArray2[indexPath.row] integerValue];
+        NSInteger endInt2 = [self.ktEndArray2[indexPath.row] integerValue];
+        
+        if (beginInt2>endInt2) {
+            intM2 = [self.monthArray2[indexPath.row] integerValue];
+            if (intM2==12) {
+                intM2=1;
+            }else{
+                intM2++;
+            }
+        }else{
+            NSNumber *m1 =self.monthArray2[indexPath.row];
+            intM2 = [m1 integerValue];
+        }
+        
+        if (len.length >10) {
+            NSString *date = [self.dateArray[indexPath.row] substringToIndex:10];
+            
+            NSString *cab = [self.dateArray[indexPath.row] substringFromIndex:10];
+            
+            cell.dateLabel.text = [NSString stringWithFormat:@"КТ1: с %@.%@ по %@.%ld\nКТ2: с %@.%@ по %@.%ld\nДата сдачи: %@",self.ktBeginArray[indexPath.row],self.monthArray[indexPath.row],self.ktEndArray[indexPath.row],(long)intM,self.ktBeginArray2[indexPath.row],self.monthArray2[indexPath.row],self.ktEndArray2[indexPath.row],(long)intM2,date];
+            cell.cabLabel.text = [NSString stringWithFormat:@"Аудитория: %@",cab];
+        }else{
+            cell.cabLabel.text = @" ";
+            cell.dateLabel.text = [NSString stringWithFormat:@"КТ1: с %@.%@ по %@.%ld\nКТ2: с %@.%@ по %@.%ld\nДата сдачи: %@",self.ktBeginArray[indexPath.row],self.monthArray[indexPath.row],self.ktEndArray[indexPath.row],(long)intM,self.ktBeginArray2[indexPath.row],self.monthArray2[indexPath.row],self.ktEndArray2[indexPath.row],(long)intM2,self.dateArray[indexPath.row]];
+        }
+        if ([self.dateArray[indexPath.row] isEqualToString:@"*"]|| [self.dateArray[indexPath.row] isEqualToString:@"+"]) {
+            cell.dateLabel.text = @" ";
+            cell.cabLabel.text = @" ";
+        }
+    }else if([self.university isEqual:@1]){
+        static NSString *identifier = @"cellGraph1";
+        cell = [tableView dequeueReusableCellWithIdentifier:identifier];
+        
+        cell.subLabel1.text = [NSString stringWithFormat:@"Дисциплина: %@",self.subjectArray[indexPath.row]];
+        
+        NSString *pred =self.teacherArray[indexPath.row];
+        
+        NSArray* array = [pred componentsSeparatedByString:@"-Лек"];
+        pred = [array componentsJoinedByString:@"-Лек\n"];
+        array = [pred componentsSeparatedByString:@"-Пр"];
+        pred = [array componentsJoinedByString:@"-Пр\n"];
+        array = [pred componentsSeparatedByString:@"-Лаб"];
+        pred = [array componentsJoinedByString:@"-Лаб\n"];
+        array = [pred componentsSeparatedByString:@"(За)"];
+        pred = [array componentsJoinedByString:@"(За)"];
+        array = [pred componentsSeparatedByString:@"(Эк)"];
+        pred = [array componentsJoinedByString:@"(Эк)"];
+        
+        cell.techLabel1.text = [NSString stringWithFormat:@"Преподаватели: %@",pred];
+        cell.typeLabel1.text = [NSString stringWithFormat:@"Вид контроля: %@",self.typeArray[indexPath.row]];
+        cell.hourLabel1.text = [NSString stringWithFormat:@"Часов: %@",self.ktBeginArray[indexPath.row]];
+        
+        NSString *len =self.dateArray[indexPath.row];
+        if (len.length >10) {
+            NSString *date = [self.dateArray[indexPath.row] substringToIndex:10];
+            
+            NSString *cab = [self.dateArray[indexPath.row] substringFromIndex:10];
+            
+            cell.dateLabel1.text = [NSString stringWithFormat:@"Дата сдачи: %@",date];
+            cell.roomLabel1.text = [NSString stringWithFormat:@"Аудитория: %@",cab];
+        }else{
+            cell.dateLabel1.text = [NSString stringWithFormat:@"Дата сдачи: %@",len];
+            cell.roomLabel1.text = @" ";
+        }
     }
-    if ([self.dateArray[indexPath.row] isEqualToString:@"*"]|| [self.dateArray[indexPath.row] isEqualToString:@"+"]) {
-        cell.dateLabel.text = @" ";
-        cell.cabLabel.text = @" ";
-    }
-    
     return cell;
+
 }
 
 

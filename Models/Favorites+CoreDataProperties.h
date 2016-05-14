@@ -2,7 +2,7 @@
 //  Favorites+CoreDataProperties.h
 //  DGTU
 //
-//  Created by Anton Pavlov on 16.02.16.
+//  Created by Anton Pavlov on 12.05.16.
 //  Copyright © 2016 Anton Pavlov. All rights reserved.
 //
 //  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
@@ -10,7 +10,6 @@
 //
 
 #import "Favorites.h"
-#import <HTMLReader.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -20,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSString *name;
 @property (nullable, nonatomic, retain) NSString *semester;
 @property (nullable, nonatomic, retain) NSString *tableTime;
+@property (nullable, nonatomic, retain) NSNumber *university;
 
 @end
 

@@ -12,4 +12,6 @@
 
 -(void) loadGraph:(NSString*) URLGroup sem:(NSString*) sem;
 
+-(void) loadGraph1:(NSString*) URLGroup;
+
 @end

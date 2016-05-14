@@ -20,12 +20,14 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+
     self.pageTitles = @[@"Понедельник", @"Вторник", @"Среда", @"Четверг",@"Пятница",@"Суббота"];
     
     self.pageViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"PageViewController"];
     self.pageViewController.dataSource = self;
-    
-    
+    self.pageViewController.view.backgroundColor = [UIColor clearColor];
+//    self.view.backgroundColor =[UIColor clearColor];
     NSDate *date = [NSDate date];
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
@@ -51,13 +53,16 @@
     NSArray *viewControllers = @[startingViewController];
     [self.pageViewController setViewControllers:viewControllers direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
     
-    self.pageViewController.view.frame = CGRectMake(0, 60, self.view.frame.size.width, self.view.frame.size.height - 65);
     
+    self.pageViewController.view.frame = CGRectMake(0, 60, self.view.frame.size.width, self.view.frame.size.height - 100);
+    
+
     [self addChildViewController:self.pageViewController];
     [self.view addSubview:self.pageViewController.view];
     [self.pageViewController didMoveToParentViewController:self];
-    
+
 }
+
 
 
 - (void)didReceiveMemoryWarning

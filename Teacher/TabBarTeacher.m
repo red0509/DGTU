@@ -23,7 +23,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    UIBarButtonItem *rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"add1.png"] style:UIBarButtonItemStylePlain target:self action:@selector(addFavorites)];
+    UIBarButtonItem *rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"add-star.png"] style:UIBarButtonItemStylePlain target:self action:@selector(addFavorites)];
     TableViewControllerClamping *clamping = [self.storyboard instantiateViewControllerWithIdentifier:@"TableViewControllerClamping"];
     clamping.reference = self.reference;
     ViewControllerPageTeacher *teacher = [self.storyboard instantiateViewControllerWithIdentifier:@"ViewControllerPageTeacher"];
@@ -59,7 +59,6 @@
     
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSLog(@"ter - %@",self.reference);
         NSURL *URLTeacher = [NSURL URLWithString:self.reference];
         NSError *errorData = nil;
         NSData *dataTeacher = [[NSData alloc]initWithContentsOfURL:URLTeacher options:NSDataReadingUncached error:&errorData];
@@ -72,7 +71,6 @@
                 NSLog(@"error %@", [errorData localizedDescription]);
                 
             } else {
-                NSLog(@"Data has loaded successfully.");
                 
                 HTMLDocument *homeTeacher = [HTMLDocument documentWithData:dataTeacher
                                                       contentTypeHeader:contentType];
@@ -82,11 +80,16 @@
                 [NSEntityDescription insertNewObjectForEntityForName:@"Favorites"
                                               inManagedObjectContext:data.managedObjectContext];
                 
+                NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+                NSInteger numberDefaults = [defaults integerForKey:@"number"];
+                NSNumber *universityNum = [[NSNumber alloc]initWithInteger:numberDefaults];
+
                 NSString *teacher= homeTeacher.serializedFragment;
                 favorites.name = self.surname;
                 favorites.tableTime = teacher;
                 favorites.graph = @"teacher";
                 favorites.semester = @"teacher";
+                favorites.university = universityNum;
                 
                 NSError* error = nil;
                 if (![data.managedObjectContext save:&error]) {

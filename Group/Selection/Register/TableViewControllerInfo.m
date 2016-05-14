@@ -27,7 +27,7 @@
     self.title = @"Информация";
     self.tableView.estimatedRowHeight = 68.0;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
-
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -66,49 +66,48 @@
               });
           }else{
               
-          NSString *contentType = nil;
-          if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
-              NSDictionary *headers = [(NSHTTPURLResponse *)response allHeaderFields];
-              contentType = headers[@"Content-Type"];
-          }
-        HTMLDocument *home = [HTMLDocument documentWithData:data
-                                          contentTypeHeader:contentType];
-          HTMLElement *vid = [home firstNodeMatchingSelector:@"#tblTitle > tbody > tr:nth-child(2) > td:nth-child(6)"];
-              NSLog(@"vid %@",vid.textContent);
+              NSString *contentType = nil;
+              if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
+                  NSDictionary *headers = [(NSHTTPURLResponse *)response allHeaderFields];
+                  contentType = headers[@"Content-Type"];
+              }
+              HTMLDocument *home = [HTMLDocument documentWithData:data
+                                                contentTypeHeader:contentType];
               
-          dispatch_async(dispatch_get_main_queue(), ^{
-              HTMLElement *info;
-        for (NSInteger i = 2; i<7; i++) {
-            for (NSInteger j = 1; j<7; j++) {
-                if ((i==4)&&(j==1)) {
-                    info = [home firstNodeMatchingSelector:@"#ucVedBox_lblSemName"];
-                }else if((i==2)&&(j==6)){
-                     info = [home firstNodeMatchingSelector:@"#ucVedBox_lblKafName"];
-                }
-                else{
-                    info = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblTitle > tbody > tr:nth-child(%ld) > td:nth-child(%ld)",(long)i,(long)j ]];
-                }
-            
-                if (info.textContent == nil) {
-                    if (j%2==0) {
-                        [self.valueArray addObject:@" "];
-                    }else{
-                        [self.nameArray addObject:@" "];
-                    }
-                    
-                }else{
-                    if (j%2==0) {
-                        [self.valueArray addObject:info.textContent];
-                    }else{
-                        [self.nameArray addObject:info.textContent];
-                    }                }
-                [self.tableView reloadData];
-                
-               
-            }
-            
-        }
-          });
+              
+              dispatch_async(dispatch_get_main_queue(), ^{
+                  HTMLElement *info;
+                  for (NSInteger i = 2; i<7; i++) {
+                      for (NSInteger j = 1; j<7; j++) {
+                          if ((i==4)&&(j==1)) {
+                              info = [home firstNodeMatchingSelector:@"#ucVedBox_lblSemName"];
+                          }else if((i==2)&&(j==6)){
+                              info = [home firstNodeMatchingSelector:@"#ucVedBox_lblKafName"];
+                          }
+                          else{
+                              info = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblTitle > tbody > tr:nth-child(%ld) > td:nth-child(%ld)",(long)i,(long)j ]];
+                          }
+                          
+                          if (info.textContent == nil) {
+                              if (j%2==0) {
+                                  [self.valueArray addObject:@" "];
+                              }else{
+                                  [self.nameArray addObject:@" "];
+                              }
+                              
+                          }else{
+                              if (j%2==0) {
+                                  [self.valueArray addObject:info.textContent];
+                              }else{
+                                  [self.nameArray addObject:info.textContent];
+                              }                }
+                          [self.tableView reloadData];
+                          
+                          
+                      }
+                      
+                  }
+              });
           }
       }] resume];
 }
@@ -123,64 +122,64 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-
+    
     static NSString *identifier = @"cellInfo";
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
-   
+    
     if (!cell) {
         
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
-                
+        
     }
     
-     cell.textLabel.text = [NSString stringWithFormat:@"%@: %@",self.nameArray[indexPath.row],self.valueArray[indexPath.row]];
+    cell.textLabel.text = [NSString stringWithFormat:@"%@: %@",self.nameArray[indexPath.row],self.valueArray[indexPath.row]];
     return cell;
 }
 
 
 /*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
+ // Override to support conditional editing of the table view.
+ - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+ // Return NO if you do not want the specified item to be editable.
+ return YES;
+ }
+ */
 
 /*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
+ // Override to support editing the table view.
+ - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+ if (editingStyle == UITableViewCellEditingStyleDelete) {
+ // Delete the row from the data source
+ [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+ } else if (editingStyle == UITableViewCellEditingStyleInsert) {
+ // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+ }
+ }
+ */
 
 /*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
+ // Override to support rearranging the table view.
+ - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
+ }
+ */
 
 /*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
+ // Override to support conditional rearranging of the table view.
+ - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
+ // Return NO if you do not want the item to be re-orderable.
+ return YES;
+ }
+ */
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

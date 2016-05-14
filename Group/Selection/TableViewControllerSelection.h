@@ -17,5 +17,6 @@
 @property (strong,nonatomic) NSString *group;
 @property (strong,nonatomic) NSString *reference;
 @property (strong,nonatomic) NSString *numberGroupString;
+@property (strong,nonatomic) NSString *referenceUniversity;
 
 @end

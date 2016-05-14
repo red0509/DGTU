@@ -77,6 +77,7 @@
     viewControllerPageContent.titleText = self.pageTitles[index];
     viewControllerPageContent.pageIndex = index;
     viewControllerPageContent.referenceContent = self.referencePageView;
+    viewControllerPageContent.referenceUniversity = self.referenceUniversity;
     return viewControllerPageContent;
 }
 

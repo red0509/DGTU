@@ -78,6 +78,7 @@
     viewControllerPageContent.titleText = self.pageTitles[index];
     viewControllerPageContent.pageIndex = index;
     viewControllerPageContent.timeTable = self.tableTime;
+    viewControllerPageContent.university = self.university;
     return viewControllerPageContent;
 }
 

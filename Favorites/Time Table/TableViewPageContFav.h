@@ -16,4 +16,5 @@
 @property NSUInteger pageIndex;
 @property NSString *titleText;
 @property NSString *timeTable;
+@property (strong,nonatomic) NSNumber *university;
 @end

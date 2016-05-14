@@ -32,20 +32,6 @@
     [super viewDidLoad];
     self.labelTitle.text = self.titleText;
     
-    NSDate *date = [NSDate date];
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
-    
-    [dateFormatter setDateFormat:@"M"];
-    NSString * strintDate = [dateFormatter stringFromDate:date];
-    NSInteger intDate = [strintDate integerValue];
-    NSString *semester;
-    if (intDate > 8 || intDate == 1) {
-        semester =  @"1";
-    }else{
-        semester = @"2";
-    }
-    
-    
     self.tableView.estimatedRowHeight = 135.0;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
 
@@ -278,12 +264,14 @@
             }
             
             for (NSMutableString *time in self.timeArray) {
-                
-                NSRange range = [time rangeOfString:@":"];
-                if (![NSStringFromRange(range) isEqualToString:@"{2, 1}"]) {
-                    [time insertString:@"-" atIndex:time.length-5];
-                    [time replaceCharactersInRange:NSMakeRange(time.length-3, 1) withString:@":"];
-                    [time replaceCharactersInRange:NSMakeRange(time.length-9, 1) withString:@":"];
+                if (time.length>3) {
+                    
+                    NSRange range = [time rangeOfString:@":"];
+                    if (![NSStringFromRange(range) isEqualToString:@"{2, 1}"] && ![NSStringFromRange(range) isEqualToString:@"{1, 1}"]) {
+                        [time insertString:@"-" atIndex:time.length-5];
+                        [time replaceCharactersInRange:NSMakeRange(time.length-3, 1) withString:@":"];
+                        [time replaceCharactersInRange:NSMakeRange(time.length-9, 1) withString:@":"];
+                    }
                 }
             }
             

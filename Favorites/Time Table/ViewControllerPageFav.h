@@ -14,6 +14,7 @@
 @property (strong, nonatomic) UIPageViewController *pageViewController;
 @property (strong, nonatomic) NSArray *pageTitles;
 @property (strong ,nonatomic) NSString *tableTime;
+@property(strong,nonatomic) NSNumber *university;
 
 @end
 

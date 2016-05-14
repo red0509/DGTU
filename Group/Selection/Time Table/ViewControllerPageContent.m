@@ -46,42 +46,34 @@
     
     self.tableView.estimatedRowHeight = 135.0;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
+    NSString *day;
 
-    
-    if (self.pageIndex == 0) {
-        [self loadGroupReference:
-         [NSString stringWithFormat:@"http://stud.sssu.ru/Rasp/Rasp.aspx?group=%@&sem=%@",self.referenceContent,semester]
-                             day:@"Понедельник"];
-        
-    }else if (self.pageIndex == 1){
-        [self loadGroupReference:
-         [NSString stringWithFormat:@"http://stud.sssu.ru/Rasp/Rasp.aspx?group=%@&sem=%@",self.referenceContent,semester]
-                             day:@"Вторник"];
-        
-    }else if (self.pageIndex == 2){
-        [self loadGroupReference:
-         [NSString stringWithFormat:@"http://stud.sssu.ru/Rasp/Rasp.aspx?group=%@&sem=%@",self.referenceContent,semester]
-                             day:@"Среда"];
-        
-    }else if (self.pageIndex == 3){
-        [self loadGroupReference:
-         [NSString stringWithFormat:@"http://stud.sssu.ru/Rasp/Rasp.aspx?group=%@&sem=%@",self.referenceContent,semester]
-                             day:@"Четверг"];
-        
-    }else if (self.pageIndex == 4){
-        [self loadGroupReference:
-         [NSString stringWithFormat:@"http://stud.sssu.ru/Rasp/Rasp.aspx?group=%@&sem=%@",self.referenceContent,semester]
-                             day:@"Пятница"];
-        
-    }else if (self.pageIndex == 5){
-        [self loadGroupReference:
-         [NSString stringWithFormat:@"http://stud.sssu.ru/Rasp/Rasp.aspx?group=%@&sem=%@",self.referenceContent,semester]
-                             day:@"Суббота"];
+    switch (self.pageIndex) {
+        case 0:
+            day = @"Понедельник";
+            break;
+        case 1:
+             day = @"Вторник";
+            break;
+        case 2:
+             day = @"Среда";
+            break;
+        case 3:
+             day = @"Четверг";
+            break;
+        case 4:
+             day = @"Пятница";
+            break;
+        case 5:
+             day = @"Суббота";
+            break;
+            
+        default:
+            break;
     }
     
-    
-    
-    
+    [self loadGroupReference:[NSString stringWithFormat:@"%@Rasp/Rasp.aspx?group=%@&sem=%@",self.referenceUniversity,self.referenceContent,semester] day:day];
+   
 }
 
 
@@ -190,19 +182,16 @@
                     teacherRow = 4;
                     classroomRow = 5;
                 }
-                HTMLElement *teacher = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(%ld)",(long)section,(long)teacherRow]];
-                HTMLElement *classroom;
-                if (teacher.textContent == nil) {
-                    
-                    section++;
-                }
                 HTMLElement *subject = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(%ld)",(long)section,(long)subjectRow]];
+                
+                
+                HTMLElement *teacher = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(%ld)",(long)section,(long)teacherRow]];
+                
                 HTMLElement *time = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(%ld)",(long)section,(long)timeRow]];
                 HTMLElement *week = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(%ld)",(long)section,(long)weekRow]];
                 
-                teacher = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(%ld)",(long)section,(long)teacherRow]];
-                classroom = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(%ld)",(long)section,(long)classroomRow]];
-                if ([week.attributes.allValues.lastObject isEqual:@"2"]) {
+                HTMLElement *classroom = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(%ld)",(long)section,(long)classroomRow]];
+                if ([week.attributes.allKeys.lastObject isEqual:@"colspan"]) {
                     [self.timeArray addObject:time.textContent];
                     [self.timeArray addObject:time.textContent];
                     
@@ -238,22 +227,90 @@
                     }else{
                         
                         [self.timeArray addObject:time.textContent];
-                        
                         [self.weekArray addObject:week.textContent];
                         [self.subjectArray addObject:subject.textContent];
                         [self.teacherArray addObject:teacher.textContent];
                         [self.classroomArray addObject:classroom.textContent];
                     }
                 }
+                
+                if ([subject.attributes.allValues.lastObject isEqual:@"2"] && [subject.attributes.allKeys.lastObject isEqual:@"rowspan"]) {
+                    
+                    section++;
+                    
+                    [self.timeArray addObject:self.timeArray.lastObject];
+                    [self.weekArray addObject:self.weekArray.lastObject];
+                    [self.subjectArray addObject:self.subjectArray.lastObject];
+                    
+                    
+                    teacher = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(%d)",(long)section,1]];
+                    [self.teacherArray addObject:teacher.textContent];
+                    
+                    classroom = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(%d)",(long)section,2]];
+                    [self.classroomArray addObject:classroom.textContent];
+                    
+                }
+                
+                NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+                NSInteger numberDefaults = [defaults integerForKey:@"number"];
+                
+                if (numberDefaults == 1) {
+                    
+                    if([week.attributes.allValues.lastObject isEqual:@"2"] && [week.attributes.allKeys.lastObject isEqual:@"rowspan"]&&[week.attributes.allValues.firstObject isEqual:@"center"]){
+                        NSLog(@"red2 %@",week.textContent);
+                        
+                        section++;
+                        
+                        [self.timeArray addObject:self.timeArray.lastObject];
+                        [self.weekArray addObject:self.weekArray.lastObject];
+                        
+                        subject = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(%d)",(long)section,1]];
+                        [self.subjectArray addObject:subject.textContent];
+                        teacher = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(%d)",(long)section,2]];
+                        [self.teacherArray addObject:teacher.textContent];
+                        
+                        classroom = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(%d)",(long)section,3]];
+                        [self.classroomArray addObject:classroom.textContent];
+                        
+                    }
+                    if([time.attributes.allValues.lastObject isEqual:@"2"] && [time.attributes.allKeys.lastObject isEqual:@"rowspan"]&&[time.attributes.allValues.firstObject isEqual:@"center"]){
+                        NSLog(@"red3 %@",week.textContent);
+                        
+                        section++;
+                        
+                        [self.timeArray addObject:self.timeArray.lastObject];
+                        [self.weekArray addObject:self.weekArray.lastObject];
+                        
+                        subject = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(%d)",(long)section,1]];
+                        [self.subjectArray addObject:subject.textContent];
+                        teacher = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(%d)",(long)section,2]];
+                        [self.teacherArray addObject:teacher.textContent];
+                        
+                        classroom = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#tblGr > tbody > tr:nth-child(%ld) > td:nth-child(%d)",(long)section,3]];
+                        [self.classroomArray addObject:classroom.textContent];
+                        
+                    }
+                }
             }
             
             for (NSMutableString *time in self.timeArray) {
-                
                 NSRange range = [time rangeOfString:@":"];
-                if (![NSStringFromRange(range) isEqualToString:@"{2, 1}"]) {
-                    [time insertString:@"-" atIndex:time.length-5];
-                    [time replaceCharactersInRange:NSMakeRange(time.length-3, 1) withString:@":"];
-                    [time replaceCharactersInRange:NSMakeRange(time.length-9, 1) withString:@":"];
+                if (time.length>7) {
+                    if (time.length == 8) {
+                        if (![NSStringFromRange(range) isEqualToString:@"{2, 1}"] && ![NSStringFromRange(range) isEqualToString:@"{1, 1}"]) {
+                            [time insertString:@"-" atIndex:time.length-4];
+                            [time replaceCharactersInRange:NSMakeRange(time.length-3, 1) withString:@":"];
+                            [time replaceCharactersInRange:NSMakeRange(time.length-8, 1) withString:@":"];
+                        }
+                        
+                    }else  {
+                    
+                        if (![NSStringFromRange(range) isEqualToString:@"{2, 1}"] && ![NSStringFromRange(range) isEqualToString:@"{1, 1}"]) {
+                            [time insertString:@"-" atIndex:time.length-5];
+                            [time replaceCharactersInRange:NSMakeRange(time.length-3, 1) withString:@":"];
+                            [time replaceCharactersInRange:NSMakeRange(time.length-9, 1) withString:@":"];
+                        }
+                    }
                 }
             }
             
@@ -353,10 +410,23 @@
         return @"5";
     }else if ([string isEqualToString:@"18:00-19:35"]) {
         return @"6";
-    }else {
+    }else if ([string isEqualToString:@"8:20-9:50"]) {
+        return @"1";
+    }else if ([string isEqualToString:@"10:00-11:30"]) {
+        return @"2";
+    }else if ([string isEqualToString:@"11:40-13:10"]) {
+        return @"3";
+    }else if ([string isEqualToString:@"13:45-15:15"]) {
+        return @"4";
+    }else if ([string isEqualToString:@"15:25-16:55"]) {
+        return @"5";
+    }else if ([string isEqualToString:@"17:05-18:35"]) {
+        return @"6";
+    }else{
         return @"7";
     }
 }
+
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     

@@ -14,5 +14,6 @@
 @property(strong,nonatomic) NSString *graph;
 @property(strong,nonatomic) NSString *tableTime;
 @property(strong,nonatomic) NSString *semester;
+@property(strong,nonatomic) NSNumber *university;
 
 @end

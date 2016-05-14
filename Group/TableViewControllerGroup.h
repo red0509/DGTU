@@ -19,6 +19,7 @@
 -(void) loadGroup: (NSString*) URLFacul;
 
 @property NSString *titleName;
+@property NSString *referenceUniversity;
 
 @property (strong, nonatomic) NSMutableArray *searchResult;
 @end
