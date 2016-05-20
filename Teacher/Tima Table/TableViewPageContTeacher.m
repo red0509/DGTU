@@ -35,7 +35,6 @@
     self.tableView.estimatedRowHeight = 135.0;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
 
-
     if ([self.graph isEqualToString:@"teacher"]) {
         
         HTMLDocument *home = [HTMLDocument documentWithString:self.tableTime];
@@ -109,12 +108,20 @@
               dispatch_async(dispatch_get_main_queue(), ^{
                   UIAlertController *alert= [UIAlertController alertControllerWithTitle:@"Ошибка" message:@"Не удается подключится." preferredStyle:UIAlertControllerStyleAlert];
                   
-                  UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK"
-                                                                          style:UIAlertActionStyleDefault
+                  
+                  UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"Закрыть"
+                                                                          style:UIAlertActionStyleCancel
                                                                         handler:^(UIAlertAction * action) {
                                                                             [self.navigationController popViewControllerAnimated:YES];
                                                                         }];
+                  
+                  UIAlertAction* repeatAction = [UIAlertAction actionWithTitle:@"Повторить"
+                                                                         style:UIAlertActionStyleDefault
+                                                                       handler:^(UIAlertAction * _Nonnull action) {
+                                                                           [self loadGroupReference:URLGroup day:weekDay];
+                                                                       }];
                   [alert addAction:defaultAction];
+                  [alert addAction:repeatAction];
                   
                   [self.navigationController presentViewController:alert animated:YES completion:nil];
               });
@@ -311,6 +318,7 @@
     
     UIView *sectionHeaderView = [[UIView alloc] initWithFrame:
                                  CGRectMake(0, 0, tableView.frame.size.width, 20)];
+    
     sectionHeaderView.backgroundColor = [UIColor colorWithRed:100.0f/255.0f green:181.0f/255.0f blue:246.0f/255.0f alpha:1.0f];
     UILabel *headerLabel = [[UILabel alloc] initWithFrame:
                             CGRectMake(15, 10, sectionHeaderView.frame.size.width, 15)];

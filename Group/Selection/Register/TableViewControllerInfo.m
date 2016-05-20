@@ -20,14 +20,20 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    self.referenceInfo = [self.referenceInfo substringFromIndex:self.referenceInfo.length-6];
+    NSString *university;
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSInteger numberDefaults = [defaults integerForKey:@"number"];
+    if (numberDefaults == 0) {
+        university = @"http://stud.sssu.ru/";
+    } else if(numberDefaults == 1){
+        university = @"http://umu.sibadi.org/";
+    }
     [self loadInfo:
-     [NSString stringWithFormat:@"http://stud.sssu.ru/Ved/Ved.aspx?id=%@",self.referenceInfo]];
+     [NSString stringWithFormat:@"%@Ved/%@",university,self.referenceInfo]];
     self.title = @"Информация";
     self.tableView.estimatedRowHeight = 68.0;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
-    
+    self.navigationController.interactivePopGestureRecognizer.enabled = NO;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -55,12 +61,21 @@
               dispatch_async(dispatch_get_main_queue(), ^{
                   UIAlertController *alert= [UIAlertController alertControllerWithTitle:@"Ошибка" message:@"Не удается подключится." preferredStyle:UIAlertControllerStyleAlert];
                   
-                  UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK"
-                                                                          style:UIAlertActionStyleDefault
+                  
+                  UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"Закрыть"
+                                                                          style:UIAlertActionStyleCancel
                                                                         handler:^(UIAlertAction * action) {
                                                                             [self.navigationController popViewControllerAnimated:YES];
                                                                         }];
+                  
+                  UIAlertAction* repeatAction = [UIAlertAction actionWithTitle:@"Повторить"
+                                                                         style:UIAlertActionStyleDefault
+                                                                       handler:^(UIAlertAction * _Nonnull action) {
+                                                                           [self loadInfo:URLIngo];
+                                                                       }];
                   [alert addAction:defaultAction];
+                  [alert addAction:repeatAction];
+                  
                   
                   [self.navigationController presentViewController:alert animated:YES completion:nil];
               });
@@ -90,9 +105,9 @@
                           
                           if (info.textContent == nil) {
                               if (j%2==0) {
-                                  [self.valueArray addObject:@" "];
+//                                  [self.valueArray addObject:@" "];
                               }else{
-                                  [self.nameArray addObject:@" "];
+//                                  [self.nameArray addObject:@" "];
                               }
                               
                           }else{
@@ -100,13 +115,12 @@
                                   [self.valueArray addObject:info.textContent];
                               }else{
                                   [self.nameArray addObject:info.textContent];
-                              }                }
-                          [self.tableView reloadData];
-                          
-                          
+                              }
+                          }
                       }
                       
                   }
+                    [self.tableView reloadData];
               });
           }
       }] resume];
@@ -133,53 +147,11 @@
         
     }
     
+
+    
     cell.textLabel.text = [NSString stringWithFormat:@"%@: %@",self.nameArray[indexPath.row],self.valueArray[indexPath.row]];
+
     return cell;
 }
-
-
-/*
- // Override to support conditional editing of the table view.
- - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
- // Return NO if you do not want the specified item to be editable.
- return YES;
- }
- */
-
-/*
- // Override to support editing the table view.
- - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
- if (editingStyle == UITableViewCellEditingStyleDelete) {
- // Delete the row from the data source
- [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
- } else if (editingStyle == UITableViewCellEditingStyleInsert) {
- // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
- }
- }
- */
-
-/*
- // Override to support rearranging the table view.
- - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
- }
- */
-
-/*
- // Override to support conditional rearranging of the table view.
- - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
- // Return NO if you do not want the item to be re-orderable.
- return YES;
- }
- */
-
-/*
- #pragma mark - Navigation
- 
- // In a storyboard-based application, you will often want to do a little preparation before navigation
- - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
- // Get the new view controller using [segue destinationViewController].
- // Pass the selected object to the new view controller.
- }
- */
 
 @end

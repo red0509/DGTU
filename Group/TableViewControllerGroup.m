@@ -8,6 +8,8 @@
 
 #import "TableViewControllerGroup.h"
 #import "ViewController.h"
+#import "LeftMenuViewController.h"
+
 
 
 
@@ -38,7 +40,9 @@
     [self.resultSearchController.searchBar sizeToFit];
     self.tableView.tableHeaderView = self.resultSearchController.searchBar;
     self.definesPresentationContext = YES;
-   
+    if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
+        self.navigationController.interactivePopGestureRecognizer.enabled = NO;
+    }
     
 }
 
@@ -60,17 +64,24 @@
         NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfig];
         [[session dataTaskWithURL:URL completionHandler:
           ^(NSData *data, NSURLResponse *response, NSError *error) {
-              
               if (error != nil) {
                   dispatch_async(dispatch_get_main_queue(), ^{
                       UIAlertController *alert= [UIAlertController alertControllerWithTitle:@"Ошибка" message:@"Не удается подключится." preferredStyle:UIAlertControllerStyleAlert];
                       
-                      UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK"
+                      UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"Закрыть"
                                                                               style:UIAlertActionStyleDefault
                                                                             handler:^(UIAlertAction * action) {
                                                                                 [self.navigationController popViewControllerAnimated:YES];
                                                                             }];
+
+                      UIAlertAction* repeatAction = [UIAlertAction actionWithTitle:@"Повторить"
+                                                                             style:UIAlertActionStyleDefault
+                                                                           handler:^(UIAlertAction * _Nonnull action) {
+                                                                               [self loadGroup:URLFacul];
+                                                                           }];
                       [alert addAction:defaultAction];
+                      [alert addAction:repeatAction];
+                     
                       
                       [self.navigationController presentViewController:alert animated:YES completion:nil];
                   });
@@ -172,7 +183,6 @@
             if ([self.EFfacul[i] isEqualToString:self.searchResult[indexPath.row]]) {
                 tableViewControllerSelection.reference = self.EFfaculReferences[i];
                 tableViewControllerSelection.referenceUniversity = self.referenceUniversity;
-                NSLog(@"%@",tableViewControllerSelection.reference );
                 
             }
         }
@@ -182,7 +192,6 @@
         tableViewControllerSelection.group = self.EFfacul[indexPath.row];
         tableViewControllerSelection.reference = self.EFfaculReferences[indexPath.row];
         tableViewControllerSelection.referenceUniversity = self.referenceUniversity;
-        NSLog(@"%@",tableViewControllerSelection.reference );
 
     }
     

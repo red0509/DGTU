@@ -27,6 +27,7 @@
     self.tableView.estimatedRowHeight = 68.0;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.title = @"Преподаватели";
+    self.navigationController.interactivePopGestureRecognizer.enabled = NO;
     [self loadDept];
 
 }
@@ -59,12 +60,21 @@
                   dispatch_async(dispatch_get_main_queue(), ^{
                       UIAlertController *alert= [UIAlertController alertControllerWithTitle:@"Ошибка" message:@"Не удается подключится." preferredStyle:UIAlertControllerStyleAlert];
                       
-                      UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK"
-                                                                              style:UIAlertActionStyleDefault
+                      
+                      UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"Закрыть"
+                                                                              style:UIAlertActionStyleCancel
                                                                             handler:^(UIAlertAction * action) {
                                                                                 [self.navigationController popViewControllerAnimated:YES];
                                                                             }];
+                      
+                      UIAlertAction* repeatAction = [UIAlertAction actionWithTitle:@"Повторить"
+                                                                             style:UIAlertActionStyleDefault
+                                                                           handler:^(UIAlertAction * _Nonnull action) {
+                                                                               [self loadDept];
+                                                                           }];
                       [alert addAction:defaultAction];
+                      [alert addAction:repeatAction];
+
                       
                       [self.navigationController presentViewController:alert animated:YES completion:nil];
                   });

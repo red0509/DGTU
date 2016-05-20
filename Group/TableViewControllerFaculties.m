@@ -35,7 +35,7 @@
     
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     NSInteger numberDefaults = [defaults integerForKey:@"number"];
-    
+    [SlideNavigationController sharedInstance].enableSwipeGesture = YES;
     if (numberDefaults == 0) {
         self.referenceUniversity = @"http://stud.sssu.ru/";
     } else if(numberDefaults == 1){
@@ -73,12 +73,20 @@
                   dispatch_async(dispatch_get_main_queue(), ^{
                       UIAlertController *alert= [UIAlertController alertControllerWithTitle:@"Ошибка" message:@"Не удается подключится." preferredStyle:UIAlertControllerStyleAlert];
                       
-                      UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK"
-                                                                              style:UIAlertActionStyleDefault
+                      
+                      UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"Закрыть"
+                                                                              style:UIAlertActionStyleCancel
                                                                             handler:^(UIAlertAction * action) {
                                                                                 [self.navigationController popViewControllerAnimated:YES];
                                                                             }];
+                      
+                      UIAlertAction* repeatAction = [UIAlertAction actionWithTitle:@"Повторить"
+                                                                             style:UIAlertActionStyleDefault
+                                                                           handler:^(UIAlertAction * _Nonnull action) {
+                                                                               [self loadFaculties:URLFacul];
+                                                                           }];
                       [alert addAction:defaultAction];
+                      [alert addAction:repeatAction];
                       
                       [self.navigationController presentViewController:alert animated:YES completion:nil];
                   });

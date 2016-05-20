@@ -26,27 +26,71 @@
 
 @implementation TableViewRegisterContent
 
+#define STATE_EXAM 30
+#define PRACTICE 30
+#define GRADUATION_WORK 30
+#define COURSE_PROJECT 40
+#define COURSE_WORK 40
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.titleLabel.text = self.titleText;
     
-    
-    if (self.pageIndex == 0) {
+    if ([self.titleText isEqualToString:@"Контрольная точка 1"]) {
         [self loadReference:
-         [NSString stringWithFormat:@"http://stud.sssu.ru/Ved/Ved.aspx?id=%@",self.referenceContent] KT:YES];
-    }else if (self.pageIndex == 1){
+         [NSString stringWithFormat:@"%@/Ved/Ved.aspx?id=%@",self.referenceUniversity ,self.referenceContent] KT:4];
+    }else if ([self.titleText isEqualToString:@"Контрольная точка 2"]) {
         [self loadReference:
-         [NSString stringWithFormat:@"http://stud.sssu.ru/Ved/Ved.aspx?id=%@",self.referenceContent] KT:NO];
-    }else if (self.pageIndex == 2){
+         [NSString stringWithFormat:@"%@/Ved/Ved.aspx?id=%@",self.referenceUniversity ,self.referenceContent] KT:9];
+    }else if ([self.titleText isEqualToString:@"Контрольная точка 3"]){
         [self loadReference:
-         [NSString stringWithFormat:@"http://stud.sssu.ru/Ved/Ved.aspx?id=%@",self.referenceContent] KT:NO];
-    }else if (self.pageIndex == 3){
+         [NSString stringWithFormat:@"%@/Ved/Ved.aspx?id=%@",self.referenceUniversity ,self.referenceContent] KT:14];
+    }else if ([self.titleText isEqualToString:@"Контрольная точка 4"]){
         [self loadReference:
-         [NSString stringWithFormat:@"http://stud.sssu.ru/Ved/Ved.aspx?id=%@",self.referenceContent] KT:NO];
-    }else if (self.pageIndex ==  4){
+         [NSString stringWithFormat:@"%@/Ved/Ved.aspx?id=%@",self.referenceUniversity ,self.referenceContent] KT:19];
+    }else if ([self.titleText isEqualToString:@"Контрольная точка 5"]){
         [self loadReference:
-         [NSString stringWithFormat:@"http://stud.sssu.ru/Ved/Ved.aspx?id=%@",self.referenceContent] KT:NO];
+         [NSString stringWithFormat:@"%@/Ved/Ved.aspx?id=%@",self.referenceUniversity ,self.referenceContent] KT:24];
+    }else if ([self.titleText isEqualToString:@"Контрольная точка 6"]){
+        [self loadReference:
+         [NSString stringWithFormat:@"%@/Ved/Ved.aspx?id=%@",self.referenceUniversity ,self.referenceContent] KT:29];
+    }else if ([self.titleText isEqualToString:@"Экзамен"] || [self.titleText isEqualToString:@"Зачет"]){
+        NSInteger num;
+        switch (self.count) {
+            case 2:
+                num = 0;
+                break;
+            case 3:
+                num = 5;
+                break;
+            case 4:
+                num = 10;
+                break;
+            case 5:
+                num = 15;
+                break;
+            case 6:
+                num = 20;
+                break;
+            case 7:
+                num = 25;
+                break;
+            default:
+                break;
+        }
+        
+        [self loadReference:
+         [NSString stringWithFormat:@"%@/Ved/Ved.aspx?id=%@",self.referenceUniversity ,self.referenceContent] KT:num];
+    }else if (self.pageIndex == PRACTICE){
+        [self loadReference:
+         [NSString stringWithFormat:@"%@/Ved/Ved.aspx?id=%@",self.referenceUniversity ,self.referenceContent] KT:0];
+    }else if (self.pageIndex ==  COURSE_WORK){
+        [self loadReference:
+         [NSString stringWithFormat:@"%@/Ved/Ved.aspx?id=%@",self.referenceUniversity ,self.referenceContent] KT:0];
     }
+    
+    
+    self.navigationController.interactivePopGestureRecognizer.enabled = NO;
     
     self.tableView.estimatedRowHeight = 68.0;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
@@ -57,7 +101,7 @@
     [super didReceiveMemoryWarning];
 }
 
--(void) loadReference:(NSString*) URLGroup KT:(BOOL)KTbool{
+-(void) loadReference:(NSString*) URLGroup KT:(NSInteger)KT{
     self.nameArray = [NSMutableArray array];
     self.lecArray = [NSMutableArray array];
     self.praArray = [NSMutableArray array];
@@ -80,12 +124,20 @@
               dispatch_async(dispatch_get_main_queue(), ^{
                   UIAlertController *alert= [UIAlertController alertControllerWithTitle:@"Ошибка" message:@"Не удается подключится." preferredStyle:UIAlertControllerStyleAlert];
                   
-                  UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK"
-                                                                          style:UIAlertActionStyleDefault
+                  
+                  UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"Закрыть"
+                                                                          style:UIAlertActionStyleCancel
                                                                         handler:^(UIAlertAction * action) {
                                                                             [self.navigationController popViewControllerAnimated:YES];
                                                                         }];
+                  
+                  UIAlertAction* repeatAction = [UIAlertAction actionWithTitle:@"Повторить"
+                                                                         style:UIAlertActionStyleDefault
+                                                                       handler:^(UIAlertAction * _Nonnull action) {
+                                                                           [self loadReference:URLGroup KT:KT];
+                                                                       }];
                   [alert addAction:defaultAction];
+                  [alert addAction:repeatAction];
                   
                   [self.navigationController presentViewController:alert animated:YES completion:nil];
               });
@@ -125,12 +177,33 @@
                   HTMLElement *projectExam;
                   
                   
-                  if (self.pageIndex == 3) {
+                  if (self.pageIndex == PRACTICE) {
                       for (NSInteger i = 5; i<nameNum+5; i++) {
                           
-                          projectName = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(5)",(long)i]];
-                          if (projectName == nil) {
-                              [self.projectExamArray addObject:@" "];
+                          projectName = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(12)",(long)i]];
+                          
+                          if ([projectName.textContent isEqualToString:@""]) {
+                              projectName = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(10)",(long)i]];
+                              
+                              if ([projectName.textContent isEqualToString:@""]) {
+                                  projectName = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(8)",(long)i]];
+                                  
+                                  if ([projectName.textContent isEqualToString:@""]) {
+                                      projectName = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(5)",(long)i]];
+                                      if ([projectName.textContent isEqualToString:@""]) {
+                                          [self.projectExamArray addObject:@" "];
+                                      }else{
+                                          [self.projectExamArray addObject:projectName.textContent];
+                                      }
+                                      
+                                  }else{
+                                      [self.projectExamArray addObject:projectName.textContent];
+                                  }
+                                  
+                              }else{
+                                  [self.projectExamArray addObject:projectName.textContent];
+                              }
+                              
                           }else{
                               [self.projectExamArray addObject:projectName.textContent];
                           }
@@ -138,19 +211,42 @@
                       }
                   }
                   
-                  if (self.pageIndex == 4) {
+                  if (self.pageIndex == COURSE_WORK) {
                       for (NSInteger i = 5; i<nameNum+5; i++) {
                           
                           projectName = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(13)",(long)i]];
-                          if (projectName == nil) {
+                          if ([projectName.textContent isEqualToString:@""]) {
                               [self.projectNameArray addObject:@" "];
                           }else{
                               [self.projectNameArray addObject:projectName.textContent];
                           }
-                          projectExam = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(5)",(long)i]];
-                          if (projectExam == nil) {
-                              [self.projectExamArray addObject:@" "];
+                          
+                          projectExam = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(12)",(long)i]];
+                          
+                          if ([projectExam.textContent isEqualToString:@""]) {
+                              projectExam = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(10)",(long)i]];
+                              
+                              if ([projectExam.textContent isEqualToString:@""]) {
+                                  projectExam = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(8)",(long)i]];
+                                  
+                                  if ([projectExam.textContent isEqualToString:@""]) {
+                                      projectExam = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(5)",(long)i]];
+                                      if ([projectExam.textContent isEqualToString:@""]) {
+                                          [self.projectExamArray addObject:@" "];
+                                      }else{
+                                          [self.projectExamArray addObject:projectExam.textContent];
+                                      }
+                                      
+                                  }else{
+                                      [self.projectExamArray addObject:projectExam.textContent];
+                                  }
+                                  
+                              }else{
+                                  [self.projectExamArray addObject:projectExam.textContent];
+                              }
+                              
                           }else{
+                              
                               [self.projectExamArray addObject:projectExam.textContent];
                           }
                           
@@ -159,39 +255,39 @@
                   
                   
                   HTMLElement *pred;
+                  if (KT>=4 && KT<=29) {
                   
-                  if (KTbool == YES) {
                       for (NSInteger i = 5; i<nameNum+5; i++) {
                           
-                          pred = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(4)",(long)i]];
+                          pred = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(%ld)",(long)i,KT]];
                           if (pred == nil) {
                               [self.lecArray addObject:@" "];
                           }else{
                               [self.lecArray addObject:pred.textContent];
                           }
                           
-                          pred = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(5)",(long)i]];
+                          pred = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(%ld)",(long)i,KT+1]];
                           if (pred == nil) {
                               [self.praArray addObject:@" "];
                           }else{
                               [self.praArray addObject:pred.textContent];
                           }
                           
-                          pred = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(6)",(long)i]];
+                          pred = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(%ld)",(long)i,KT+2]];
                           if (pred == nil) {
                               [self.labArray addObject:@" "];
                           }else{
                               [self.labArray addObject:pred.textContent];
                           }
                           
-                          pred = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(7)",(long)i]];
+                          pred = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(%ld)",(long)i,KT+3]];
                           if (pred == nil) {
                               [self.drArray addObject:@" "];
                           }else{
                               [self.drArray addObject:pred.textContent];
                           }
                           
-                          pred = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(8)",(long)i]];
+                          pred = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(%ld)",(long)i,KT+4]];
                           if (pred == nil) {
                               [self.totalArray addObject:@" "];
                           }else{
@@ -200,79 +296,41 @@
                           
                           [self.tableView reloadData];
                       }
-                      
-                  }else{
-                      for (NSInteger i = 5; i<nameNum+5; i++) {
-                          
-                          pred = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(9)",(long)i]];
-                          if (pred == nil) {
-                              [self.lecArray addObject:@" "];
-                          }else{
-                              [self.lecArray addObject:pred.textContent];
-                          }
-                          
-                          pred = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(10)",(long)i]];
-                          if (pred == nil) {
-                              [self.praArray addObject:@" "];
-                          }else{
-                              [self.praArray addObject:pred.textContent];
-                          }
-                          
-                          pred = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(11)",(long)i]];
-                          if (pred == nil) {
-                              [self.labArray addObject:@" "];
-                          }else{
-                              [self.labArray addObject:pred.textContent];
-                          }
-                          
-                          pred = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(12)",(long)i]];
-                          if (pred == nil) {
-                              [self.drArray addObject:@" "];
-                          }else{
-                              [self.drArray addObject:pred.textContent];
-                          }
-                          
-                          pred = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(13)",(long)i]];
-                          if (pred == nil) {
-                              [self.totalArray addObject:@" "];
-                          }else{
-                              [self.totalArray addObject:pred.textContent];
-                          }
-                          
-                          [self.tableView reloadData];
-                          
-                      }
-                      
                   }
+                  
                   HTMLElement *examNum;
                   HTMLElement *exam;
                   
                   for (NSInteger i = 5; i<nameNum+5; i++) {
                       
-                      examNum = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(15)",(long)i]];
+                      examNum = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(%ld)",(long)i,10+KT]];
                       
-                      if (examNum == nil) {
+                      if ([examNum.textContent isEqualToString:@""] || examNum == nil) {
                           [self.examNumArray addObject:@" "];
                       }else{
                           [self.examNumArray addObject:examNum.textContent];
                       }
                       
-                      exam = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(18)",(long)i]];
+                      exam = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(%ld)",(long)i,20+KT]];
                       
-                      if (exam == nil) {
-                          [self.examArray addObject:@" "];
-                      }else if (([exam.textContent isEqualToString:@"Н/я"])||([exam.textContent isEqualToString:@"Незачет"])||([exam.textContent isEqualToString:@"Неуд"])){
-                          exam = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(21)",(long)i]];
-                          
-                          if (exam == nil) {
-                              [self.examArray addObject:@" "];
+                      if ([exam.textContent isEqualToString:@""] || exam == nil) {
+                          exam = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(%ld)",(long)i,18+KT]];
+                          if ([exam.textContent isEqualToString:@""] || exam == nil) {
+                              exam = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(%ld)",(long)i,16+KT]];
+                              if ([exam.textContent isEqualToString:@""] || exam == nil) {
+                                  exam = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(%ld)",(long)i,13+KT]];
+                                  if ([exam.textContent isEqualToString:@""] || exam == nil) {
+                                      [self.examArray addObject:@" "];
+                                  }else{
+                                      [self.examArray addObject:exam.textContent];
+                                  }
+                              }else{
+                                  [self.examArray addObject:exam.textContent];
+                              }
                           }else{
                               [self.examArray addObject:exam.textContent];
                           }
-                          
-                          
-                      }
-                      else{
+                      }else{
                           [self.examArray addObject:exam.textContent];
                       }
                       
@@ -289,16 +347,33 @@
 
 #pragma mark - Table view data source
 
-
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (self.pageIndex == 2) {
         return 0;
         
-    }else if (self.pageIndex == 3) {
+    }else if (self.pageIndex == PRACTICE) {
         return 0;
         
-    }else if (self.pageIndex == 4) {
+    }else if (self.pageIndex == COURSE_WORK) {
+        return 0;
+        
+    }else{
+        return 30;
+        
+    }
+    
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    
+    if (self.pageIndex == self.count-1) {
+        return 0;
+        
+    }else if (self.pageIndex == PRACTICE) {
+        return 0;
+        
+    }else if (self.pageIndex == COURSE_WORK) {
         return 0;
         
     }else{
@@ -364,8 +439,8 @@
     NSString *identifier = nil;
     TableViewCellRegister *cell = nil;
     
-    
-    if (self.pageIndex == 0) {
+    if (self.pageIndex < self.count-1) {
+        
         identifier = @"cellRegister";
         cell = [tableView dequeueReusableCellWithIdentifier:identifier];
         cell.nameLabel.text = self.nameArray[indexPath.row];
@@ -374,43 +449,28 @@
         cell.labLabel.text = self.labArray[indexPath.row];
         cell.drLabel.text = self.drArray[indexPath.row];
         cell.totalLabel.text = self.totalArray[indexPath.row];
-        cell.totalLabel.text = [NSString stringWithFormat:@"Итог по КТ 1: %@" ,self.totalArray[indexPath.row]];
+        cell.totalLabel.text = [NSString stringWithFormat:@"Итог по КТ: %@" ,self.totalArray[indexPath.row]];
         
-    }else if (self.pageIndex == 1) {
-        identifier = @"cellRegister";
-        cell = [tableView dequeueReusableCellWithIdentifier:identifier];
-        cell.nameLabel.text = self.nameArray[indexPath.row];
-        cell.lecLabel.text = self.lecArray[indexPath.row];
-        cell.praLabel.text = self.praArray[indexPath.row];
-        cell.labLabel.text = self.labArray[indexPath.row];
-        cell.drLabel.text = self.drArray[indexPath.row];
-        cell.totalLabel.text = self.totalArray[indexPath.row];
-        cell.totalLabel.text = [NSString stringWithFormat:@"Итог по КТ 2: %@" ,self.totalArray[indexPath.row]];
-        
-    }else if(self.pageIndex == 2){
+    }else if (self.pageIndex == self.count-1){
         identifier = @"cellExam";
         cell = [tableView dequeueReusableCellWithIdentifier:identifier];
         cell.nameLabel.text = self.nameArray[indexPath.row];
         cell.examNumLabel.text =  [NSString stringWithFormat:@"Итоговый Рейтинг: %@",self.examNumArray[indexPath.row]];
         cell.examLabel.text =  [NSString stringWithFormat:@"Итог: %@",self.examArray[indexPath.row]];
-    }else if(self.pageIndex == 3){
+        
+    }else if(self.pageIndex == PRACTICE){
         identifier = @"cellPra";
         cell = [tableView dequeueReusableCellWithIdentifier:identifier];
         cell.NamePra.text = self.nameArray[indexPath.row];
         cell.numPra.text =[NSString stringWithFormat:@"Оценка: %@",self.projectExamArray[indexPath.row]];
         
-    }else if(self.pageIndex == 4){
+    }else if(self.pageIndex == COURSE_WORK){
         identifier = @"cellProject";
         cell = [tableView dequeueReusableCellWithIdentifier:identifier];
         cell.projectNameLabel.text = self.nameArray[indexPath.row];
         cell.projectNumLabel.text =[NSString stringWithFormat:@"Оценка: %@",self.projectExamArray[indexPath.row]];
         cell.project.text =[NSString stringWithFormat:@"Тема: %@",self.projectNameArray[indexPath.row]];
-        
     }
-    
-    
-    
-    
     
     return cell;
 }

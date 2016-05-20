@@ -12,7 +12,7 @@
 #import "Favorites+CoreDataProperties.h"
 #import "SlideNavigationController.h"
 
-@interface TableViewFav : UITableViewController <NSFetchedResultsControllerDelegate ,SlideNavigationControllerDelegate>
+@interface TableViewFav : UITableViewController <NSFetchedResultsControllerDelegate ,SlideNavigationControllerDelegate >
 
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;

@@ -55,9 +55,6 @@
         [self loadGroupReference:self.timeTable day:@"Суббота"];
     }
     
-    
-    
-    
 }
 
 
@@ -185,7 +182,6 @@
                     }
                 }
                 if ([subject.attributes.allValues.lastObject isEqual:@"2"] && [subject.attributes.allKeys.lastObject isEqual:@"rowspan"]) {
-                    NSLog(@"red1 %@",subject.textContent);
                     section++;
                     
                     [self.timeArray addObject:self.timeArray.lastObject];
@@ -202,9 +198,7 @@
                 }
                 
                 if ([self.university isEqual:@1]) {
-                    NSLog(@"uni - %@",self.university);
                     if([week.attributes.allValues.lastObject isEqual:@"2"] && [week.attributes.allKeys.lastObject isEqual:@"rowspan"]&&[week.attributes.allValues.firstObject isEqual:@"center"]){
-                        NSLog(@"red2 %@",week.textContent);
                         
                         section++;
                         
@@ -221,7 +215,6 @@
                         
                     }
                     if([time.attributes.allValues.lastObject isEqual:@"2"] && [time.attributes.allKeys.lastObject isEqual:@"rowspan"]&&[time.attributes.allValues.firstObject isEqual:@"center"]){
-                        NSLog(@"red3 %@",week.textContent);
                         
                         section++;
                         

@@ -29,9 +29,9 @@
     
     self.tableView.estimatedRowHeight = 135.0;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
-       
+    self.navigationController.interactivePopGestureRecognizer.enabled = NO;
+   
     self.tableView.contentInset = UIEdgeInsetsMake(0., 0., CGRectGetHeight(self.tabBarController.tabBar.frame), 0);
-
     if ([self.graph isEqualToString:@"teacher"]) {
         HTMLDocument *home = [HTMLDocument documentWithString:self.tableTime];
         [self loadTimeTable:home];
@@ -62,12 +62,21 @@
               dispatch_async(dispatch_get_main_queue(), ^{
                   UIAlertController *alert= [UIAlertController alertControllerWithTitle:@"Ошибка" message:@"Не удается подключится." preferredStyle:UIAlertControllerStyleAlert];
                   
-                  UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK"
-                                                                          style:UIAlertActionStyleDefault
+                  
+                  UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"Закрыть"
+                                                                          style:UIAlertActionStyleCancel
                                                                         handler:^(UIAlertAction * action) {
                                                                             [self.navigationController popViewControllerAnimated:YES];
                                                                         }];
+                  
+                  UIAlertAction* repeatAction = [UIAlertAction actionWithTitle:@"Повторить"
+                                                                         style:UIAlertActionStyleDefault
+                                                                       handler:^(UIAlertAction * _Nonnull action) {
+                                                                           [self loadGroupReference:URLGroup];
+                                                                       }];
                   [alert addAction:defaultAction];
+                  [alert addAction:repeatAction];
+
                   
                   [self.navigationController presentViewController:alert animated:YES completion:nil];
               });

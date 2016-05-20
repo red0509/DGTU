@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
 #import "DataManager.h"
-#import "SlideNavigationController.h"
+//#import "SlideNavigationController.h"
 #import "LeftMenuViewController.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>

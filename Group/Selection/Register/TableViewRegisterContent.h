@@ -12,7 +12,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 
 @property NSUInteger pageIndex;
+@property NSInteger count;
 @property NSString *titleText;
 @property NSString *referenceContent;
+@property (strong,nonatomic) NSString *referenceUniversity;
 
 @end

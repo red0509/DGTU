@@ -18,9 +18,13 @@
 
 @property (strong, nonatomic) HTMLDocument* docTime;
 @property (strong, nonatomic) HTMLDocument* docGraph;
+
 @property (strong, nonatomic) NSString *docString;
 @property BOOL boolRef;
 @property NSMutableArray *array;
+
+@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+
 @end
 
 @implementation TableViewControllerSelection
@@ -31,9 +35,9 @@
     self.docGraph = [[HTMLDocument alloc]init];
     self.title = self.group;
     self.numberGroupString = [self.reference substringFromIndex:22];
-    UIBarButtonItem *rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"add-star.png"] style:UIBarButtonItemStylePlain target:self action:@selector(addFavorites)];
+    UIBarButtonItem *rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(action)];
     self.navigationItem.rightBarButtonItem = rightBarButtonItem;
-    
+    self.navigationController.interactivePopGestureRecognizer.enabled = NO;
     
 }
 
@@ -41,6 +45,34 @@
 {
     return YES;
 }
+
+- (NSManagedObjectContext*) managedObjectContext {
+    
+    if (!_managedObjectContext) {
+        _managedObjectContext = [[DataManager sharedManager] managedObjectContext];
+    }
+    return _managedObjectContext;
+}
+
+-(void) action{
+    
+    UIAlertController *alert= [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:@"Отмена"
+                                                            style:UIAlertActionStyleCancel
+                                                          handler:nil];
+    UIAlertAction* addAction = [UIAlertAction actionWithTitle:@"Добавить в избранное"
+                                                            style:UIAlertActionStyleDefault
+                                                          handler:^(UIAlertAction * _Nonnull action) {
+                                                              [self addFavorites];
+                                                          }];
+    [alert addAction:addAction];
+    [alert addAction:cancelAction];
+    
+    [self.navigationController presentViewController:alert animated:YES completion:nil];
+    
+}
+
 
 -(void) addFavorites{
     
@@ -67,8 +99,7 @@
         NSData *dataGraph = [[NSData alloc]initWithContentsOfURL:URLGraph options:NSDataReadingUncached error:&errorData];
         dispatch_async(dispatch_get_main_queue(), ^{
             if (errorData != nil) {
-                NSLog(@"error %@", [errorData localizedDescription]);
-               
+                
             } else {
                 
                 HTMLDocument *homeTime = [HTMLDocument documentWithData:dataTime
@@ -84,7 +115,11 @@
                 NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
                 NSInteger numberDefaults = [defaults integerForKey:@"number"];
                 NSNumber *universityNum = [[NSNumber alloc]initWithInteger:numberDefaults];
-                
+
+                NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Favorites"];
+                NSError *errorCount = nil;
+                NSUInteger position = [self.managedObjectContext countForFetchRequest:fetchRequest error:&errorCount];
+                NSNumber *count = [[NSNumber alloc]initWithUnsignedInteger:position];
                 NSString *graph= homeTable.serializedFragment;
                 NSString *time= homeTime.serializedFragment;
                 favorites.name = self.group;
@@ -92,6 +127,7 @@
                 favorites.tableTime = time;
                 favorites.semester = semester;
                 favorites.university = universityNum;
+                favorites.positionCount = count;
                 
                 NSError* error = nil;
                 if (![data.managedObjectContext save:&error]) {
@@ -131,6 +167,7 @@
         TableViewControllerRegister *tableViewControllerRegister = [self.storyboard instantiateViewControllerWithIdentifier:@"TableViewControllerRegister"];
         [tableViewControllerRegister loadRegister:[NSString stringWithFormat:@"%@Ved/Default.aspx?sem=cur&group=%@",self.referenceUniversity,self.numberGroupString]];
         
+        tableViewControllerRegister.referenceUniversity = self.referenceUniversity;
         [self.navigationController pushViewController:tableViewControllerRegister animated:YES];
         
         

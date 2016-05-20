@@ -27,7 +27,7 @@
     self.navigationItem.leftBarButtonItem = leftBarButtonItem;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleData) name:@"reload_data" object:nil];
-    
+    [SlideNavigationController sharedInstance].enableSwipeGesture = YES;
 }
 
 -(void)handleData {

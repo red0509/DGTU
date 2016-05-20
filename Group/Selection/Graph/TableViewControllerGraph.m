@@ -40,7 +40,7 @@
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     NSInteger numberDefaults = [defaults integerForKey:@"number"];
-    
+    self.navigationController.interactivePopGestureRecognizer.enabled = NO;
     self.university = numberDefaults;
     
     
@@ -83,12 +83,21 @@
               dispatch_async(dispatch_get_main_queue(), ^{
                   UIAlertController *alert= [UIAlertController alertControllerWithTitle:@"Ошибка" message:@"Не удается подключится." preferredStyle:UIAlertControllerStyleAlert];
                   
-                  UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK"
-                                                                          style:UIAlertActionStyleDefault
+                  
+                  UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"Закрыть"
+                                                                          style:UIAlertActionStyleCancel
                                                                         handler:^(UIAlertAction * action) {
                                                                             [self.navigationController popViewControllerAnimated:YES];
                                                                         }];
+                  
+                  UIAlertAction* repeatAction = [UIAlertAction actionWithTitle:@"Повторить"
+                                                                         style:UIAlertActionStyleDefault
+                                                                       handler:^(UIAlertAction * _Nonnull action) {
+                                                                           [self loadGraph:URLGroup sem:sem];
+                                                                       }];
                   [alert addAction:defaultAction];
+                  [alert addAction:repeatAction];
+
                   
                   [self.navigationController presentViewController:alert animated:YES completion:nil];
               });
@@ -209,12 +218,21 @@
               dispatch_async(dispatch_get_main_queue(), ^{
                   UIAlertController *alert= [UIAlertController alertControllerWithTitle:@"Ошибка" message:@"Не удается подключится." preferredStyle:UIAlertControllerStyleAlert];
                   
-                  UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK"
-                                                                          style:UIAlertActionStyleDefault
+                  
+                  UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"Закрыть"
+                                                                          style:UIAlertActionStyleCancel
                                                                         handler:^(UIAlertAction * action) {
                                                                             [self.navigationController popViewControllerAnimated:YES];
                                                                         }];
+                  
+                  UIAlertAction* repeatAction = [UIAlertAction actionWithTitle:@"Повторить"
+                                                                         style:UIAlertActionStyleDefault
+                                                                       handler:^(UIAlertAction * _Nonnull action) {
+                                                                           [self loadGraph1:URLGroup];
+                                                                       }];
                   [alert addAction:defaultAction];
+                  [alert addAction:repeatAction];
+
                   
                   [self.navigationController presentViewController:alert animated:YES completion:nil];
               });

@@ -14,6 +14,7 @@
 
 @interface TableViewFav ()
 
+
 @end
 
 @implementation TableViewFav
@@ -42,26 +43,20 @@
 {
     [super setEditing:editing animated:animated];
     
-    if (editing)
-    {
+    if (editing){
         self.editButtonItem.title = @"Готово";
-    }
-    else
-    {
+        [SlideNavigationController sharedInstance].enableSwipeGesture = NO;
+    }else{
         self.editButtonItem.title = @"Правка";
+         [SlideNavigationController sharedInstance].enableSwipeGesture = YES;
     }
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    //    self.clearsSelectionOnViewWillAppear = self.splitViewController.isCollapsed;
-    [super viewWillAppear:animated];
-}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
 
 
 - (NSManagedObjectContext*) managedObjectContext {
@@ -86,12 +81,21 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CellFav" forIndexPath:indexPath];
     [self configureCell:cell atIndexPath:indexPath];
-    
     return cell;
 }
 
+- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
+    
+    Favorites *favorites = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    cell.textLabel.text = favorites.name;
+    
+}
+
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
+    return YES;
+}
+
+- (BOOL)tableView:(UITableView *)tableview canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
     return YES;
 }
 
@@ -101,25 +105,19 @@
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        
         NSManagedObjectContext *context = [self.fetchedResultsController managedObjectContext];
         [context deleteObject:[self.fetchedResultsController objectAtIndexPath:indexPath]];
         
         NSError *error = nil;
         if (![context save:&error]) {
-            // Replace this implementation with code to handle the error appropriately.
-            // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
             NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
             abort();
         }
+       
     }
 }
 
-- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
-    
-    Favorites *favorites = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    cell.textLabel.text = favorites.name;
-}
+
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
@@ -129,7 +127,7 @@
         favTeacher.name = favorites.name;
         favTeacher.graph = favorites.graph;
         favTeacher.tableTime = favorites.tableTime;
-
+        
         [self.navigationController pushViewController:favTeacher animated:YES];
     }else{
         TableViewControllerSelFav *fav = [self.storyboard instantiateViewControllerWithIdentifier:@"TableViewControllerSelFav"];
@@ -141,11 +139,22 @@
         fav.university = favorites.university;
         [self.navigationController pushViewController:fav animated:YES];
     }
-    
-
-    
 }
 
+- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath{
+    if (destinationIndexPath.section == sourceIndexPath.section) {
+        NSMutableArray *objectArray = [[[self fetchedResultsController] fetchedObjects] mutableCopy];
+        NSManagedObject *objectToMove = [objectArray objectAtIndex:sourceIndexPath.row];
+        [objectArray removeObjectAtIndex:sourceIndexPath.row];
+        [objectArray insertObject:objectToMove atIndex:destinationIndexPath.row];
+        
+        for (int i=0; i<[objectArray count]; i++)
+        {
+            [(NSManagedObject *)[objectArray objectAtIndex:i] setValue:[NSNumber numberWithInt:i] forKey:@"positionCount"];
+        }
+    }
+    
+}
 #pragma mark - Fetched results controller
 
 - (NSFetchedResultsController *)fetchedResultsController
@@ -153,30 +162,20 @@
     if (_fetchedResultsController != nil) {
         return _fetchedResultsController;
     }
-    //    DataManager *data = [[DataManager alloc]init];
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    // Edit the entity name as appropriate.
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Favorites" inManagedObjectContext:self.managedObjectContext];
-    [fetchRequest setEntity:entity];
     
-    // Set the batch size to a suitable number.
-    [fetchRequest setFetchBatchSize:20];
+    fetchRequest.entity = [NSEntityDescription entityForName:@"Favorites" inManagedObjectContext:self.managedObjectContext];
+    fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"positionCount" ascending:YES]];
+    fetchRequest.fetchBatchSize = 20;
     
-    // Edit the sort key as appropriate.
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:NO];
-    //
-    [fetchRequest setSortDescriptors:@[sortDescriptor]];
-    
-    // Edit the section name key path and cache name if appropriate.
-    // nil for section name key path means "no sections".
     NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:self.managedObjectContext sectionNameKeyPath:nil cacheName:nil];
     aFetchedResultsController.delegate = self;
+    
     self.fetchedResultsController = aFetchedResultsController;
     
     NSError *error = nil;
     if (![self.fetchedResultsController performFetch:&error]) {
-        // Replace this implementation with code to handle the error appropriately.
-        // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+        
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         abort();
     }
@@ -188,6 +187,7 @@
 {
     [self.tableView beginUpdates];
 }
+
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
            atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type
@@ -222,12 +222,14 @@
             break;
             
         case NSFetchedResultsChangeUpdate:
-            [self configureCell:[tableView cellForRowAtIndexPath:indexPath] atIndexPath:indexPath];
+            [tableView reloadRowsAtIndexPaths:@[indexPath]  withRowAnimation:UITableViewRowAnimationAutomatic];
+            
             break;
             
         case NSFetchedResultsChangeMove:
             [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
             [tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+            
             break;
     }
 }

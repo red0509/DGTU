@@ -44,6 +44,9 @@
         semester = @"2";
     }
     
+    self.navigationController.interactivePopGestureRecognizer.enabled = NO;
+
+    
     self.tableView.estimatedRowHeight = 135.0;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     NSString *day;
@@ -96,12 +99,20 @@
               dispatch_async(dispatch_get_main_queue(), ^{
                   UIAlertController *alert= [UIAlertController alertControllerWithTitle:@"Ошибка" message:@"Не удается подключится." preferredStyle:UIAlertControllerStyleAlert];
                   
-                  UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK"
-                                                                          style:UIAlertActionStyleDefault
+                  
+                  UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"Закрыть"
+                                                                          style:UIAlertActionStyleCancel
                                                                         handler:^(UIAlertAction * action) {
                                                                             [self.navigationController popViewControllerAnimated:YES];
                                                                         }];
+                  
+                  UIAlertAction* repeatAction = [UIAlertAction actionWithTitle:@"Повторить"
+                                                                         style:UIAlertActionStyleDefault
+                                                                       handler:^(UIAlertAction * _Nonnull action) {
+                                                                           [self loadGroupReference:URLGroup day:weekDay];
+                                                                       }];
                   [alert addAction:defaultAction];
+                  [alert addAction:repeatAction];
                   
                   [self.navigationController presentViewController:alert animated:YES completion:nil];
               });
@@ -257,7 +268,6 @@
                 if (numberDefaults == 1) {
                     
                     if([week.attributes.allValues.lastObject isEqual:@"2"] && [week.attributes.allKeys.lastObject isEqual:@"rowspan"]&&[week.attributes.allValues.firstObject isEqual:@"center"]){
-                        NSLog(@"red2 %@",week.textContent);
                         
                         section++;
                         
@@ -274,7 +284,6 @@
                         
                     }
                     if([time.attributes.allValues.lastObject isEqual:@"2"] && [time.attributes.allKeys.lastObject isEqual:@"rowspan"]&&[time.attributes.allValues.firstObject isEqual:@"center"]){
-                        NSLog(@"red3 %@",week.textContent);
                         
                         section++;
                         

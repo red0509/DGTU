@@ -27,7 +27,6 @@
     self.pageViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"PageViewController"];
     self.pageViewController.dataSource = self;
     self.pageViewController.view.backgroundColor = [UIColor clearColor];
-//    self.view.backgroundColor =[UIColor clearColor];
     NSDate *date = [NSDate date];
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
@@ -54,21 +53,48 @@
     [self.pageViewController setViewControllers:viewControllers direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
     
     
-    self.pageViewController.view.frame = CGRectMake(0, 60, self.view.frame.size.width, self.view.frame.size.height - 100);
+//    self.pageViewController.view.frame = CGRectMake(0, 60, self.view.frame.size.width, self.view.frame.size.height - 100);
+//    
+//    if (UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation])) {
+//         self.pageViewController.view.frame = CGRectMake(0, 60, self.view.frame.size.width, self.view.frame.size.height - 100);
+//    }else if(UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation])){
+//         self.pageViewController.view.frame = CGRectMake(0, 30, self.view.frame.size.width, self.view.frame.size.height - 100);
+//    }
     
-
+    
+    
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(OrientationDidChange) name:UIDeviceOrientationDidChangeNotification object:nil];
+    
+    [self OrientationDidChange];
+    
+   
     [self addChildViewController:self.pageViewController];
     [self.view addSubview:self.pageViewController.view];
     [self.pageViewController didMoveToParentViewController:self];
 
 }
 
+-(void)OrientationDidChange
+{
+    UIDeviceOrientation Orientation=[[UIDevice currentDevice]orientation];
+    
+    if(Orientation==UIDeviceOrientationLandscapeLeft || Orientation==UIDeviceOrientationLandscapeRight){
+         self.pageViewController.view.frame = CGRectMake(0, 30, self.view.frame.size.width, self.view.frame.size.height - 100);
+    }else if(Orientation==UIDeviceOrientationPortrait){
+        self.pageViewController.view.frame = CGRectMake(0, 60, self.view.frame.size.width, self.view.frame.size.height - 100);
+    }
+}
+
+- (void)dealloc{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
 }
+
 
 
 - (TableViewPageContTeacher *)viewControllerAtIndex:(NSUInteger)index

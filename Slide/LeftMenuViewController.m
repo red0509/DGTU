@@ -39,7 +39,9 @@
     
     
     
-
+    if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
+        self.navigationController.interactivePopGestureRecognizer.enabled = NO;
+    }
     revealAnimator = [[SlideNavigationContorllerAnimatorSlideAndFade alloc] initWithMaximumFadeAlpha:.8 fadeColor:[UIColor blackColor] andSlideMovement:100];
     animationDuration = .19;
     [SlideNavigationController sharedInstance].menuRevealAnimationDuration = animationDuration;
@@ -50,9 +52,12 @@
     
     if ( IDIOM == IPAD ) {
         [SlideNavigationController sharedInstance].portraitSlideOffset = 500.0;
-        
+        [SlideNavigationController sharedInstance].landscapeSlideOffset = 500.0;
+        [SlideNavigationController sharedInstance].panGestureSideOffset = 500;
     } else {
         [SlideNavigationController sharedInstance].portraitSlideOffset = 120.0;
+        [SlideNavigationController sharedInstance].landscapeSlideOffset = 200.0;
+        [SlideNavigationController sharedInstance].panGestureSideOffset = 100;
     }
 
 

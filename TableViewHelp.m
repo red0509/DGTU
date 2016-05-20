@@ -25,7 +25,7 @@
     UIImage *image = [UIImage imageNamed:@"menu-button"];
     UIBarButtonItem *leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:image style:UIBarButtonItemStylePlain target:self action:@selector(slideMenu)];
     self.navigationItem.leftBarButtonItem = leftBarButtonItem;
-    
+     [SlideNavigationController sharedInstance].enableSwipeGesture = YES;
 }
 
 -(void) slideMenu{

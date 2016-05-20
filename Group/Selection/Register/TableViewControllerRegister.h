@@ -10,9 +10,12 @@
 #import <HTMLReader.h>
 #import "ViewRegisterPageView.h"
 
-@interface TableViewControllerRegister : UITableViewController 
+@interface TableViewControllerRegister : UITableViewController
+
+@property (strong,nonatomic) NSString *referenceUniversity;
 
 -(void) loadRegister:(NSString*) URLFacul;
+
 
 
 @end

@@ -17,13 +17,15 @@
 
 @interface TabBarTeacher ()
 
+@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+
 @end
 
 @implementation TabBarTeacher
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    UIBarButtonItem *rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"add-star.png"] style:UIBarButtonItemStylePlain target:self action:@selector(addFavorites)];
+    UIBarButtonItem *rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(action)];
     TableViewControllerClamping *clamping = [self.storyboard instantiateViewControllerWithIdentifier:@"TableViewControllerClamping"];
     clamping.reference = self.reference;
     ViewControllerPageTeacher *teacher = [self.storyboard instantiateViewControllerWithIdentifier:@"ViewControllerPageTeacher"];
@@ -32,6 +34,8 @@
     teacher.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Расписание занятий" image:[UIImage imageNamed:@"agenda"] tag:1];
     
     clamping.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Фиксированные занятия" image:[UIImage imageNamed:@"note"] tag:2];
+    
+    self.navigationController.interactivePopGestureRecognizer.enabled = NO;
     
     if([self.graph isEqualToString:@"teacher"]){
         self.title = self.name;
@@ -53,6 +57,35 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+-(void) action{
+    
+    UIAlertController *alert= [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:@"Отмена"
+                                                           style:UIAlertActionStyleCancel
+                                                         handler:nil];
+    UIAlertAction* addAction = [UIAlertAction actionWithTitle:@"Добавить в избранное"
+                                                        style:UIAlertActionStyleDefault
+                                                      handler:^(UIAlertAction * _Nonnull action) {
+                                                          [self addFavorites];
+                                                      }];
+    [alert addAction:addAction];
+    [alert addAction:cancelAction];
+    
+    [self.navigationController presentViewController:alert animated:YES completion:nil];
+    
+}
+
+
+- (NSManagedObjectContext*) managedObjectContext {
+    
+    if (!_managedObjectContext) {
+        _managedObjectContext = [[DataManager sharedManager] managedObjectContext];
+    }
+    return _managedObjectContext;
+}
+
 
 
 -(void) addFavorites{
@@ -84,12 +117,18 @@
                 NSInteger numberDefaults = [defaults integerForKey:@"number"];
                 NSNumber *universityNum = [[NSNumber alloc]initWithInteger:numberDefaults];
 
+                NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Favorites"];
+                NSError *errorCount = nil;
+                NSUInteger position = [self.managedObjectContext countForFetchRequest:fetchRequest error:&errorCount];
+                NSNumber *count = [[NSNumber alloc]initWithUnsignedInteger:position];
+                
                 NSString *teacher= homeTeacher.serializedFragment;
                 favorites.name = self.surname;
                 favorites.tableTime = teacher;
                 favorites.graph = @"teacher";
                 favorites.semester = @"teacher";
                 favorites.university = universityNum;
+                favorites.positionCount = count;
                 
                 NSError* error = nil;
                 if (![data.managedObjectContext save:&error]) {

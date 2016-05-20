@@ -18,6 +18,9 @@
 @property (strong,nonatomic) NSMutableArray *closedArray;
 @property (strong,nonatomic) NSMutableArray *registerReferences;
 
+@property (strong,nonatomic) NSMutableArray *pointArray;
+
+
 @end
 
 @implementation TableViewControllerRegister
@@ -27,7 +30,7 @@
     self.title = @"Дисциплины";
     self.tableView.estimatedRowHeight = 68.0;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
-    
+    self.navigationController.interactivePopGestureRecognizer.enabled = NO;
 }
 
 
@@ -59,12 +62,21 @@
                   dispatch_async(dispatch_get_main_queue(), ^{
                       UIAlertController *alert= [UIAlertController alertControllerWithTitle:@"Ошибка" message:@"Не удается подключится." preferredStyle:UIAlertControllerStyleAlert];
                       
-                      UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK"
-                                                                              style:UIAlertActionStyleDefault
+                      
+                      UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"Закрыть"
+                                                                              style:UIAlertActionStyleCancel
                                                                             handler:^(UIAlertAction * action) {
                                                                                 [self.navigationController popViewControllerAnimated:YES];
                                                                             }];
+                      
+                      UIAlertAction* repeatAction = [UIAlertAction actionWithTitle:@"Повторить"
+                                                                             style:UIAlertActionStyleDefault
+                                                                           handler:^(UIAlertAction * _Nonnull action) {
+                                                                               [self loadRegister:URLFacul];
+                                                                           }];
                       [alert addAction:defaultAction];
+                      [alert addAction:repeatAction];
+                      
                       
                       [self.navigationController presentViewController:alert animated:YES completion:nil];
                   });
@@ -143,35 +155,90 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
+    [self loadPoint:[NSString stringWithFormat:@"%@/Ved/%@",self.referenceUniversity ,self.registerReferences[indexPath.row]]];
+    
     NSString *type = [NSString stringWithFormat:@"%@",self.typeArray[indexPath.row]];
     ViewRegisterPageView *viewRegisterPageView = [self.storyboard instantiateViewControllerWithIdentifier:@"ViewRegisterPageView"];
     
-    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-    NSInteger numberDefaults = [defaults integerForKey:@"number"];
+    [self.pointArray addObject:type];
     
-    
-    
-    if (numberDefaults == 0) {
-        viewRegisterPageView.pageTitles = @[@"Контрольная точка 1", @"Контрольная точка 2",type];
-        
-        
-    }else if(numberDefaults == 1){
-        viewRegisterPageView.pageTitles = @[@"Контрольная точка 1", @"Контрольная точка 2",@"Контрольная точка 3",type];
-    }
-    
+    viewRegisterPageView.pageTitles = self.pointArray;
+
     if([type isEqualToString:@"Курсовой проект" ]){
         viewRegisterPageView.pageTitles = @[@"Курсовой проект"];
     }else if([type isEqualToString:@"Курсовая работа" ]){
         viewRegisterPageView.pageTitles = @[@"Курсовая работа"];
     }else if([type isEqualToString:@"Практика" ]){
         viewRegisterPageView.pageTitles = @[@"Практика"];
+    }else if([type isEqualToString:@"ГосЭкзамен" ]){
+        viewRegisterPageView.pageTitles = @[@"ГосЭкзамен"];
+    }else if([type isEqualToString:@"Выпуская работа" ]){
+        viewRegisterPageView.pageTitles = @[@"Выпуская работа"];
     }
     
     viewRegisterPageView.referencePageView = self.registerReferences[indexPath.row];
-    
-    
+    viewRegisterPageView.referenceUniversity = self.referenceUniversity;
     
     [self.navigationController pushViewController:viewRegisterPageView animated:YES];
+    
+}
+
+-(void) loadPoint: (NSString*) URLFacul{
+    
+        self.pointArray = [NSMutableArray array];
+        
+        NSURL *URLTime = [NSURL URLWithString:URLFacul];
+        NSError *errorData = nil;
+        NSData *data = [[NSData alloc]initWithContentsOfURL:URLTime options:NSDataReadingUncached error:&errorData];
+        
+        NSString *contentType = @"text/html; charset=windows-1251";
+        
+        
+            if (errorData != nil) {
+                
+            } else {
+                
+                HTMLDocument *home = [HTMLDocument documentWithData:data
+                                                  contentTypeHeader:contentType];
+                
+                HTMLElement *div = [home firstNodeMatchingSelector:@"#ucVedBox_Row1 > td:nth-child(19)"];
+                
+                if ([div.textContent isEqualToString:@"Точка 6"]) {
+                    [self.pointArray insertObject:@"Контрольная точка 6" atIndex:0];
+                }
+                
+                div = [home firstNodeMatchingSelector:@"#ucVedBox_Row1 > td:nth-child(16)"];
+                
+                if ([div.textContent isEqualToString:@"Точка 5"]) {
+                    [self.pointArray insertObject:@"Контрольная точка 5" atIndex:0];
+                }
+                
+                div = [home firstNodeMatchingSelector:@"#ucVedBox_Row1 > td:nth-child(13)"];
+                
+                if ([div.textContent isEqualToString:@"Точка 4"]) {
+                    [self.pointArray insertObject:@"Контрольная точка 4" atIndex:0];
+                }
+                
+                div = [home firstNodeMatchingSelector:@"#ucVedBox_Row1 > td:nth-child(10)"];
+                
+                if ([div.textContent isEqualToString:@"Точка 3"]) {
+                    [self.pointArray insertObject:@"Контрольная точка 3" atIndex:0];
+                }
+                
+                div = [home firstNodeMatchingSelector:@"#ucVedBox_Row1 > td:nth-child(7)"];
+                
+                if ([div.textContent isEqualToString:@"Точка 2"]) {
+                    [self.pointArray insertObject:@"Контрольная точка 2" atIndex:0];
+                }
+                
+                div = [home firstNodeMatchingSelector:@"#ucVedBox_Row1 > td:nth-child(4)"];
+                
+                if ([div.textContent isEqualToString:@"Точка 1"]) {
+                    [self.pointArray insertObject:@"Контрольная точка 1" atIndex:0];
+                }
+                
+            }
+            
     
 }
 
