@@ -40,10 +40,14 @@
     
     if (indexPath.row == 0) {
 
-        ViewControllerPageFav *viewControllerPageFav = [self.storyboard instantiateViewControllerWithIdentifier:@"ViewControllerPageFav"];
-        viewControllerPageFav.tableTime = self.tableTime;
-        viewControllerPageFav.university = self.university;
-        [self.navigationController pushViewController:viewControllerPageFav animated:YES];
+//        ViewControllerPageFav *viewControllerPageFav = [self.storyboard instantiateViewControllerWithIdentifier:@"ViewControllerPageFav"];
+//        viewControllerPageFav.tableTime = self.tableTime;
+//        viewControllerPageFav.university = self.university;
+        TableViewPageContFav *viewControllerPageContent = [self.storyboard instantiateViewControllerWithIdentifier:@"TableViewPageContFav"];
+        viewControllerPageContent.timeTable = self.tableTime;
+        viewControllerPageContent.university = self.university;
+        
+        [self.navigationController pushViewController:viewControllerPageContent animated:YES];
 
     }else if (indexPath.row == 1){
         

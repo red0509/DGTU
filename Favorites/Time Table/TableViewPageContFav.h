@@ -10,8 +10,12 @@
 #import <HTMLReader.h>
 
 
-@interface TableViewPageContFav : UITableViewController <UITableViewDataSource>
+@interface TableViewPageContFav : UIViewController <UITableViewDataSource,UITableViewDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *labelTitle;
+@property (strong, nonatomic) IBOutlet UISegmentedControl *segmented;
+@property (strong, nonatomic) IBOutlet UIView *viewSeg;
+@property (strong, nonatomic) IBOutlet UITableView *tableView;
+- (IBAction)ActionSegmented:(id)sender;
 
 @property NSUInteger pageIndex;
 @property NSString *titleText;

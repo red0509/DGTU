@@ -52,9 +52,11 @@
     NSArray *viewControllers = @[startingViewController];
     [self.pageViewController setViewControllers:viewControllers direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
     
+    [self OrientationDidChange];
+    
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(OrientationDidChange) name:UIDeviceOrientationDidChangeNotification object:nil];
     
-    [self OrientationDidChange];
+    
 
     [self addChildViewController:self.pageViewController];
     [self.view addSubview:self.pageViewController.view];
@@ -67,8 +69,8 @@
     UIDeviceOrientation Orientation=[[UIDevice currentDevice]orientation];
     
     if(Orientation==UIDeviceOrientationLandscapeLeft || Orientation==UIDeviceOrientationLandscapeRight){
-        self.pageViewController.view.frame = CGRectMake(0, 30, self.view.frame.size.width, self.view.frame.size.height - 65);
-    }else if(Orientation==UIDeviceOrientationPortrait){
+        self.pageViewController.view.frame = CGRectMake(0, 30, self.view.frame.size.width, self.view.frame.size.height - 20);
+    }else if(Orientation==UIDeviceOrientationPortrait ||  Orientation== UIDeviceOrientationFaceUp){
         self.pageViewController.view.frame = CGRectMake(0, 60, self.view.frame.size.width, self.view.frame.size.height - 65);
     }
 }

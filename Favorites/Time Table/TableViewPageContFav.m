@@ -31,35 +31,65 @@
     [super viewDidLoad];
     self.labelTitle.text = self.titleText;
     
-    
+    self.viewSeg.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"NavBar.png"]];
     self.tableView.estimatedRowHeight = 135.0;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
+    self.automaticallyAdjustsScrollViewInsets = NO;
+    [self ActionSegmented:self.segmented];
+    self.title = @"Расписание";
     
     
-    if (self.pageIndex == 0) {
-        [self loadGroupReference:self.timeTable day:@"Понедельник"];
-        
-    }else if (self.pageIndex == 1){
-        [self loadGroupReference:self.timeTable day:@"Вторник"];
-        
-    }else if (self.pageIndex == 2){
-        [self loadGroupReference:self.timeTable day:@"Среда"];
-        
-    }else if (self.pageIndex == 3){
-        [self loadGroupReference:self.timeTable day:@"Четверг"];
-        
-    }else if (self.pageIndex == 4){
-        [self loadGroupReference:self.timeTable day:@"Пятница"];
-        
-    }else if (self.pageIndex == 5){
-        [self loadGroupReference:self.timeTable day:@"Суббота"];
-    }
+//    if (self.pageIndex == 0) {
+//        [self loadGroupReference:self.timeTable day:@"Понедельник"];
+//        
+//    }else if (self.pageIndex == 1){
+//        [self loadGroupReference:self.timeTable day:@"Вторник"];
+//        
+//    }else if (self.pageIndex == 2){
+//        [self loadGroupReference:self.timeTable day:@"Среда"];
+//        
+//    }else if (self.pageIndex == 3){
+//        [self loadGroupReference:self.timeTable day:@"Четверг"];
+//        
+//    }else if (self.pageIndex == 4){
+//        [self loadGroupReference:self.timeTable day:@"Пятница"];
+//        
+//    }else if (self.pageIndex == 5){
+//        [self loadGroupReference:self.timeTable day:@"Суббота"];
+//    }
     
 }
 
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
+}
+
+- (IBAction)ActionSegmented:(id)sender {
+    if (self.segmented.selectedSegmentIndex == 0) {
+        [self loadGroupReference:self.timeTable day:@"Понедельник"];
+        
+    }else if (self.segmented.selectedSegmentIndex == 1){
+        [self loadGroupReference:self.timeTable day:@"Вторник"];
+        
+    }else if (self.segmented.selectedSegmentIndex == 2){
+        [self loadGroupReference:self.timeTable day:@"Среда"];
+        
+    }else if (self.segmented.selectedSegmentIndex == 3){
+        [self loadGroupReference:self.timeTable day:@"Четверг"];
+        
+    }else if (self.segmented.selectedSegmentIndex == 4){
+        [self loadGroupReference:self.timeTable day:@"Пятница"];
+        
+    }else if (self.segmented.selectedSegmentIndex == 5){
+        [self loadGroupReference:self.timeTable day:@"Суббота"];
+    }
+    
+}
+
+- (BOOL)slideNavigationControllerShouldDisplayLeftMenu
+{
+    return YES;
 }
 
 -(void) loadGroupReference:(NSString*) URLGroup day:(NSString*) weekDay{
@@ -276,6 +306,7 @@
                 }
                 [self.tableView reloadData];
             }
+            [self.tableView reloadData];
         });
     });
 }
@@ -290,7 +321,7 @@
     
     UIView *sectionHeaderView = [[UIView alloc] initWithFrame:
                                  CGRectMake(0, 0, tableView.frame.size.width, 20)];
-    sectionHeaderView.backgroundColor = [UIColor colorWithRed:100.0f/255.0f green:181.0f/255.0f blue:246.0f/255.0f alpha:1.0f];
+    sectionHeaderView.backgroundColor = [UIColor colorWithRed:100.0f/255.0f green:181.0f/255.0f blue:246.0f/255.0f alpha:0.95f];
     UILabel *headerLabel = [[UILabel alloc] initWithFrame:
                             CGRectMake(15, 10, sectionHeaderView.frame.size.width, 15)];
     
@@ -370,7 +401,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    static NSString *identifier = @"cell";
+    static NSString *identifier = @"cellFavTime";
     TableViewCellContent *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
     if (indexPath.section == 0) {
         cell.num.text = [self arrayString:self.timeArray[indexPath.row]];
@@ -391,6 +422,7 @@
     return cell;
     
 }
+
 
 
 @end

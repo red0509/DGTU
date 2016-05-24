@@ -259,7 +259,7 @@
                   
                       for (NSInteger i = 5; i<nameNum+5; i++) {
                           
-                          pred = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(%ld)",(long)i,KT]];
+                          pred = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(%ld)",(long)i,(long)KT]];
                           if (pred == nil) {
                               [self.lecArray addObject:@" "];
                           }else{
@@ -349,7 +349,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    if (self.pageIndex == 2) {
+    if (self.pageIndex+1 == self.count) {
         return 0;
         
     }else if (self.pageIndex == PRACTICE) {
@@ -367,7 +367,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
     
-    if (self.pageIndex == self.count-1) {
+    if (self.pageIndex+1 == self.count) {
         return 0;
         
     }else if (self.pageIndex == PRACTICE) {
@@ -439,7 +439,7 @@
     NSString *identifier = nil;
     TableViewCellRegister *cell = nil;
     
-    if (self.pageIndex < self.count-1) {
+    if (self.pageIndex+1 < self.count) {
         
         identifier = @"cellRegister";
         cell = [tableView dequeueReusableCellWithIdentifier:identifier];
@@ -451,7 +451,7 @@
         cell.totalLabel.text = self.totalArray[indexPath.row];
         cell.totalLabel.text = [NSString stringWithFormat:@"Итог по КТ: %@" ,self.totalArray[indexPath.row]];
         
-    }else if (self.pageIndex == self.count-1){
+    }else if (self.pageIndex+1 == self.count){
         identifier = @"cellExam";
         cell = [tableView dequeueReusableCellWithIdentifier:identifier];
         cell.nameLabel.text = self.nameArray[indexPath.row];
