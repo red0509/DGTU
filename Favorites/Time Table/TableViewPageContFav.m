@@ -29,62 +29,70 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.labelTitle.text = self.titleText;
     
     self.viewSeg.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"NavBar.png"]];
     self.tableView.estimatedRowHeight = 135.0;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.automaticallyAdjustsScrollViewInsets = NO;
+    self.segmented.selectedSegmentIndex = [self indexDate];
     [self ActionSegmented:self.segmented];
     self.title = @"Расписание";
     
-    
-//    if (self.pageIndex == 0) {
-//        [self loadGroupReference:self.timeTable day:@"Понедельник"];
-//        
-//    }else if (self.pageIndex == 1){
-//        [self loadGroupReference:self.timeTable day:@"Вторник"];
-//        
-//    }else if (self.pageIndex == 2){
-//        [self loadGroupReference:self.timeTable day:@"Среда"];
-//        
-//    }else if (self.pageIndex == 3){
-//        [self loadGroupReference:self.timeTable day:@"Четверг"];
-//        
-//    }else if (self.pageIndex == 4){
-//        [self loadGroupReference:self.timeTable day:@"Пятница"];
-//        
-//    }else if (self.pageIndex == 5){
-//        [self loadGroupReference:self.timeTable day:@"Суббота"];
-//    }
-    
 }
+
 
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
+- (NSInteger) indexDate{
+    NSDate *date = [NSDate date];
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
+    
+    [dateFormatter setDateFormat:@"EEEE"];
+    NSString * strintDate = [dateFormatter stringFromDate:date];
+    if ([strintDate isEqualToString:@"понедельник"]) {
+        return 0;
+    }else if([strintDate isEqualToString:@"вторник"]){
+        return 1;
+    }else if([strintDate isEqualToString:@"среда"]){
+        return 2;
+    }else if([strintDate isEqualToString:@"четверг"]){
+        return 3;
+    }else if([strintDate isEqualToString:@"пятница"]){
+        return 4;
+    }else if([strintDate isEqualToString:@"суббота"]){
+        return 5;
+    }else{
+        return 0;
+    }
+}
 
 - (IBAction)ActionSegmented:(id)sender {
-    if (self.segmented.selectedSegmentIndex == 0) {
-        [self loadGroupReference:self.timeTable day:@"Понедельник"];
-        
-    }else if (self.segmented.selectedSegmentIndex == 1){
-        [self loadGroupReference:self.timeTable day:@"Вторник"];
-        
-    }else if (self.segmented.selectedSegmentIndex == 2){
-        [self loadGroupReference:self.timeTable day:@"Среда"];
-        
-    }else if (self.segmented.selectedSegmentIndex == 3){
-        [self loadGroupReference:self.timeTable day:@"Четверг"];
-        
-    }else if (self.segmented.selectedSegmentIndex == 4){
-        [self loadGroupReference:self.timeTable day:@"Пятница"];
-        
-    }else if (self.segmented.selectedSegmentIndex == 5){
-        [self loadGroupReference:self.timeTable day:@"Суббота"];
-    }
     
+    switch (self.segmented.selectedSegmentIndex) {
+        case 0:
+            [self loadGroupReference:self.timeTable day:@"Понедельник"];
+            break;
+        case 1:
+            [self loadGroupReference:self.timeTable day:@"Вторник"];
+            break;
+        case 2:
+            [self loadGroupReference:self.timeTable day:@"Среда"];
+            break;
+        case 3:
+            [self loadGroupReference:self.timeTable day:@"Четверг"];
+            break;
+        case 4:
+            [self loadGroupReference:self.timeTable day:@"Пятница"];
+            break;
+        case 5:
+            [self loadGroupReference:self.timeTable day:@"Суббота"];
+            break;
+        default:
+            break;
+    }
 }
 
 - (BOOL)slideNavigationControllerShouldDisplayLeftMenu

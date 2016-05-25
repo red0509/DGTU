@@ -10,9 +10,7 @@
 #import <HTMLReader.h>
 
 
-@interface TableViewPageContTeacher : UITableViewController <UITableViewDataSource>
-
-@property (weak, nonatomic) IBOutlet UILabel *labelTitle;
+@interface TableViewPageContTeacher : UIViewController <UITableViewDataSource , UITableViewDelegate>
 
 @property NSUInteger pageIndex;
 @property NSString *titleText;
@@ -20,5 +18,9 @@
 @property(strong,nonatomic) NSString *graph;
 @property(strong,nonatomic) NSString *tableTime;
 @property(strong,nonatomic) NSString *reference;
+@property (strong, nonatomic) IBOutlet UITableView *tableView;
 
+@property (strong, nonatomic) IBOutlet UIView *viewSeg;
+@property (strong, nonatomic) IBOutlet UISegmentedControl *segmented;
+- (IBAction)actionSegmented:(id)sender;
 @end

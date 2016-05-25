@@ -10,12 +10,13 @@
 #import <HTMLReader.h>
 
 
-@interface ViewControllerPageContent : UITableViewController <UITableViewDataSource>
-@property (weak, nonatomic) IBOutlet UILabel *labelTitle;
+@interface ViewControllerPageContent : UIViewController <UITableViewDataSource , UITableViewDelegate>
 
-@property NSUInteger pageIndex;
-@property NSString *titleText;
 @property (strong,nonatomic) HTMLDocument *document;
-@property NSString *referenceContent;
+@property (strong,nonatomic) NSString *referenceContent;
 @property (strong,nonatomic) NSString *referenceUniversity;
+@property (strong, nonatomic) IBOutlet UIView *viewSeg;
+@property (strong, nonatomic) IBOutlet UITableView *tableView;
+@property (strong, nonatomic) IBOutlet UISegmentedControl *segmented;
+- (IBAction)actionSegmented:(id)sender;
 @end

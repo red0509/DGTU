@@ -30,15 +30,50 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.labelTitle.text = self.titleText;
     
     self.tableView.estimatedRowHeight = 135.0;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
+    self.automaticallyAdjustsScrollViewInsets = NO;
+    self.viewSeg.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"NavBar.png"]];
+    self.segmented.selectedSegmentIndex = [self indexDate];
+    [self actionSegmented:self.segmented];
+    
+}
 
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+}
+
+- (NSInteger) indexDate{
+    NSDate *date = [NSDate date];
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
+    
+    [dateFormatter setDateFormat:@"EEEE"];
+    NSString * strintDate = [dateFormatter stringFromDate:date];
+    if ([strintDate isEqualToString:@"понедельник"]) {
+        return 0;
+    }else if([strintDate isEqualToString:@"вторник"]){
+        return 1;
+    }else if([strintDate isEqualToString:@"среда"]){
+        return 2;
+    }else if([strintDate isEqualToString:@"четверг"]){
+        return 3;
+    }else if([strintDate isEqualToString:@"пятница"]){
+        return 4;
+    }else if([strintDate isEqualToString:@"суббота"]){
+        return 5;
+    }else{
+        return 0;
+    }
+}
+
+- (IBAction)actionSegmented:(id)sender {
     if ([self.graph isEqualToString:@"teacher"]) {
         
         HTMLDocument *home = [HTMLDocument documentWithString:self.tableTime];
-        switch (self.pageIndex) {
+        switch (self.segmented.selectedSegmentIndex) {
             case 0:
                 [self loadTimeTable:home day:@"Понедельник"];
                 break;
@@ -61,7 +96,7 @@
                 break;
         }
     }else{
-        switch (self.pageIndex) {
+        switch (self.segmented.selectedSegmentIndex) {
             case 0:
                 [self loadGroupReference:self.reference day:@"Понедельник"];
                 break;
@@ -83,14 +118,9 @@
             default:
                 break;
         }
-
+        
     }
-   
-}
-
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
+    
 }
 
 -(void) loadGroupReference:(NSString*) URLGroup day:(NSString*) weekDay{
@@ -145,7 +175,6 @@
 
 -(void) loadTimeTable:(HTMLDocument*)home day:(NSString*) weekDay
 {
-    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         self.timeArray = [NSMutableArray array];
         self.weekArray = [NSMutableArray array];
@@ -304,7 +333,7 @@
                 }
                 [self.tableView reloadData];
             }
-            
+            [self.tableView reloadData];
         });
     });
 }
@@ -319,7 +348,7 @@
     UIView *sectionHeaderView = [[UIView alloc] initWithFrame:
                                  CGRectMake(0, 0, tableView.frame.size.width, 20)];
     
-    sectionHeaderView.backgroundColor = [UIColor colorWithRed:100.0f/255.0f green:181.0f/255.0f blue:246.0f/255.0f alpha:1.0f];
+    sectionHeaderView.backgroundColor = [UIColor colorWithRed:100.0f/255.0f green:181.0f/255.0f blue:246.0f/255.0f alpha:0.95f];
     UILabel *headerLabel = [[UILabel alloc] initWithFrame:
                             CGRectMake(15, 10, sectionHeaderView.frame.size.width, 15)];
     
@@ -360,6 +389,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     if (section == 0) {
         return [self.timeArray count];
+        
     }else {
         return [self.timeArrayWeekTwo count];
     }
@@ -386,7 +416,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    static NSString *identifier = @"cell";
+    static NSString *identifier = @"cellTeach";
     TableViewCellContent *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
     if (indexPath.section == 0) {
         cell.num.text = [self arrayString:self.timeArray[indexPath.row]];
@@ -407,6 +437,7 @@
     return cell;
     
 }
+
 
 
 @end

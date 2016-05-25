@@ -7,7 +7,6 @@
 //
 
 #import "TableViewControllerSelFav.h"
-#import "ViewControllerPageFav.h"
 #import "TableViewPageContFav.h"
 #import "TableViewGraphFav.h"
 
@@ -40,9 +39,6 @@
     
     if (indexPath.row == 0) {
 
-//        ViewControllerPageFav *viewControllerPageFav = [self.storyboard instantiateViewControllerWithIdentifier:@"ViewControllerPageFav"];
-//        viewControllerPageFav.tableTime = self.tableTime;
-//        viewControllerPageFav.university = self.university;
         TableViewPageContFav *viewControllerPageContent = [self.storyboard instantiateViewControllerWithIdentifier:@"TableViewPageContFav"];
         viewControllerPageContent.timeTable = self.tableTime;
         viewControllerPageContent.university = self.university;

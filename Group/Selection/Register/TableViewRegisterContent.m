@@ -34,29 +34,53 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.titleLabel.text = self.titleText;
+    self.title = @"Ведомости";
     
-    if ([self.titleText isEqualToString:@"Контрольная точка 1"]) {
+    [self.segmented removeAllSegments];
+    for (int i = 0; i<[self.arrayPage count];i++) {
+        [self.segmented insertSegmentWithTitle:self.arrayPage[i] atIndex:i animated:NO];
+    }
+    
+    self.segmented.selectedSegmentIndex = 0;
+    [self actionSegmented:self.segmented];
+    
+    self.navigationController.interactivePopGestureRecognizer.enabled = NO;
+    self.viewSeg.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"NavBar.png"]];
+    self.tableView.estimatedRowHeight = 68.0;
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    
+}
+
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+}
+
+- (IBAction)actionSegmented:(id)sender {
+    
+    if ([self.arrayPage[self.segmented.selectedSegmentIndex] isEqualToString:@"КT 1"]) {
         [self loadReference:
-         [NSString stringWithFormat:@"%@/Ved/Ved.aspx?id=%@",self.referenceUniversity ,self.referenceContent] KT:4];
-    }else if ([self.titleText isEqualToString:@"Контрольная точка 2"]) {
+         [NSString stringWithFormat:@"%@Ved/%@",self.referenceUniversity ,self.referenceContent] KT:4];
+    }else if ([self.arrayPage[self.segmented.selectedSegmentIndex] isEqualToString:@"КT 2"]) {
         [self loadReference:
-         [NSString stringWithFormat:@"%@/Ved/Ved.aspx?id=%@",self.referenceUniversity ,self.referenceContent] KT:9];
-    }else if ([self.titleText isEqualToString:@"Контрольная точка 3"]){
+         [NSString stringWithFormat:@"%@Ved/%@",self.referenceUniversity ,self.referenceContent] KT:9];
+    }else if ([self.arrayPage[self.segmented.selectedSegmentIndex] isEqualToString:@"КT 3"]){
         [self loadReference:
-         [NSString stringWithFormat:@"%@/Ved/Ved.aspx?id=%@",self.referenceUniversity ,self.referenceContent] KT:14];
-    }else if ([self.titleText isEqualToString:@"Контрольная точка 4"]){
+         [NSString stringWithFormat:@"%@Ved/%@",self.referenceUniversity ,self.referenceContent] KT:14];
+    }else if ([self.arrayPage[self.segmented.selectedSegmentIndex] isEqualToString:@"КT 4"]){
         [self loadReference:
-         [NSString stringWithFormat:@"%@/Ved/Ved.aspx?id=%@",self.referenceUniversity ,self.referenceContent] KT:19];
-    }else if ([self.titleText isEqualToString:@"Контрольная точка 5"]){
+         [NSString stringWithFormat:@"%@Ved/%@",self.referenceUniversity ,self.referenceContent] KT:19];
+    }else if ([self.arrayPage[self.segmented.selectedSegmentIndex] isEqualToString:@"КT 5"]){
         [self loadReference:
-         [NSString stringWithFormat:@"%@/Ved/Ved.aspx?id=%@",self.referenceUniversity ,self.referenceContent] KT:24];
-    }else if ([self.titleText isEqualToString:@"Контрольная точка 6"]){
+         [NSString stringWithFormat:@"%@Ved/%@",self.referenceUniversity ,self.referenceContent] KT:24];
+    }else if ([self.arrayPage[self.segmented.selectedSegmentIndex] isEqualToString:@"КT 6"]){
         [self loadReference:
-         [NSString stringWithFormat:@"%@/Ved/Ved.aspx?id=%@",self.referenceUniversity ,self.referenceContent] KT:29];
-    }else if ([self.titleText isEqualToString:@"Экзамен"] || [self.titleText isEqualToString:@"Зачет"]){
+         [NSString stringWithFormat:@"%@Ved/%@",self.referenceUniversity ,self.referenceContent] KT:29];
+    }else if ([self.arrayPage[self.segmented.selectedSegmentIndex] isEqualToString:@"Экзамен"] ||
+              [self.arrayPage[self.segmented.selectedSegmentIndex] isEqualToString:@"Зачет"]){
+        
         NSInteger num;
-        switch (self.count) {
+        switch ([self.arrayPage count]) {
             case 2:
                 num = 0;
                 break;
@@ -80,25 +104,20 @@
         }
         
         [self loadReference:
-         [NSString stringWithFormat:@"%@/Ved/Ved.aspx?id=%@",self.referenceUniversity ,self.referenceContent] KT:num];
-    }else if (self.pageIndex == PRACTICE){
+         [NSString stringWithFormat:@"%@Ved/%@",self.referenceUniversity ,self.referenceContent] KT:num];
+    }else if ([self.arrayPage[self.segmented.selectedSegmentIndex] isEqualToString:@"Практика"] ||
+              [self.arrayPage[self.segmented.selectedSegmentIndex] isEqualToString:@"ГосЭкзамен"] ||
+              [self.arrayPage[self.segmented.selectedSegmentIndex] isEqualToString:@"Выпуская работа"]){
+       
         [self loadReference:
-         [NSString stringWithFormat:@"%@/Ved/Ved.aspx?id=%@",self.referenceUniversity ,self.referenceContent] KT:0];
-    }else if (self.pageIndex ==  COURSE_WORK){
+         [NSString stringWithFormat:@"%@Ved/%@",self.referenceUniversity ,self.referenceContent] KT:50];
+    }else if ([self.arrayPage[self.segmented.selectedSegmentIndex] isEqualToString:@"Курсовой проект"] ||
+              [self.arrayPage[self.segmented.selectedSegmentIndex] isEqualToString:@"Курсовая работа"]){
+        
         [self loadReference:
-         [NSString stringWithFormat:@"%@/Ved/Ved.aspx?id=%@",self.referenceUniversity ,self.referenceContent] KT:0];
+         [NSString stringWithFormat:@"%@Ved/%@",self.referenceUniversity ,self.referenceContent] KT:40];
     }
     
-    
-    self.navigationController.interactivePopGestureRecognizer.enabled = NO;
-    
-    self.tableView.estimatedRowHeight = 68.0;
-    self.tableView.rowHeight = UITableViewAutomaticDimension;
-}
-
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
 }
 
 -(void) loadReference:(NSString*) URLGroup KT:(NSInteger)KT{
@@ -165,6 +184,7 @@
                       
                       if (name != nil) {
                           [self.nameArray addObject:name.textContent];
+                          [self.tableView reloadData];
                       }else{
                           break;
                       }
@@ -177,7 +197,7 @@
                   HTMLElement *projectExam;
                   
                   
-                  if (self.pageIndex == PRACTICE) {
+                  if (KT == 50) {
                       for (NSInteger i = 5; i<nameNum+5; i++) {
                           
                           projectName = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(12)",(long)i]];
@@ -207,11 +227,12 @@
                           }else{
                               [self.projectExamArray addObject:projectName.textContent];
                           }
-                          
+                          [self.tableView reloadData];
                       }
                   }
                   
-                  if (self.pageIndex == COURSE_WORK) {
+                  if (KT == 40) {
+                      
                       for (NSInteger i = 5; i<nameNum+5; i++) {
                           
                           projectName = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ucVedBox_tblVed > tbody > tr:nth-child(%ld) > td:nth-child(13)",(long)i]];
@@ -249,7 +270,8 @@
                               
                               [self.projectExamArray addObject:projectExam.textContent];
                           }
-                          
+                          [self.tableView reloadData];
+
                       }
                   }
                   
@@ -336,7 +358,7 @@
                       
                       [self.tableView reloadData];
                   }
-                  
+                  [self.tableView reloadData];
               });
               
           }
@@ -349,31 +371,38 @@
 
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    if (self.pageIndex+1 == self.count) {
+    if ([self.arrayPage[self.segmented.selectedSegmentIndex] isEqualToString:@"Экзамен"] ||
+        [self.arrayPage[self.segmented.selectedSegmentIndex] isEqualToString:@"Зачет"]) {
         return 0;
         
-    }else if (self.pageIndex == PRACTICE) {
+    }else if ([self.arrayPage[self.segmented.selectedSegmentIndex] isEqualToString:@"Практика"] ||
+              [self.arrayPage[self.segmented.selectedSegmentIndex] isEqualToString:@"ГосЭкзамен"] ||
+              [self.arrayPage[self.segmented.selectedSegmentIndex] isEqualToString:@"Выпуская работа"]) {
         return 0;
         
-    }else if (self.pageIndex == COURSE_WORK) {
+    }else if ([self.arrayPage[self.segmented.selectedSegmentIndex] isEqualToString:@"Курсовой проект"] ||
+              [self.arrayPage[self.segmented.selectedSegmentIndex] isEqualToString:@"Курсовая работа"]) {
         return 0;
         
     }else{
         return 30;
         
     }
-    
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
     
-    if (self.pageIndex+1 == self.count) {
+    if ([self.arrayPage[self.segmented.selectedSegmentIndex] isEqualToString:@"Экзамен"] ||
+        [self.arrayPage[self.segmented.selectedSegmentIndex] isEqualToString:@"Зачет"]) {
         return 0;
         
-    }else if (self.pageIndex == PRACTICE) {
+    }else if ([self.arrayPage[self.segmented.selectedSegmentIndex] isEqualToString:@"Практика"] ||
+              [self.arrayPage[self.segmented.selectedSegmentIndex] isEqualToString:@"ГосЭкзамен"] ||
+              [self.arrayPage[self.segmented.selectedSegmentIndex] isEqualToString:@"Выпуская работа"]) {
         return 0;
         
-    }else if (self.pageIndex == COURSE_WORK) {
+    }else if ([self.arrayPage[self.segmented.selectedSegmentIndex] isEqualToString:@"Курсовой проект"] ||
+              [self.arrayPage[self.segmented.selectedSegmentIndex] isEqualToString:@"Курсовая работа"]) {
         return 0;
         
     }else{
@@ -385,7 +414,7 @@
     
     UIView *sectionHeaderView = [[UIView alloc] initWithFrame:
                                  CGRectMake(0, 0, tableView.frame.size.width, 20)];
-    sectionHeaderView.backgroundColor = [UIColor colorWithRed:100.0f/255.0f green:181.0f/255.0f blue:246.0f/255.0f alpha:1.0f];
+    sectionHeaderView.backgroundColor = [UIColor colorWithRed:100.0f/255.0f green:181.0f/255.0f blue:246.0f/255.0f alpha:0.95f];
     UILabel *lec = [[UILabel alloc] initWithFrame:
                     CGRectMake(130, 10, 50, 15)];
     UILabel *pra = [[UILabel alloc] initWithFrame:
@@ -435,12 +464,35 @@
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
     NSString *identifier = nil;
     TableViewCellRegister *cell = nil;
     
-    if (self.pageIndex+1 < self.count) {
+    if ([self.arrayPage[self.segmented.selectedSegmentIndex] isEqualToString:@"Экзамен"] ||
+              [self.arrayPage[self.segmented.selectedSegmentIndex] isEqualToString:@"Зачет"]){
+        identifier = @"cellExam";
+        cell = [tableView dequeueReusableCellWithIdentifier:identifier];
+        cell.nameLabel.text = self.nameArray[indexPath.row];
+        cell.examNumLabel.text =  [NSString stringWithFormat:@"Итоговый Рейтинг: %@",self.examNumArray[indexPath.row]];
+        cell.examLabel.text =  [NSString stringWithFormat:@"Итог: %@",self.examArray[indexPath.row]];
         
+    }else if([self.arrayPage[self.segmented.selectedSegmentIndex] isEqualToString:@"Практика"] ||
+             [self.arrayPage[self.segmented.selectedSegmentIndex] isEqualToString:@"ГосЭкзамен"] ||
+             [self.arrayPage[self.segmented.selectedSegmentIndex] isEqualToString:@"Выпуская работа"]){
+        
+        identifier = @"cellPra";
+        cell = [tableView dequeueReusableCellWithIdentifier:identifier];
+        cell.NamePra.text = self.nameArray[indexPath.row];
+        cell.numPra.text =[NSString stringWithFormat:@"Оценка: %@",self.projectExamArray[indexPath.row]];
+        
+    }else if([self.arrayPage[self.segmented.selectedSegmentIndex] isEqualToString:@"Курсовой проект"] ||
+             [self.arrayPage[self.segmented.selectedSegmentIndex] isEqualToString:@"Курсовая работа"]){
+        
+        identifier = @"cellProject";
+        cell = [tableView dequeueReusableCellWithIdentifier:identifier];
+        cell.projectNameLabel.text = self.nameArray[indexPath.row];
+        cell.projectNumLabel.text =[NSString stringWithFormat:@"Оценка: %@",self.projectExamArray[indexPath.row]];
+        cell.project.text =[NSString stringWithFormat:@"Тема: %@",self.projectNameArray[indexPath.row]];
+    }   else  {
         identifier = @"cellRegister";
         cell = [tableView dequeueReusableCellWithIdentifier:identifier];
         cell.nameLabel.text = self.nameArray[indexPath.row];
@@ -451,29 +503,11 @@
         cell.totalLabel.text = self.totalArray[indexPath.row];
         cell.totalLabel.text = [NSString stringWithFormat:@"Итог по КТ: %@" ,self.totalArray[indexPath.row]];
         
-    }else if (self.pageIndex+1 == self.count){
-        identifier = @"cellExam";
-        cell = [tableView dequeueReusableCellWithIdentifier:identifier];
-        cell.nameLabel.text = self.nameArray[indexPath.row];
-        cell.examNumLabel.text =  [NSString stringWithFormat:@"Итоговый Рейтинг: %@",self.examNumArray[indexPath.row]];
-        cell.examLabel.text =  [NSString stringWithFormat:@"Итог: %@",self.examArray[indexPath.row]];
-        
-    }else if(self.pageIndex == PRACTICE){
-        identifier = @"cellPra";
-        cell = [tableView dequeueReusableCellWithIdentifier:identifier];
-        cell.NamePra.text = self.nameArray[indexPath.row];
-        cell.numPra.text =[NSString stringWithFormat:@"Оценка: %@",self.projectExamArray[indexPath.row]];
-        
-    }else if(self.pageIndex == COURSE_WORK){
-        identifier = @"cellProject";
-        cell = [tableView dequeueReusableCellWithIdentifier:identifier];
-        cell.projectNameLabel.text = self.nameArray[indexPath.row];
-        cell.projectNumLabel.text =[NSString stringWithFormat:@"Оценка: %@",self.projectExamArray[indexPath.row]];
-        cell.project.text =[NSString stringWithFormat:@"Тема: %@",self.projectNameArray[indexPath.row]];
     }
     
     return cell;
 }
+
 
 
 

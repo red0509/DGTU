@@ -158,10 +158,11 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     if(indexPath.row == 0){//Расписание
-       ViewControllerPageView *viewControllerPageView = [self.storyboard instantiateViewControllerWithIdentifier:@"ViewControllerPageView"];
-        viewControllerPageView.referencePageView = self.numberGroupString;
-        viewControllerPageView.referenceUniversity = self.referenceUniversity;
-        [self.navigationController pushViewController:viewControllerPageView animated:YES];
+        
+        ViewControllerPageContent *viewControllerPageContent = [self.storyboard instantiateViewControllerWithIdentifier:@"ViewControllerPageContent"];
+        viewControllerPageContent.referenceContent = self.numberGroupString;
+        viewControllerPageContent.referenceUniversity = self.referenceUniversity;
+        [self.navigationController pushViewController:viewControllerPageContent animated:YES];
         
     }else if(indexPath.row == 1){//Ведомость
         TableViewControllerRegister *tableViewControllerRegister = [self.storyboard instantiateViewControllerWithIdentifier:@"TableViewControllerRegister"];

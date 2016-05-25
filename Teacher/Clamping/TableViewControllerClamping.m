@@ -223,7 +223,7 @@
     
     UIView *sectionHeaderView = [[UIView alloc] initWithFrame:
                                  CGRectMake(0, 0, tableView.frame.size.width, 20)];
-    sectionHeaderView.backgroundColor = [UIColor colorWithRed:100.0f/255.0f green:181.0f/255.0f blue:246.0f/255.0f alpha:1.0f];
+    sectionHeaderView.backgroundColor = [UIColor colorWithRed:100.0f/255.0f green:181.0f/255.0f blue:246.0f/255.0f alpha:0.95f];
     UILabel *headerLabel = [[UILabel alloc] initWithFrame:
                             CGRectMake(15, 10, sectionHeaderView.frame.size.width, 15)];
     

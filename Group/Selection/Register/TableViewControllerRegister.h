@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import <HTMLReader.h>
-#import "ViewRegisterPageView.h"
 
 @interface TableViewControllerRegister : UITableViewController
 

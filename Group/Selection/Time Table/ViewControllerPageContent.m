@@ -29,59 +29,94 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.labelTitle.text = self.titleText;
-    
-    NSDate *date = [NSDate date];
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
-    
-    [dateFormatter setDateFormat:@"M"];
-    NSString * strintDate = [dateFormatter stringFromDate:date];
-    NSInteger intDate = [strintDate integerValue];
-    NSString *semester;
-    if (intDate > 8 || intDate == 1) {
-        semester =  @"1";
-    }else{
-        semester = @"2";
-    }
+    self.title = @"Расписание";
     
     self.navigationController.interactivePopGestureRecognizer.enabled = NO;
-
-    
+    self.automaticallyAdjustsScrollViewInsets = NO;
+    self.viewSeg.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"NavBar.png"]];
     self.tableView.estimatedRowHeight = 135.0;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
-    NSString *day;
+    self.segmented.selectedSegmentIndex = [self indexDate];
+    [self actionSegmented:self.segmented];
+    
+}
 
-    switch (self.pageIndex) {
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+}
+
+- (BOOL)slideNavigationControllerShouldDisplayLeftMenu
+{
+    return YES;
+}
+
+- (IBAction)actionSegmented:(id)sender {
+    NSString *day;
+    switch (self.segmented.selectedSegmentIndex) {
         case 0:
             day = @"Понедельник";
             break;
         case 1:
-             day = @"Вторник";
+            day = @"Вторник";
             break;
         case 2:
-             day = @"Среда";
+            day = @"Среда";
             break;
         case 3:
-             day = @"Четверг";
+            day = @"Четверг";
             break;
         case 4:
-             day = @"Пятница";
+            day = @"Пятница";
             break;
         case 5:
-             day = @"Суббота";
+            day = @"Суббота";
             break;
             
         default:
             break;
     }
     
-    [self loadGroupReference:[NSString stringWithFormat:@"%@Rasp/Rasp.aspx?group=%@&sem=%@",self.referenceUniversity,self.referenceContent,semester] day:day];
-   
+    [self loadGroupReference:[NSString stringWithFormat:@"%@Rasp/Rasp.aspx?group=%@&sem=%@",self.referenceUniversity,self.referenceContent,[self semesterData]] day:day];
 }
 
+- (NSInteger) indexDate{
+    NSDate *date = [NSDate date];
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
+    
+    [dateFormatter setDateFormat:@"EEEE"];
+    NSString * strintDate = [dateFormatter stringFromDate:date];
+    if ([strintDate isEqualToString:@"понедельник"]) {
+        return 0;
+    }else if([strintDate isEqualToString:@"вторник"]){
+        return 1;
+    }else if([strintDate isEqualToString:@"среда"]){
+        return 2;
+    }else if([strintDate isEqualToString:@"четверг"]){
+        return 3;
+    }else if([strintDate isEqualToString:@"пятница"]){
+        return 4;
+    }else if([strintDate isEqualToString:@"суббота"]){
+        return 5;
+    }else{
+        return 0;
+    }
+}
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
+-(NSString*)semesterData{
+    NSDate *date = [NSDate date];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
+    
+    [dateFormatter setDateFormat:@"M"];
+    NSString * strintDate = [dateFormatter stringFromDate:date];
+    NSInteger intDate = [strintDate integerValue];
+    
+    if (intDate > 8 || intDate == 1) {
+        return @"1";
+    }else{
+        return @"2";
+    }
 }
 
 -(void) loadGroupReference:(NSString*) URLGroup day:(NSString*) weekDay{
@@ -344,7 +379,7 @@
                 }
                 [self.tableView reloadData];
             }
-            
+            [self.tableView reloadData];
         });
     });
 }
@@ -358,7 +393,7 @@
     
     UIView *sectionHeaderView = [[UIView alloc] initWithFrame:
                                  CGRectMake(0, 0, tableView.frame.size.width, 20)];
-    sectionHeaderView.backgroundColor = [UIColor colorWithRed:100.0f/255.0f green:181.0f/255.0f blue:246.0f/255.0f alpha:1.0f];
+    sectionHeaderView.backgroundColor = [UIColor colorWithRed:100.0f/255.0f green:181.0f/255.0f blue:246.0f/255.0f alpha:0.95f];
     UILabel *headerLabel = [[UILabel alloc] initWithFrame:
                             CGRectMake(15, 10, sectionHeaderView.frame.size.width, 15)];
     
@@ -439,7 +474,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    static NSString *identifier = @"cell";
+    static NSString *identifier = @"cellGroupTima";
     TableViewCellContent *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
     if (indexPath.section == 0) {
         cell.num.text = [self arrayString:self.timeArray[indexPath.row]];
@@ -461,6 +496,7 @@
     return cell;
     
 }
+
 
 
 @end

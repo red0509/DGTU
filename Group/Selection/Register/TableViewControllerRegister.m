@@ -9,6 +9,9 @@
 #import "TableViewControllerRegister.h"
 #import "TableViewCellSubject.h"
 #import "TableViewControllerInfo.h"
+#import "TableViewRegisterContent.h"
+
+
 
 
 @interface TableViewControllerRegister ()
@@ -158,28 +161,28 @@
     [self loadPoint:[NSString stringWithFormat:@"%@/Ved/%@",self.referenceUniversity ,self.registerReferences[indexPath.row]]];
     
     NSString *type = [NSString stringWithFormat:@"%@",self.typeArray[indexPath.row]];
-    ViewRegisterPageView *viewRegisterPageView = [self.storyboard instantiateViewControllerWithIdentifier:@"ViewRegisterPageView"];
+    TableViewRegisterContent *tableViewRegisterContent = [self.storyboard instantiateViewControllerWithIdentifier:@"TableViewRegisterContent"];
     
     [self.pointArray addObject:type];
     
-    viewRegisterPageView.pageTitles = self.pointArray;
+    tableViewRegisterContent.arrayPage = self.pointArray;
 
     if([type isEqualToString:@"Курсовой проект" ]){
-        viewRegisterPageView.pageTitles = @[@"Курсовой проект"];
+        tableViewRegisterContent.arrayPage = @[@"Курсовой проект"];
     }else if([type isEqualToString:@"Курсовая работа" ]){
-        viewRegisterPageView.pageTitles = @[@"Курсовая работа"];
+        tableViewRegisterContent.arrayPage = @[@"Курсовая работа"];
     }else if([type isEqualToString:@"Практика" ]){
-        viewRegisterPageView.pageTitles = @[@"Практика"];
+        tableViewRegisterContent.arrayPage = @[@"Практика"];
     }else if([type isEqualToString:@"ГосЭкзамен" ]){
-        viewRegisterPageView.pageTitles = @[@"ГосЭкзамен"];
+        tableViewRegisterContent.arrayPage = @[@"ГосЭкзамен"];
     }else if([type isEqualToString:@"Выпуская работа" ]){
-        viewRegisterPageView.pageTitles = @[@"Выпуская работа"];
+        tableViewRegisterContent.arrayPage = @[@"Выпуская работа"];
     }
     
-    viewRegisterPageView.referencePageView = self.registerReferences[indexPath.row];
-    viewRegisterPageView.referenceUniversity = self.referenceUniversity;
+    tableViewRegisterContent.referenceUniversity = self.referenceUniversity;
+    tableViewRegisterContent.referenceContent = self.registerReferences[indexPath.row];
     
-    [self.navigationController pushViewController:viewRegisterPageView animated:YES];
+    [self.navigationController pushViewController:tableViewRegisterContent animated:YES];
     
 }
 
@@ -204,37 +207,37 @@
                 HTMLElement *div = [home firstNodeMatchingSelector:@"#ucVedBox_Row1 > td:nth-child(19)"];
                 
                 if ([div.textContent isEqualToString:@"Точка 6"]) {
-                    [self.pointArray insertObject:@"Контрольная точка 6" atIndex:0];
+                    [self.pointArray insertObject:@"КT 6" atIndex:0];
                 }
                 
                 div = [home firstNodeMatchingSelector:@"#ucVedBox_Row1 > td:nth-child(16)"];
                 
                 if ([div.textContent isEqualToString:@"Точка 5"]) {
-                    [self.pointArray insertObject:@"Контрольная точка 5" atIndex:0];
+                    [self.pointArray insertObject:@"КT 5" atIndex:0];
                 }
                 
                 div = [home firstNodeMatchingSelector:@"#ucVedBox_Row1 > td:nth-child(13)"];
                 
                 if ([div.textContent isEqualToString:@"Точка 4"]) {
-                    [self.pointArray insertObject:@"Контрольная точка 4" atIndex:0];
+                    [self.pointArray insertObject:@"КT 4" atIndex:0];
                 }
                 
                 div = [home firstNodeMatchingSelector:@"#ucVedBox_Row1 > td:nth-child(10)"];
                 
                 if ([div.textContent isEqualToString:@"Точка 3"]) {
-                    [self.pointArray insertObject:@"Контрольная точка 3" atIndex:0];
+                    [self.pointArray insertObject:@"КT 3" atIndex:0];
                 }
                 
                 div = [home firstNodeMatchingSelector:@"#ucVedBox_Row1 > td:nth-child(7)"];
                 
                 if ([div.textContent isEqualToString:@"Точка 2"]) {
-                    [self.pointArray insertObject:@"Контрольная точка 2" atIndex:0];
+                    [self.pointArray insertObject:@"КT 2" atIndex:0];
                 }
                 
                 div = [home firstNodeMatchingSelector:@"#ucVedBox_Row1 > td:nth-child(4)"];
                 
                 if ([div.textContent isEqualToString:@"Точка 1"]) {
-                    [self.pointArray insertObject:@"Контрольная точка 1" atIndex:0];
+                    [self.pointArray insertObject:@"КT 1" atIndex:0];
                 }
                 
             }

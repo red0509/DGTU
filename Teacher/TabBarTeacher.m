@@ -11,7 +11,7 @@
 #import "Favorites+CoreDataProperties.h"
 #import <HTMLReader.h>
 #import "TableViewControllerClamping.h"
-#import "ViewControllerPageTeacher.h"
+#import "TableViewPageContTeacher.h"
 
 
 
@@ -28,7 +28,7 @@
     UIBarButtonItem *rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(action)];
     TableViewControllerClamping *clamping = [self.storyboard instantiateViewControllerWithIdentifier:@"TableViewControllerClamping"];
     clamping.reference = self.reference;
-    ViewControllerPageTeacher *teacher = [self.storyboard instantiateViewControllerWithIdentifier:@"ViewControllerPageTeacher"];
+    TableViewPageContTeacher *teacher = [self.storyboard instantiateViewControllerWithIdentifier:@"TableViewPageContTeacher"];
     teacher.reference = self.reference;
     
     teacher.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Расписание занятий" image:[UIImage imageNamed:@"agenda"] tag:1];
@@ -50,6 +50,10 @@
     
     [self setViewControllers:@[teacher,clamping]];
 
+}
+- (BOOL)slideNavigationControllerShouldDisplayLeftMenu
+{
+    return YES;
 }
 
 
