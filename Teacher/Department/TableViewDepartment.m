@@ -101,13 +101,13 @@
                                                     contentTypeHeader:contentType];
                   NSInteger numFacul = 2;
                   
-                  HTMLElement *div = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#_ctl0_ContentPage_ucKaf_Grid > tbody > tr:nth-child(%ld) > td:nth-child(1) > a",(long)numFacul]];
+                  HTMLElement *div = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ctl00_ContentPage_ucKaf_Grid > tbody > tr:nth-child(%ld) > td:nth-child(1) > a",(long)numFacul]];
                   HTMLElement *ref;
                                     
                   while (!(div == nil)) {
                       
-                      div = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#_ctl0_ContentPage_ucKaf_Grid > tbody > tr:nth-child(%ld) > td:nth-child(1) > a",(long)numFacul]];
-                      ref = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#_ctl0_ContentPage_ucKaf_Grid > tbody > tr:nth-child(%ld) > td:nth-child(2) > a",(long)numFacul]];
+                      div = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ctl00_ContentPage_ucKaf_Grid > tbody > tr:nth-child(%ld) > td:nth-child(1) > a",(long)numFacul]];
+                      ref = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ctl00_ContentPage_ucKaf_Grid > tbody > tr:nth-child(%ld) > td:nth-child(2) > a",(long)numFacul]];
                      
                       dispatch_async(dispatch_get_main_queue(), ^{
                           if (div != nil) {

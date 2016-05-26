@@ -121,6 +121,7 @@
 }
 
 -(void) loadReference:(NSString*) URLGroup KT:(NSInteger)KT{
+    
     self.nameArray = [NSMutableArray array];
     self.lecArray = [NSMutableArray array];
     self.praArray = [NSMutableArray array];
@@ -131,6 +132,7 @@
     self.examNumArray = [NSMutableArray array];
     self.projectNameArray = [NSMutableArray array];
     self.projectExamArray = [NSMutableArray array];
+    
     NSURL *URL = [NSURL URLWithString:URLGroup];
     NSURLSessionConfiguration *sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
     sessionConfig.timeoutIntervalForResource = 5;
@@ -184,11 +186,11 @@
                       
                       if (name != nil) {
                           [self.nameArray addObject:name.textContent];
-                          [self.tableView reloadData];
+                          
                       }else{
                           break;
                       }
-                      
+                      [self.tableView reloadData];
                       nameNum++;
                   }
                   nameNum -=5;
@@ -370,22 +372,22 @@
 #pragma mark - Table view data source
 
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
     if ([self.arrayPage[self.segmented.selectedSegmentIndex] isEqualToString:@"Экзамен"] ||
         [self.arrayPage[self.segmented.selectedSegmentIndex] isEqualToString:@"Зачет"]) {
-        return 0;
+        
+        return 2.f;
         
     }else if ([self.arrayPage[self.segmented.selectedSegmentIndex] isEqualToString:@"Практика"] ||
               [self.arrayPage[self.segmented.selectedSegmentIndex] isEqualToString:@"ГосЭкзамен"] ||
               [self.arrayPage[self.segmented.selectedSegmentIndex] isEqualToString:@"Выпуская работа"]) {
-        return 0;
         
+        return 2.f;
     }else if ([self.arrayPage[self.segmented.selectedSegmentIndex] isEqualToString:@"Курсовой проект"] ||
               [self.arrayPage[self.segmented.selectedSegmentIndex] isEqualToString:@"Курсовая работа"]) {
-        return 0;
         
+        return 2.f;
     }else{
-        return 30;
+        return 30.f;
         
     }
 }
@@ -394,68 +396,91 @@
     
     if ([self.arrayPage[self.segmented.selectedSegmentIndex] isEqualToString:@"Экзамен"] ||
         [self.arrayPage[self.segmented.selectedSegmentIndex] isEqualToString:@"Зачет"]) {
-        return 0;
+        
+        return 2.f;
         
     }else if ([self.arrayPage[self.segmented.selectedSegmentIndex] isEqualToString:@"Практика"] ||
               [self.arrayPage[self.segmented.selectedSegmentIndex] isEqualToString:@"ГосЭкзамен"] ||
               [self.arrayPage[self.segmented.selectedSegmentIndex] isEqualToString:@"Выпуская работа"]) {
-        return 0;
         
+        return 2.f;
     }else if ([self.arrayPage[self.segmented.selectedSegmentIndex] isEqualToString:@"Курсовой проект"] ||
               [self.arrayPage[self.segmented.selectedSegmentIndex] isEqualToString:@"Курсовая работа"]) {
-        return 0;
         
+        return 2.f;
     }else{
-        return 30;
+        return 30.f;
         
     }
 }
 - (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     
-    UIView *sectionHeaderView = [[UIView alloc] initWithFrame:
-                                 CGRectMake(0, 0, tableView.frame.size.width, 20)];
-    sectionHeaderView.backgroundColor = [UIColor colorWithRed:100.0f/255.0f green:181.0f/255.0f blue:246.0f/255.0f alpha:0.95f];
-    UILabel *lec = [[UILabel alloc] initWithFrame:
-                    CGRectMake(130, 10, 50, 15)];
-    UILabel *pra = [[UILabel alloc] initWithFrame:
-                    CGRectMake(180, 10, 50, 15)];
-    UILabel *lab = [[UILabel alloc] initWithFrame:
-                    CGRectMake(230, 10, 50, 15)];
-    UILabel *dr = [[UILabel alloc] initWithFrame:
-                   CGRectMake(280, 10, 50, 15)];
+    if ([self.arrayPage[self.segmented.selectedSegmentIndex] isEqualToString:@"Экзамен"] ||
+        [self.arrayPage[self.segmented.selectedSegmentIndex] isEqualToString:@"Зачет"]) {
+        
+        return nil;
+        
+    }else if ([self.arrayPage[self.segmented.selectedSegmentIndex] isEqualToString:@"Практика"] ||
+              [self.arrayPage[self.segmented.selectedSegmentIndex] isEqualToString:@"ГосЭкзамен"] ||
+              [self.arrayPage[self.segmented.selectedSegmentIndex] isEqualToString:@"Выпуская работа"]) {
+        
+        return nil;
+    }else if ([self.arrayPage[self.segmented.selectedSegmentIndex] isEqualToString:@"Курсовой проект"] ||
+              [self.arrayPage[self.segmented.selectedSegmentIndex] isEqualToString:@"Курсовая работа"]) {
+        UIView *sectionHeaderView = [[UIView alloc] initWithFrame:
+                                     CGRectMake(0, 0, tableView.frame.size.width, 20)];
+        sectionHeaderView.backgroundColor = [UIColor colorWithRed:100.0f/255.0f green:181.0f/255.0f blue:246.0f/255.0f alpha:0.95f];
+        return nil;
+    }else{
+        UIView *sectionHeaderView = [[UIView alloc] initWithFrame:
+                                     CGRectMake(0, 0, tableView.frame.size.width, 20)];
+        sectionHeaderView.backgroundColor = [UIColor colorWithRed:100.0f/255.0f green:181.0f/255.0f blue:246.0f/255.0f alpha:0.95f];
+        UILabel *lec = [[UILabel alloc] initWithFrame:
+                        CGRectMake(130, 10, 50, 15)];
+        UILabel *pra = [[UILabel alloc] initWithFrame:
+                        CGRectMake(180, 10, 50, 15)];
+        UILabel *lab = [[UILabel alloc] initWithFrame:
+                        CGRectMake(230, 10, 50, 15)];
+        UILabel *dr = [[UILabel alloc] initWithFrame:
+                       CGRectMake(280, 10, 50, 15)];
+        
+        
+        lec.textColor = [UIColor whiteColor];
+        lec.backgroundColor = [UIColor clearColor];
+        lec.textAlignment = NSTextAlignmentLeft;
+        [lec setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:15]];
+        
+        pra.textColor = [UIColor whiteColor];
+        pra.backgroundColor = [UIColor clearColor];
+        pra.textAlignment = NSTextAlignmentLeft;
+        [pra setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:15]];
+        
+        lab.textColor = [UIColor whiteColor];
+        lab.backgroundColor = [UIColor clearColor];
+        lab.textAlignment = NSTextAlignmentLeft;
+        [lab setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:15]];
+        
+        dr.textColor = [UIColor whiteColor];
+        dr.backgroundColor = [UIColor clearColor];
+        dr.textAlignment = NSTextAlignmentLeft;
+        [dr setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:15]];
+        
+        [sectionHeaderView addSubview:lec];
+        [sectionHeaderView addSubview:pra];
+        [sectionHeaderView addSubview:lab];
+        [sectionHeaderView addSubview:dr];
+        
+        lec.text = @"Лек.";
+        pra.text = @"Пр.";
+        lab.text = @"Лаб.";
+        dr.text = @"Др.";
+        
+        return sectionHeaderView;
+        
+    }
     
     
-    lec.textColor = [UIColor whiteColor];
-    lec.backgroundColor = [UIColor clearColor];
-    lec.textAlignment = NSTextAlignmentLeft;
-    [lec setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:15]];
     
-    pra.textColor = [UIColor whiteColor];
-    pra.backgroundColor = [UIColor clearColor];
-    pra.textAlignment = NSTextAlignmentLeft;
-    [pra setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:15]];
-    
-    lab.textColor = [UIColor whiteColor];
-    lab.backgroundColor = [UIColor clearColor];
-    lab.textAlignment = NSTextAlignmentLeft;
-    [lab setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:15]];
-    
-    dr.textColor = [UIColor whiteColor];
-    dr.backgroundColor = [UIColor clearColor];
-    dr.textAlignment = NSTextAlignmentLeft;
-    [dr setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:15]];
-    
-    [sectionHeaderView addSubview:lec];
-    [sectionHeaderView addSubview:pra];
-    [sectionHeaderView addSubview:lab];
-    [sectionHeaderView addSubview:dr];
-    
-    lec.text = @"Лек.";
-    pra.text = @"Пр.";
-    lab.text = @"Лаб.";
-    dr.text = @"Др.";
-    
-    return sectionHeaderView;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {

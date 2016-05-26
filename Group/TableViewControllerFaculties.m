@@ -43,7 +43,7 @@
     }
     
     [self loadFaculties:[NSString stringWithFormat:@"%@Dek/Default.aspx",self.referenceUniversity]];
-    
+
 }
 
 -(void) slideMenu{
@@ -102,13 +102,14 @@
                                                     contentTypeHeader:contentType];
                   NSInteger numFacul = 2;
                   
-                  HTMLElement *div = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#_ctl0_ContentPage_ucFacultets_Grid > tbody > tr:nth-child(%ld) > td:nth-child(1) > a",(long)numFacul]];
+                  HTMLElement *div = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ctl00_ContentPage_ucFacultets_Grid > tbody > tr:nth-child(%ld) > td:nth-child(1) > a",(long)numFacul]];
                   HTMLElement *facul;
                   
                   while (!(div == nil)) {
                       
-                      div = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#_ctl0_ContentPage_ucFacultets_Grid > tbody > tr:nth-child(%ld) > td:nth-child(1) > a",(long)numFacul]];
-                      facul = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#_ctl0_ContentPage_ucFacultets_Grid > tbody > tr:nth-child(%ld) > td:nth-child(2)",(long)numFacul]];
+                      div = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ctl00_ContentPage_ucFacultets_Grid > tbody > tr:nth-child(%ld) > td:nth-child(1) > a",(long)numFacul]];
+                      facul = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ctl00_ContentPage_ucFacultets_Grid > tbody > tr:nth-child(%ld) > td:nth-child(2)",(long)numFacul]];
+//      old                #_ctl0_ContentPage_ucFacultets_Grid > tbody > tr:nth-child(%ld) > td:nth-child(1) > a
                       
                       dispatch_async(dispatch_get_main_queue(), ^{
                           if (div != nil) {

@@ -97,11 +97,12 @@
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSURL *URLTeacher = [NSURL URLWithString:self.reference];
+        NSLog(@"%@",self.reference);
         NSError *errorData = nil;
         NSData *dataTeacher = [[NSData alloc]initWithContentsOfURL:URLTeacher options:NSDataReadingUncached error:&errorData];
         
-        NSString *contentType = @"text/html; charset=windows-1251";
-        
+//        NSString *contentType = @"text/html; charset=windows-1251";
+        NSString *contentType = @"text/html; charset=utf-8";
 
         dispatch_async(dispatch_get_main_queue(), ^{
             if (errorData != nil) {

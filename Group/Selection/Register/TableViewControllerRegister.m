@@ -97,7 +97,7 @@
                   
                   
                   HTMLElement *subject = [home firstNodeMatchingSelector:
-                                          [NSString stringWithFormat:@"#_ctl0_ContentPage_ucListVedBox_Grid > tbody > tr:nth-child(%ld) > td:nth-child(1) > a",(long)section]];
+                                          [NSString stringWithFormat:@"#ctl00_ContentPage_ucListVedBox_Grid > tbody > tr:nth-child(%ld) > td:nth-child(1) > a",(long)section]];
                   HTMLElement *type;
                   HTMLElement *closed;
                   
@@ -105,11 +105,11 @@
                       
                       
                       subject = [home firstNodeMatchingSelector:
-                                 [NSString stringWithFormat:@"#_ctl0_ContentPage_ucListVedBox_Grid > tbody > tr:nth-child(%ld) > td:nth-child(1) > a",(long)section]];
+                                 [NSString stringWithFormat:@"#ctl00_ContentPage_ucListVedBox_Grid > tbody > tr:nth-child(%ld) > td:nth-child(1) > a",(long)section]];
                       type = [home firstNodeMatchingSelector:
-                              [NSString stringWithFormat:@"#_ctl0_ContentPage_ucListVedBox_Grid > tbody > tr:nth-child(%ld) > td:nth-child(2)",(long)section]];
+                              [NSString stringWithFormat:@"#ctl00_ContentPage_ucListVedBox_Grid > tbody > tr:nth-child(%ld) > td:nth-child(2)",(long)section]];
                       closed = [home firstNodeMatchingSelector:
-                                [NSString stringWithFormat:@"#_ctl0_ContentPage_ucListVedBox_Grid > tbody > tr:nth-child(%ld) > td:nth-child(3)",(long)section]];
+                                [NSString stringWithFormat:@"#ctl00_ContentPage_ucListVedBox_Grid > tbody > tr:nth-child(%ld) > td:nth-child(3)",(long)section]];
                       
                       
                       dispatch_async(dispatch_get_main_queue(), ^{
@@ -194,9 +194,10 @@
         NSError *errorData = nil;
         NSData *data = [[NSData alloc]initWithContentsOfURL:URLTime options:NSDataReadingUncached error:&errorData];
         
-        NSString *contentType = @"text/html; charset=windows-1251";
-        
-        
+//        NSString *contentType = @"text/html; charset=windows-1251";
+        NSString *contentType = @"text/html; charset=utf-8";
+
+    
             if (errorData != nil) {
                 
             } else {

@@ -157,7 +157,7 @@
               if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
                   NSDictionary *headers = [(NSHTTPURLResponse *)response allHeaderFields];
                   contentType = headers[@"Content-Type"];
-              }
+             }
               HTMLDocument *home = [HTMLDocument documentWithData:data
                                                 contentTypeHeader:contentType];
               

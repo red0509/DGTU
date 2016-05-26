@@ -19,10 +19,10 @@
 @property (weak, nonatomic) IBOutlet UILabel *nameExamLabel;
 @property (weak, nonatomic) IBOutlet UILabel *examLabel;
 @property (weak, nonatomic) IBOutlet UILabel *examNumLabel;
+
 @property (weak, nonatomic) IBOutlet UILabel *projectNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *projectNumLabel;
 @property (weak, nonatomic) IBOutlet UILabel *project;
-
 
 @property (weak, nonatomic) IBOutlet UILabel *NamePra;
 @property (weak, nonatomic) IBOutlet UILabel *numPra;

@@ -93,8 +93,9 @@
         NSError *errorData = nil;
         NSData *dataTime = [[NSData alloc]initWithContentsOfURL:URLTime options:NSDataReadingUncached error:&errorData];
         
-        NSString *contentType = @"text/html; charset=windows-1251";
-        
+//        NSString *contentType = @"text/html; charset=windows-1251";
+        NSString *contentType = @"text/html; charset=utf-8";
+       
         NSURL *URLGraph = [NSURL URLWithString:[NSString stringWithFormat:@"%@Graph/Graph.aspx?group=%@&sem=%@",self.referenceUniversity,self.numberGroupString, semester]];
         NSData *dataGraph = [[NSData alloc]initWithContentsOfURL:URLGraph options:NSDataReadingUncached error:&errorData];
         dispatch_async(dispatch_get_main_queue(), ^{

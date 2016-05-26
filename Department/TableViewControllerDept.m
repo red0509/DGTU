@@ -133,7 +133,7 @@
 
     NSInteger numFacul = 2;
     
-    HTMLElement *div = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#_ctl0_ContentPage_ucKaf_Grid > tbody > tr:nth-child(%ld) > td:nth-child(1) > a",(long)numFacul]];
+    HTMLElement *div = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ctl00_ContentPage_ucKaf_Grid > tbody > tr:nth-child(%ld) > td:nth-child(1) > a",(long)numFacul]];
     HTMLElement *zav;
     HTMLElement *num;
     HTMLElement *cab;
@@ -141,11 +141,11 @@
     
     while (!(div == nil)) {
         
-        div = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#_ctl0_ContentPage_ucKaf_Grid > tbody > tr:nth-child(%ld) > td:nth-child(1) > a",(long)numFacul]];
+        div = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ctl00_ContentPage_ucKaf_Grid > tbody > tr:nth-child(%ld) > td:nth-child(1) > a",(long)numFacul]];
         
-        zav = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#_ctl0_ContentPage_ucKaf_Grid > tbody > tr:nth-child(%ld) > td:nth-child(3)",(long)numFacul]];
-        num = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#_ctl0_ContentPage_ucKaf_Grid > tbody > tr:nth-child(%ld) > td:nth-child(4)",(long)numFacul]];
-        cab = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#_ctl0_ContentPage_ucKaf_Grid > tbody > tr:nth-child(%ld) > td:nth-child(5)",(long)numFacul]];
+        zav = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ctl00_ContentPage_ucKaf_Grid > tbody > tr:nth-child(%ld) > td:nth-child(3)",(long)numFacul]];
+        num = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ctl00_ContentPage_ucKaf_Grid > tbody > tr:nth-child(%ld) > td:nth-child(4)",(long)numFacul]];
+        cab = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ctl00_ContentPage_ucKaf_Grid > tbody > tr:nth-child(%ld) > td:nth-child(5)",(long)numFacul]];
         dispatch_async(dispatch_get_main_queue(), ^{
             if (div != nil) {
                 
@@ -166,7 +166,7 @@
     
     NSInteger numFacul = 2;
     
-    HTMLElement *div = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#_ctl0_ContentPage_ucKaf_Grid > tbody > tr:nth-child(%ld) > td:nth-child(2)",(long)numFacul]];
+    HTMLElement *div = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ctl00_ContentPage_ucKaf_Grid > tbody > tr:nth-child(%ld) > td:nth-child(2)",(long)numFacul]];
     HTMLElement *zav;
     HTMLElement *num;
     HTMLElement *cab;
@@ -174,10 +174,10 @@
     
     while (!(div == nil)) {
         
-        div = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#_ctl0_ContentPage_ucKaf_Grid > tbody > tr:nth-child(%ld) > td:nth-child(2)",(long)numFacul]];
-        zav = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#_ctl0_ContentPage_ucKaf_Grid > tbody > tr:nth-child(%ld) > td:nth-child(4)",(long)numFacul]];
-        num = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#_ctl0_ContentPage_ucKaf_Grid > tbody > tr:nth-child(%ld) > td:nth-child(5)",(long)numFacul]];
-        cab = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#_ctl0_ContentPage_ucKaf_Grid > tbody > tr:nth-child(%ld) > td:nth-child(6)",(long)numFacul]];
+        div = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ctl00_ContentPage_ucKaf_Grid > tbody > tr:nth-child(%ld) > td:nth-child(2)",(long)numFacul]];
+        zav = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ctl00_ContentPage_ucKaf_Grid > tbody > tr:nth-child(%ld) > td:nth-child(4)",(long)numFacul]];
+        num = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ctl00_ContentPage_ucKaf_Grid > tbody > tr:nth-child(%ld) > td:nth-child(5)",(long)numFacul]];
+        cab = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ctl00_ContentPage_ucKaf_Grid > tbody > tr:nth-child(%ld) > td:nth-child(6)",(long)numFacul]];
         dispatch_async(dispatch_get_main_queue(), ^{
             if (div != nil) {
                 

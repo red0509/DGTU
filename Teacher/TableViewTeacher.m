@@ -90,12 +90,12 @@
                                                     contentTypeHeader:contentType];
                   NSInteger numFacul = 2;
                   
-                  HTMLElement *div = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#_ctl0_ContentPage_grPrep > tbody > tr:nth-child(%ld) > td > a",(long)numFacul]];
+                  HTMLElement *div = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ctl00_ContentPage_grPrep > tbody > tr:nth-child(%ld) > td > a",(long)numFacul]];
                   
                   
                   while (!(div == nil)) {
                       
-                      div = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#_ctl0_ContentPage_grPrep > tbody > tr:nth-child(%ld) > td > a",(long)numFacul]];
+                      div = [home firstNodeMatchingSelector:[NSString stringWithFormat:@"#ctl00_ContentPage_grPrep > tbody > tr:nth-child(%ld) > td > a",(long)numFacul]];
                       
                       
                       dispatch_async(dispatch_get_main_queue(), ^{
@@ -140,11 +140,11 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     TabBarTeacher * tabBarTeacher = [self.storyboard  instantiateViewControllerWithIdentifier:@"TabBarTeacher"];
-
-    tabBarTeacher.reference = [NSString stringWithFormat:@"http://stud.sssu.ru/Rasp/%@",[self.ref[indexPath.row] stringByAddingPercentEscapesUsingEncoding:NSWindowsCP1251StringEncoding]];
+//    tabBarTeacher.reference = [NSString stringWithFormat:@"http://stud.sssu.ru/Rasp/%@",[self.ref[indexPath.row] stringByAddingPercentEscapesUsingEncoding:NSWindowsCP1251StringEncoding]];
+    tabBarTeacher.reference = [NSString stringWithFormat:@"http://stud.sssu.ru/Rasp/%@",[self.ref[indexPath.row] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
     tabBarTeacher.surname = self.name[indexPath.row];
 
-    
+
     [self.navigationController pushViewController:tabBarTeacher animated:YES];
 }
 @end

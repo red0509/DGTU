@@ -37,7 +37,6 @@
     self.viewSeg.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"NavBar.png"]];
     self.segmented.selectedSegmentIndex = [self indexDate];
     [self actionSegmented:self.segmented];
-    
 }
 
 
@@ -71,7 +70,6 @@
 
 - (IBAction)actionSegmented:(id)sender {
     if ([self.graph isEqualToString:@"teacher"]) {
-        
         HTMLDocument *home = [HTMLDocument documentWithString:self.tableTime];
         switch (self.segmented.selectedSegmentIndex) {
             case 0:
@@ -124,7 +122,6 @@
 }
 
 -(void) loadGroupReference:(NSString*) URLGroup day:(NSString*) weekDay{
-    
     NSURL *URL = [NSURL URLWithString:URLGroup];
     NSURLSessionConfiguration *sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
     sessionConfig.timeoutIntervalForResource = 5;
